@@ -3,7 +3,10 @@
 -- 2. Run supabase/migrations/20261020160000_sims_style_customization.sql.
 -- 3. Run supabase/migrations/20261020163000_virtual_wallets.sql.
 -- 4. Run supabase/migrations/20261020170000_household_needs_and_economy.sql.
--- 5. Enable Anonymous Sign-Ins in Authentication > Providers > Anonymous.
+-- 5. Run supabase/migrations/20261020173000_doms_access_and_presence.sql.
+--    This reserves Doms for the user currently holding that household profile.
+--    If no Doms profile exists yet, the migration intentionally leaves Doms locked.
+-- 6. Enable Anonymous Sign-Ins in Authentication > Providers > Anonymous.
 create table if not exists public.tenu_players (
   character_id text primary key check (character_id in ('MMA','Ukechi','Chibaby','Doms','Jahsfavour','Mummy','Dee')),
   user_id uuid not null unique references auth.users(id) on delete cascade,

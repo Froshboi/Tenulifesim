@@ -3,20 +3,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#2a1f2d">
 <link rel="manifest" href="./manifest.webmanifest">
-<title>TENU HOUSE DEMO</title>
+<title>TENU HOUSE</title>
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#ffd9a0;font-family:"Trebuchet MS",system-ui,sans-serif;touch-action:none}
 canvas{display:block}
-#btns{position:fixed;right:10px;bottom:calc(44px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px}
+#btns{position:fixed;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:3;display:flex;flex-direction:column;gap:8px}
 #btns button{width:46px;height:46px;border-radius:50%;border:0;background:#2a1f2dd9;color:#fff;font-size:20px}
-#hint{position:fixed;left:0;right:0;bottom:calc(12px + env(safe-area-inset-bottom));text-align:center;color:#2a1f2d;font-size:13px;pointer-events:none}
-#home{position:fixed;left:8px;bottom:calc(38px + env(safe-area-inset-bottom));max-width:min(260px,calc(100vw - 82px));padding:7px 9px;border-radius:10px;background:#2a1f2dd9;color:#fdf3e4;font-size:10px;line-height:1.45;pointer-events:none}
+#hint{position:fixed;left:0;right:0;bottom:calc(86px + env(safe-area-inset-bottom));text-align:center;color:#2a1f2d;font-size:13px;pointer-events:none}
+#home{position:fixed;left:8px;top:calc(8px + env(safe-area-inset-top));max-width:min(260px,calc(100vw - 160px));padding:7px 9px;border-radius:10px;background:#2a1f2dd9;color:#fdf3e4;font-size:10px;line-height:1.45;pointer-events:none}
 #clock{position:fixed;top:env(safe-area-inset-top);right:8px;padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:12px}
 #needs{position:fixed;right:8px;top:calc(42px + env(safe-area-inset-top));padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:11px;line-height:1.55}
 #needs progress{width:68px;height:7px;vertical-align:middle;accent-color:#64c987}
 #toast{position:fixed;left:50%;top:calc(94px + env(safe-area-inset-top));transform:translateX(-50%);padding:9px 14px;border-radius:10px;background:#2a1f2dee;color:white;font-size:13px;pointer-events:none;opacity:0;transition:opacity .2s}
 #toast.show{opacity:1}
-.tools{position:fixed;left:8px;top:90px;display:flex;flex-direction:column;gap:6px}
+.tools{position:fixed;left:8px;top:90px;z-index:3;display:flex;flex-direction:column;gap:6px;transition:opacity .25s}
 .tools button,.panel button,.overlay button{border:0;border-radius:9px;padding:8px 10px;background:#2a1f2d;color:#fff;font:inherit}
 .tools button{font-size:12px}
 .overlay{position:fixed;inset:0;z-index:5;display:grid;place-items:center;background:#201824b8;padding:16px}
@@ -35,20 +35,35 @@ canvas{display:block}
 .slider-row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
 .slider-row input{grid-column:1/-1}
 .number{font-variant-numeric:tabular-nums}
+#btns{transition:opacity .25s}
+.controls-hidden .tools,.controls-hidden #btns{opacity:0;pointer-events:none}
+#restoreControls{position:fixed;right:10px;bottom:calc(78px + env(safe-area-inset-bottom));z-index:3;border:0;border-radius:20px;padding:10px 13px;background:#2a1f2dee;color:white;font:inherit}
+#simbar{position:fixed;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;gap:6px;min-height:68px;padding:5px 8px calc(5px + env(safe-area-inset-bottom));box-sizing:border-box;overflow-x:auto;background:#211b27ed;scrollbar-width:thin}
+#simbar button{position:relative;flex:0 0 54px;height:58px;border:1px solid #786a77;border-radius:12px;background:#382d3d;color:#fff4df;padding:3px;font:10px "Trebuchet MS",sans-serif}
+#simbar button.selected{border:2px solid #ffc857;background:#55404d}
+#simbar button:disabled{opacity:.65}
+#simbar canvas{display:block;width:34px;height:34px;margin:0 auto 2px;border-radius:50%}
+#simbar .presence{position:absolute;right:1px;top:1px;font-size:8px;color:#80e59e}
+#simbar .presence.offline{color:#c6b8c6}
+#phoneOverlay .choice-grid button{min-height:58px}
 [hidden]{display:none!important}
 </style></head><body>
-<div id="home">TENU HOUSE DEMO · Tap the ground to walk · Coins are fictional</div>
+<div id="home">NDDC Close · Tenu Close No. 4 · Tap to walk</div>
 <div id="clock">Day 1 · 08:00 ☀️</div>
 <div id="needs" hidden></div>
 <div id="toast" aria-live="polite"></div>
 <div id="hint">Choose your character to begin. You can only control that character.</div>
-<div class="tools"><button id="profileBtn">My profile</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Activities</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div>
+<div class="tools"><button id="profileBtn">My profile</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Activities</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div>
 <div id="btns"><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">－</button><button id="rot" aria-label="Rotate view">⟲</button></div>
-<div id="profileOverlay" class="overlay"><section class="dialog"><h1>TENU HOUSE DEMO</h1><h2>Who are you playing?</h2><p>Choose a household member to start. Your character is reserved to you while you play.</p><div id="profileChoices" class="choice-grid"></div><p id="profileStatus" class="status">Getting the house ready…</p></section></div>
+<button id="restoreControls" hidden>Show controls</button>
+<nav id="simbar" aria-label="Household characters"></nav>
+<div id="profileOverlay" class="overlay"><section class="dialog"><h1>TENU HOUSE</h1><h2>Who are you playing?</h2><p>Choose a household member. Doms is reserved for the household owner.</p><div id="profileChoices" class="choice-grid"></div><button id="accountBtn" class="secondary">Sign in / secure account</button><p id="profileStatus" class="status">Getting the house ready…</p></section></div>
+<div id="accountOverlay" class="overlay" hidden><section class="dialog"><h2>Secure your household account</h2><p>Use your email on another device to sign in as the same household player. To secure Doms, do this from the device that already owns Doms.</p><label for="accountEmail">Email</label><input id="accountEmail" type="email" autocomplete="email"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="current-password" minlength="8"><p id="accountStatus" class="status"></p><div class="row"><button id="signInAccount">Sign in</button><button id="secureAccount">Secure this player</button><button id="closeAccount" class="secondary">Close</button></div></section></div>
 <div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
 <div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Go to school<br>Earn 100 coins</button><button data-activity="market">Work at the market<br>Earn 300 coins</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay a household bill<br>Spend 250 coins</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep / rest</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
 <div id="bankOverlay" class="overlay" hidden><section class="dialog"><h2>Household wallet</h2><p id="bankBalance">Loading balance…</p><p>Send fictional TENU coins to another household player.</p><label for="bankRecipient">Send to</label><select id="bankRecipient"></select><label for="bankAmount">Amount (1–10,000)</label><input id="bankAmount" type="number" min="1" max="10000" step="1"><p id="bankStatus" class="status"></p><div class="row"><button id="sendCoins">Send coins</button><button id="closeBank" class="secondary">Close</button></div></section></div>
 <div id="chatOverlay" class="overlay" hidden><section class="dialog"><h2>House chat</h2><div id="chatLog" aria-live="polite"></div><label for="chatMessage">Message</label><textarea id="chatMessage" maxlength="500" placeholder="Say something to the household"></textarea><p id="chatStatus" class="status"></p><div class="row"><button id="sendChat">Send</button><button id="closeChat" class="secondary">Close</button></div></section></div>
+<div id="phoneOverlay" class="overlay" hidden><section class="dialog"><h2 id="phoneTitle">Phone</h2><p>Choose a ride, flight or map app. Game fares use TENU coins.</p><div id="phoneApps" class="choice-grid"><button data-phone="bolt">Bolt<br>Order a car</button><button data-phone="uber">Uber / taxi<br>Order a car</button><button data-phone="keke">Keke<br>Local ride</button><button data-phone="flight">Flights<br>Book a trip</button><button data-phone="maps">Maps<br>NDDC Close · Tenu Close 4</button></div><label id="flightDestinationWrap" for="flightDestination" hidden>Flight destination<select id="flightDestination"><option value="abuja">Lagos → Abuja</option><option value="port-harcourt">Lagos → Port Harcourt</option><option value="enugu">Lagos → Enugu</option></select></label><label id="rideDestinationWrap" for="rideDestination" hidden>Ride destination<select id="rideDestination"><option value="home">Home · Tenu Close No. 4</option><option value="market">Tenu Market</option><option value="school">Community school</option><option value="neighbor">Neighbour · Tenu Close No. 5</option></select></label><p id="phoneStatus" class="status"></p><div class="row"><button id="orderRide" hidden>Order ride</button><button id="bookFlight" hidden>Book flight</button><button id="closePhone" class="secondary">Close</button></div></section></div>
 <div id="browserOverlay" class="overlay" hidden><section class="dialog"><h1>Browser not supported</h1><p id="browserMessage"></p></section></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -59,7 +74,7 @@ canvas{display:block}
  if(!probe.getContext('webgl')&&!probe.getContext('experimental-webgl'))missing.push('WebGL graphics');
  if(!window.WebSocket)missing.push('live chat support');
  if(!window.fetch||!window.Promise)missing.push('modern web support');
- if(missing.length){document.getElementById('browserOverlay').hidden=false;document.getElementById('browserMessage').textContent=(ios?'Please open TENU HOUSE DEMO in Safari on your iPhone or iPad. ':'Please update or switch to a modern browser. ')+'This browser is missing '+missing.join(', ')+'.';return}
+ if(missing.length){document.getElementById('browserOverlay').hidden=false;document.getElementById('browserMessage').textContent=(ios?'Please open TENU HOUSE in Safari on your iPhone or iPad. ':'Please update or switch to a modern browser. ')+'This browser is missing '+missing.join(', ')+'.';return}
 const R=new THREE.WebGLRenderer({antialias:true});
 R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;
 document.body.appendChild(R.domElement);
@@ -102,10 +117,11 @@ for(let z=-58;z<60;z+=6)box(.25,.16,2.6,'#f2c230',11,.02,z);
 for(let z=-14;z<=10;z+=2.5){box(.25,.9,.25,'#c9a15a',-18,.45,z);box(.25,.9,.25,'#c9a15a',9.5,.45,z)}
 box(.15,.4,26,'#c9a15a',-18,.6,-2);
 // Nearby homes, a supermarket, a school and visible street advertising.
-building(-25,-4,8,9,'#e8c18c','NEXT DOOR');
-building(-29,10,7,8,'#d8a77b','FAMILY HOME');
+building(-25,-4,8,9,'#e8c18c','TENU CLOSE · NO. 5');
 building(21,-5,9,10,'#59a777','TENU MARKET');
 building(22,-23,13,11,'#e6bd65','COMMUNITY SCHOOL');
+sign('NDDC CLOSE · TENU CLOSE',-7,4,6,'#246b87');
+sign('OUR HOME · NO. 4',-6,4.2,-1.3,'#246b87');
 box(.25,4,.25,'#4b4139',6,2,13);box(5,.12,.2,'#2b3d4f',6,4,13);
 sign('TENU MARKET · OPEN DAILY',6,4.8,13,'#167a60');
 [-3,9].forEach(z=>{box(.3,3,.3,'#4b4139',16,1.5,z);box(4,.1,.2,'#2b3d4f',16,3.1,z);sign(z<0?'MARKET':'SCHOOL',16,3.8,z,'#d94d3f')});
@@ -183,7 +199,7 @@ const DEF=[['MMA','Sister','family','🏠','#8d5524','#c45b72','#30364a','#17171
  ['Dee','Dad','sleeper','😴','#8d5524','#3a6ea5','#2b2b3c','#171717']];
 const roomAssignments=[2,1,2,1,3,0,0];
 const chars=DEF.map((d,i)=>{const o=person(d[4],d[5],d[6],d[7]);Object.assign(o,{i,n:d[0],relation:d[1],q:i===5?'chatter':i===6?'sleeper':(i===0||i===2)?'gamer':'raider',ic:d[3],roomIndex:roomAssignments[i],path:[],act:null,hold:0,wait:2+i*2,st:'',ph:0,appearance:{skin:d[4],shirt:d[5],hair:d[7],hair_style:'short',body_build:1,height:1},room:{color:['#c75b7a','#6c63d6','#e6a94d','#6b9fa8'][roomAssignments[i]],wall_color:'#f2e3c6',floor_color:'#dcc28c'}});
- o.needs={energy:100,hunger:100,fun:100};o.activityDone=false;o.lastQuirkToast=0;
+ o.needs={energy:100,hunger:100,fun:100};o.activityDone=false;o.lastQuirkToast=0;o.online=false;
  o.nameTag=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,depthTest:false}));o.nameTag.position.y=3.05;o.nameTag.scale.set(2.25,.75,1);o.nameTag.renderOrder=10;o.nameTag.visible=false;o.g.add(o.nameTag);
  o.nameCanvas=document.createElement('canvas');o.nameCanvas.width=384;o.nameCanvas.height=128;o.nameContext=o.nameCanvas.getContext('2d');
  o.nameTexture=new THREE.CanvasTexture(o.nameCanvas);o.nameTag.material.map=o.nameTexture;drawNameTag(o);
@@ -210,7 +226,7 @@ const gridX=i=>GRID_X+(i%GRID_W)*GRID_STEP,gridZ=i=>GRID_Z+Math.floor(i/GRID_W)*
 [
  [-6,-17,20,.3],[-16,-9,.3,16],[4,-9,.3,16],
  [-11.5,-1,9,.3],[-.5,-1,9,.3],
- [-25,-4,8,9],[-29,10,7,8],[21,-5,9,10],[22,-23,13,11],
+ [-25,-4,8,9],[21,-5,9,10],[22,-23,13,11],
  ...[-11,-6,-1].flatMap(x=>[[x,-14.75,.2,4.5],[x,-9.65,.2,2.3]]),
  ...[-13.5,-8.5,-3.5,1.5].flatMap(x=>[[x-2.5,-8.5,3.6,.2],[x+2.2,-8.5,.8,.2]]),
  ...bedrooms.map(x=>[x,-14.2,2.8,2.8]),
@@ -332,6 +348,27 @@ document.getElementById('rot').onclick=()=>{ang+=Math.PI/2;size()};
 const clk=new THREE.Clock();
 const $=id=>document.getElementById(id),profileOverlay=$('profileOverlay');
 let currentUserId=null,currentProfile=null,roomRows={};
+let controlTimeout=null,presenceTimer=null,phoneMode='',lastPresenceWrite=0;
+function resetControlsTimeout(){
+ document.body.classList.remove('controls-hidden');$('restoreControls').hidden=true;
+ clearTimeout(controlTimeout);
+ if(!activeCharId)return;
+ controlTimeout=setTimeout(()=>{document.body.classList.add('controls-hidden');$('restoreControls').hidden=false},30000)
+}
+async function sendPresence(isOnline){
+ if(!db||!activeCharId)return;
+ const {error}=await db.rpc('set_tenu_presence',{p_character_id:activeCharId,p_is_online:isOnline});
+ if(error){if(error.code!=='42883'&&error.code!=='PGRST202')console.warn('Player presence could not be updated:',error);return}
+ lastPresenceWrite=Date.now()
+}
+function startPresence(){
+ clearInterval(presenceTimer);
+ sendPresence(true).catch(err=>console.error('Presence heartbeat failed:',err));
+ presenceTimer=setInterval(async()=>{
+  if(document.visibilityState==='hidden'||!activeCharId||!db)return;
+  try{await sendPresence(true);await refreshProfiles()}catch(err){console.error('Presence refresh failed:',err)}
+ },10000)
+}
 function updateNameTags(){
  chars.forEach(c=>{
   const visible=(c.i===sel&&activeCharId)||c.i===hoveredChar||(c.i===touchedChar&&performance.now()<touchedUntil);
@@ -339,6 +376,10 @@ function updateNameTags(){
  })
 }
 const defaultConfig={url:'https://nxqbehhnloyzykfyyoum.supabase.co',key:'sb_publishable_nq74MhjrVf-Nu3-ygODveA_p2N7t2ad'},localProfilesKey='tenuLocalProfiles',localRoomsKey='tenuLocalRooms',localChatKey='tenuLocalChat';
+function withTimeout(promise,milliseconds){
+ let timer;
+ return Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Connection timed out')),milliseconds)})]).finally(()=>clearTimeout(timer))
+}
 function drawNameTag(c){
  const ctx=c.nameContext,w=c.nameCanvas.width,h=c.nameCanvas.height,label=c.n;
  ctx.clearRect(0,0,w,h);ctx.fillStyle='#241b29e8';ctx.fillRect(8,4,w-16,54);
@@ -349,6 +390,26 @@ function drawNameTag(c){
   ctx.fillStyle='#fff4df';ctx.font='bold 13px Trebuchet MS,sans-serif';ctx.textAlign='right';ctx.fillText(letter,36,y+9)
  });
  c.nameTexture.needsUpdate=true
+}
+function drawHeadshot(canvas,c){
+ const ctx=canvas.getContext('2d'),skin=c.appearance.skin||DEF[c.i][4],hair=c.appearance.hair||DEF[c.i][7];
+ ctx.clearRect(0,0,64,64);ctx.fillStyle=c.appearance.shirt||DEF[c.i][5];ctx.fillRect(0,0,64,64);
+ ctx.fillStyle=skin;ctx.beginPath();ctx.ellipse(32,34,19,23,0,0,Math.PI*2);ctx.fill();
+ if(c.appearance.hair_style!=='bald'){ctx.fillStyle=hair;ctx.beginPath();ctx.ellipse(32,19,c.appearance.hair_style==='afro'?24:20,c.appearance.hair_style==='afro'?16:9,0,Math.PI,Math.PI*2);ctx.fill()}
+ ctx.fillStyle='#211b20';ctx.beginPath();ctx.arc(25,34,2,0,Math.PI*2);ctx.arc(39,34,2,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='#733c36';ctx.lineWidth=2;ctx.beginPath();ctx.arc(32,42,5,.2,Math.PI-.2);ctx.stroke()
+}
+function updateSimbar(){
+ const bar=$('simbar');if(!bar)return;bar.replaceChildren();
+ chars.forEach(c=>{
+  const id=DEF[c.i][0],owner=profilesByChar[id],ownedByCurrent=Boolean(db&&owner?.user_id===currentUserId);
+  const button=document.createElement('button'),canvas=document.createElement('canvas'),name=document.createElement('span'),presence=document.createElement('span');
+  button.type='button';button.className=c.i===sel&&activeCharId?'selected':'';
+  button.disabled=Boolean(db&&owner&&owner.user_id!==currentUserId)||id==='Doms'&&!ownedByCurrent;
+  button.title=button.disabled&&id==='Doms'?'Doms is reserved for the household owner':button.disabled?'This character is controlled by another player':c.online?'Online now':'NPC when offline';
+  drawHeadshot(canvas,c);name.textContent=c.n;presence.className='presence'+(c.online?'':' offline');presence.textContent=c.online?'●':'○';
+  button.append(canvas,name,presence);button.onclick=()=>{resetControlsTimeout();chooseProfile(id)};bar.appendChild(button)
+ })
 }
 function applyAppearance(c,appearance){
  c.appearance={...c.appearance,...(appearance||{})};
@@ -371,19 +432,21 @@ function applyProfile(row){
  c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance);drawNameTag(c);
  activeCharId=row.character_id;sel=c.i;currentProfile=row;
  applyRoom(c.roomIndex,roomRows[c.roomIndex]);
- $('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=false;updateNeedsHud();
+ $('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=false;updateNeedsHud();updateSimbar();resetControlsTimeout();
  $('hint').textContent='Playing as '+c.n+' · Tap the ground to move your character.';
+ c.online=true;updateSimbar();
  profileOverlay.hidden=true
 }
 function updateChoices(){
  const list=$('profileChoices');list.replaceChildren();
  chars.forEach(c=>{
   const original=DEF[c.i][0],owner=profilesByChar[original],b=document.createElement('button');
-  b.textContent=(owner&&owner.user_id===currentUserId?c.n+' · your profile':c.n+(db&&owner?' · in use':''))+' — '+c.relation;
-  b.disabled=Boolean(db&&owner&&owner.user_id!==currentUserId);
+  const isDoms=original==='Doms',isMine=Boolean(owner&&owner.user_id===currentUserId);
+  b.textContent=isDoms&&!isMine?c.n+' · reserved for Doms owner':(isMine?c.n+' · your profile':c.n+(db&&owner?(c.online?' · online':' · NPC when offline'):''))+' — '+c.relation;
+  b.disabled=isDoms?!isMine:Boolean(db&&owner&&owner.user_id!==currentUserId);
   b.onclick=()=>chooseProfile(original);
   list.appendChild(b)
- });
+ });updateSimbar()
 }
 function appendChat(row){
  const log=$('chatLog'),p=document.createElement('p');
@@ -391,16 +454,27 @@ function appendChat(row){
  while(log.children.length>60)log.firstElementChild.remove();log.scrollTop=log.scrollHeight
 }
 async function refreshProfiles(){
- let {data,error}=await db.from('tenu_players').select('character_id,user_id,character_name,appearance,needs');
- if(error?.code==='42703'||error?.code==='PGRST204')({data,error}=await db.from('tenu_players').select('character_id,user_id,character_name,appearance'));
+ let {data,error}=await db.from('tenu_players').select('character_id,user_id,character_name,appearance,needs,last_seen_at');
+ if(error?.code==='42703'||error?.code==='PGRST204'){
+  ({data,error}=await db.from('tenu_players').select('character_id,user_id,character_name,appearance,last_seen_at'));
+  if(error?.code==='42703'||error?.code==='PGRST204')({data,error}=await db.from('tenu_players').select('character_id,user_id,character_name,appearance'))
+ }
  if(error)throw error;
  profilesByChar=Object.fromEntries(data.map(row=>[row.character_id,row]));
- chars.forEach(c=>{const row=profilesByChar[DEF[c.i][0]];if(row){c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance);if(row.needs)c.needs={...c.needs,...row.needs};drawNameTag(c)}});
+ chars.forEach(c=>{
+  const row=profilesByChar[DEF[c.i][0]];
+  if(row){
+   c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance);
+   if(row.needs)c.needs={...c.needs,...row.needs};
+   const seen=Date.parse(row.last_seen_at||'');c.online=row.user_id===currentUserId||Number.isFinite(seen)&&Date.now()-seen<30000;
+   drawNameTag(c)
+  }else c.online=false
+ });
  let {data:rooms,error:roomError}=await db.from('tenu_rooms').select('room_id,color,wall_color,floor_color');
  if(roomError?.code==='42703')({data:rooms,error:roomError}=await db.from('tenu_rooms').select('room_id,color'));
  if(roomError)throw roomError;roomRows=Object.fromEntries(rooms.map(row=>[row.room_id,row]));
  rooms.forEach(row=>applyRoom(row.room_id,row));
- updateChoices()
+ updateChoices();updateSimbar()
 }
 function saveLocalNeeds(){
  try{localStorage.setItem(savedNeedsKey,JSON.stringify(Object.fromEntries(chars.map(c=>[DEF[c.i][0],c.needs]))))}
@@ -440,10 +514,15 @@ async function connectHouse(url,key){
  if(parsed.username||parsed.password||parsed.search||parsed.hash||parsed.pathname!=='/')throw Error('Enter the base Supabase project URL without paths, credentials, or query parameters.');
  if(!key.trim())throw Error('Enter the anon or publishable key.');
  if(!window.supabase?.createClient)throw Error('Could not load the Supabase client. Check your connection and reload.');
- db=window.supabase.createClient(url.replace(/\/$/,''),key.trim(),{auth:{persistSession:true,autoRefreshToken:true}});
- let {data:{session},error}=await db.auth.getSession();if(error)throw error;
- if(!session){const signed=await db.auth.signInAnonymously();if(signed.error)throw signed.error;session=signed.data.session}
+ const fetchWithTimeout=(input,init={})=>{
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),6000);
+  return fetch(input,{...init,signal:controller.signal}).finally(()=>clearTimeout(timer))
+ };
+ const client=window.supabase.createClient(url.replace(/\/$/,''),key.trim(),{auth:{persistSession:true,autoRefreshToken:true},global:{fetch:fetchWithTimeout}});
+ let {data:{session},error}=await withTimeout(client.auth.getSession(),7000);if(error)throw error;
+ if(!session){const signed=await withTimeout(client.auth.signInAnonymously(),7000);if(signed.error)throw signed.error;session=signed.data.session}
  currentUserId=session.user.id;
+ db=client;
  await refreshProfiles();
  const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
  $('profileStatus').textContent=mine?'Welcome back, '+(mine.character_name||mine.character_id)+'. Select your profile to continue.':'Choose your household character.';
@@ -457,6 +536,7 @@ async function chooseProfile(characterId){
  const status=$('profileStatus');status.textContent='Reserving profile…';
  try{
   if(!db){
+   if(characterId==='Doms'){status.textContent='Doms is reserved for the household owner. Sign in on the owner’s device.';return}
    const c=chars.find(z=>DEF[z.i][0]===characterId);if(!c)return;
    const saved=JSON.parse(localStorage.getItem(localProfilesKey)||'{}'),rooms=JSON.parse(localStorage.getItem(localRoomsKey)||'{}');
    profilesByChar={};roomRows=rooms;
@@ -472,11 +552,46 @@ async function chooseProfile(characterId){
   else result=await db.from('tenu_players').insert({character_id:characterId,user_id:currentUserId,character_name:characterId,appearance:{}}).select('character_id,user_id,character_name,appearance').single();
   if(result.error)throw result.error;
   await refreshProfiles();applyProfile(result.data);
+  startPresence();
   try{await startChat()}catch(chatError){$('chatStatus').textContent='House chat is unavailable right now.';console.warn('House chat could not start:',chatError)}
  }catch(err){
   status.textContent='That character could not be reserved. Please try another.';console.error('Profile selection failed:',err)
  }
 }
+function openAccount(){
+  $('accountStatus').textContent='';
+  const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
+  $('secureAccount').hidden=!mine;
+  $('accountOverlay').hidden=false
+ }
+ async function signInAccount(){
+  const email=$('accountEmail').value.trim(),password=$('accountPassword').value;
+  $('signInAccount').disabled=true;$('accountStatus').textContent='Signing in…';
+  try{
+   if(!db)throw Error('Household login is unavailable while offline.');
+   const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;
+   currentUserId=data.user.id;await refreshProfiles();
+   const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
+   $('accountOverlay').hidden=true;
+   if(mine){applyProfile(mine);startPresence()}
+   else{profileOverlay.hidden=false;$('profileStatus').textContent='Signed in. Choose a household character.'}
+   updateChoices()
+  }catch(err){$('accountStatus').textContent='Could not sign in with those details.';console.error('Household sign-in failed:',err)}
+  finally{$('signInAccount').disabled=false}
+ }
+ async function secureAccount(){
+  const email=$('accountEmail').value.trim(),password=$('accountPassword').value;
+  if(!email||password.length<8){$('accountStatus').textContent='Enter your email and a password with at least 8 characters.';return}
+  const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
+  if(!db||!mine){$('accountStatus').textContent='Choose your household character online before securing this account.';return}
+  $('secureAccount').disabled=true;$('accountStatus').textContent='Securing account…';
+  try{
+   const {data,error}=await db.auth.updateUser({email,password});if(error)throw error;
+   if(data.user.id!==currentUserId)throw Error('Account identity changed unexpectedly.');
+   $('accountStatus').textContent='Account secured. Confirm the email if prompted; use these details to sign in on other devices.'
+  }catch(err){$('accountStatus').textContent='Could not secure this account right now.';console.error('Household account upgrade failed:',err)}
+  finally{$('secureAccount').disabled=false}
+ }
 function openCustomization(){
  if(!currentProfile)return;
  $('customName').value=currentProfile.character_name||DEF[sel][0];
@@ -616,6 +731,71 @@ async function buyItem(item){
   toast(item==='bill'?'Bill paid.':'Shopping done.');await loadWallet()
  }catch(err){$('activityStatus').textContent='Not enough coins, or the shop is temporarily unavailable.';console.error('Purchase failed:',err)}
 }
+const tripDestinations={
+ home:{point:[-6,-3],label:'Home · Tenu Close No. 4'},
+ market:{point:[16,-5],label:'Tenu Market'},
+ school:{point:[16,-18],label:'Community school'},
+ neighbor:{point:[-20,-4],label:'Neighbour · Tenu Close No. 5'}
+};
+async function payTransport(item,fare){
+ if(db&&economyOnline){
+  const {data,error}=await db.rpc('purchase_tenu_item',{p_item:item});if(error)throw error;
+  localWallet[activeCharId]=Number(data);saveWallet()
+ }else{
+  localWallet[activeCharId]=Number(localWallet[activeCharId]??10000);
+  if(localWallet[activeCharId]<fare)throw Error('Insufficient game coins');
+  localWallet[activeCharId]-=fare;saveWallet()
+ }
+ await loadWallet()
+}
+function openPhone(){
+ phoneMode='';$('phoneStatus').textContent='';$('phoneApps').hidden=false;
+ $('flightDestinationWrap').hidden=true;$('rideDestinationWrap').hidden=true;
+ $('orderRide').hidden=true;$('bookFlight').hidden=true;$('phoneOverlay').hidden=false
+}
+function selectPhoneApp(mode){
+ phoneMode=mode;$('phoneApps').hidden=true;$('phoneStatus').textContent='';
+ const flight=mode==='flight',ride=['bolt','uber','keke'].includes(mode),maps=mode==='maps';
+ $('flightDestinationWrap').hidden=!flight;$('rideDestinationWrap').hidden=!ride;
+ $('orderRide').hidden=!ride;$('bookFlight').hidden=!flight;
+ if(flight)updateFlightFare();
+ if(ride){$('orderRide').textContent=mode==='keke'?'Order keke':'Order '+(mode==='bolt'?'Bolt':'Uber / taxi');$('phoneStatus').textContent='Pickup: Tenu Close No. 4. Choose a stop.'}
+ if(maps){$('phoneStatus').textContent='You are at NDDC Close, Tenu Close No. 4. Your neighbour is No. 5.';$('phoneApps').hidden=false}
+}
+function updateFlightFare(){
+ const fares={abuja:2500,'port-harcourt':2200,enugu:2300},destination=$('flightDestination').value;
+ $('bookFlight').textContent='Book flight · '+fares[destination].toLocaleString()+' coins'
+}
+async function orderRide(){
+ const fares={bolt:250,uber:350,keke:100},fare=fares[phoneMode],destination=tripDestinations[$('rideDestination').value];
+ if(!fare||!destination)return;
+ const c=chars[sel];$('orderRide').disabled=true;$('phoneStatus').textContent='Driver is on the way…';
+ try{
+  await payTransport(phoneMode,fare);
+  const from=[8,Math.max(-20,Math.min(20,c.g.position.z))],to=destination.point;
+  const vehicle=phoneMode==='keke'?keke():taxi();vehicle.position.set(from[0],0,from[1]);S.add(vehicle);
+  c.g.visible=false;c.path=[];c.then=null;c.act={at:'ride',t:0,max:7};
+  c.trip={kind:'ride',vehicle,from,to,label:destination.label,provider:phoneMode};
+  $('phoneOverlay').hidden=true;toast((phoneMode==='keke'?'Keke':phoneMode==='bolt'?'Bolt':'Uber')+' is taking you to '+destination.label+'.')
+ }catch(err){$('phoneStatus').textContent='The ride could not be booked. Check your game balance.';console.error('Ride booking failed:',err)}
+ finally{$('orderRide').disabled=false}
+}
+async function bookFlight(){
+ const destination=$('flightDestination').value;
+ const items={abuja:'flight_abuja','port-harcourt':'flight_port_harcourt',enugu:'flight_enugu'};
+ const labels={abuja:'Abuja','port-harcourt':'Port Harcourt',enugu:'Enugu'};
+ const fares={abuja:2500,'port-harcourt':2200,enugu:2300},item=items[destination],c=chars[sel];
+ $('bookFlight').disabled=true;$('phoneStatus').textContent='Booking your flight…';
+ try{
+  await payTransport(item,fares[destination]);
+  const plane=new THREE.Group();
+  box(.35,.35,2,'#fff4df',0,0,0,plane);box(3,.12,.6,'#438bd1',0,0,0,plane);box(.15,.8,.4,'#e6b647',0,.25,.7,plane);
+  plane.position.set(c.g.position.x,8,c.g.position.z);S.add(plane);
+  c.g.visible=false;c.path=[];c.act={at:'flight',t:0,max:12};c.trip={kind:'flight',vehicle:plane,label:labels[destination],from:[c.g.position.x,c.g.position.z]};
+  $('phoneOverlay').hidden=true;toast('Boarding your flight to '+labels[destination]+'.')
+ }catch(err){$('phoneStatus').textContent='Flight booking failed. Check your game balance.';console.error('Flight booking failed:',err)}
+ finally{$('bookFlight').disabled=false}
+}
 async function tryDomsGift(){
  const target=$('giftRecipient').value;if(!target){$('activityStatus').textContent='Invite another household member first.';return}
  $('domsGift').disabled=true;
@@ -671,6 +851,14 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
    else{p.x+=dx/d*s;p.z+=dz/d*s}c.st='🚶'}
   else if(c.act){
    c.act.t+=dt;c.st=c.act.at==='sofa'||c.act.at==='sleep'?'😴':c.ic;
+   if(c.trip?.kind==='ride'){
+    const p=c.act.t/c.act.max,from=c.trip.from,to=c.trip.to;
+    c.trip.vehicle.position.set(from[0]+(to[0]-from[0])*p,0,from[1]+(to[1]-from[1])*p);
+    c.trip.vehicle.rotation.y=Math.atan2(to[0]-from[0],to[1]-from[1])
+   }else if(c.trip?.kind==='flight'){
+    const p=c.act.t/c.act.max;c.trip.vehicle.position.x=c.trip.from[0]+Math.sin(p*Math.PI*2)*8;
+    c.trip.vehicle.position.z=c.trip.from[1]-p*24;c.trip.vehicle.position.y=8+Math.sin(p*Math.PI)*3
+   }
    if(c.act.at==='eat'||c.act.at==='raid')c.needs.hunger=Math.min(100,c.needs.hunger+(c.act.at==='raid'?14:18)*dt);
    if(c.act.at==='sleep')c.needs.energy=Math.min(100,c.needs.energy+2.5*dt);
    if(c.act.at==='sofa')c.needs.energy=Math.min(100,c.needs.energy+.9*dt);
@@ -678,10 +866,20 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
    if(c.act.face){const f=c.act.face.g.position;c.g.rotation.y=Math.atan2(f.x-p.x,f.z-p.z)}
    if(c.act.at!=='sofa'&&c.act.at!=='sleep')c.p.position.y=Math.abs(Math.sin(t*6))*.05;
    if(c.act.t>=c.act.max||c.act.at==='sleep'&&c.needs.energy>=99){
+    const trip=c.trip;
+    if(trip?.kind==='ride'){
+     c.g.position.set(trip.to[0],0,trip.to[1]);c.g.visible=true;S.remove(trip.vehicle);view.set(trip.to[0],0,trip.to[1]);size();
+     $('home').textContent='NDDC Close · '+trip.label;toast('Arrived at '+trip.label+'.')
+    }else if(trip?.kind==='flight'){
+     S.remove(trip.vehicle);c.g.visible=true;const flightMinutes=gameMinute+8*60;gameDay+=Math.floor(flightMinutes/1440);gameMinute=flightMinutes%1440;
+     $('home').textContent='Visiting '+trip.label+' · NDDC Close, Lagos';toast('Landed at '+trip.label+' airport.')
+    }
+    c.trip=null;
     const completed=c.act.action;c.p.position.y=0;endAct(c);c.wait=5+Math.random()*6;
     if(completed)finishActivity(c,completed).catch(err=>console.error('Activity could not finish:',err))
    }}
-  else{c.st='';if(c.hold<=0&&(c.wait-=dt)<=0){decide(c);c.wait=4+Math.random()*4}}});
+  else{c.st='';if(c.i===sel&&activeCharId===DEF[c.i][0])c.wait=2;
+   else if(c.hold<=0&&(c.wait-=dt)<=0){decide(c);c.wait=4+Math.random()*4}}});
  uiTimer+=dt;
  if(uiTimer>=1){
   uiTimer=0;const hour=Math.floor(gameMinute/60)%24,minute=Math.floor(gameMinute%60),clockText=String(hour).padStart(2,'0')+':'+String(minute).padStart(2,'0');
@@ -693,17 +891,29 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  updateNameTags();
  R.render(S,cam);requestAnimationFrame(frame)}
 document.getElementById('profileBtn').onclick=async()=>{
+ resetControlsTimeout();
  if(!db){updateChoices();profileOverlay.hidden=false;$('profileStatus').textContent='Choose who you want to play as.';return}
  try{await refreshProfiles();profileOverlay.hidden=false;$('profileStatus').textContent='Choose your household character. You can only control your own profile.'}
  catch(err){$('profileStatus').textContent='The household list is unavailable right now.';profileOverlay.hidden=false;console.error('Profile list refresh failed:',err)}
 };
 document.getElementById('customizeBtn').onclick=openCustomization;
+document.getElementById('restoreControls').onclick=resetControlsTimeout;
+document.getElementById('accountBtn').onclick=openAccount;
+document.getElementById('closeAccount').onclick=()=> $('accountOverlay').hidden=true;
+document.getElementById('signInAccount').onclick=signInAccount;
+document.getElementById('secureAccount').onclick=secureAccount;
 document.getElementById('closeCustom').onclick=cancelCustomization;
 document.getElementById('saveCustom').onclick=saveCustomization;
 ['shirtColor','skinColor','hairColor','hairStyle','bodyBuild','bodyHeight'].forEach(id=>$(id).addEventListener('input',previewCustomization));
 ['roomColor','wallColor','floorColor'].forEach(id=>$(id).addEventListener('input',previewRoom));
 document.getElementById('bankBtn').onclick=()=>openBank().catch(err=>{console.error('Wallet could not open:',err);$('bankStatus').textContent='The wallet is unavailable right now.'});
 document.getElementById('activitiesBtn').onclick=()=>openActivities().catch(err=>{console.error('Activities could not open:',err);$('activityStatus').textContent='Activities are unavailable right now.'});
+document.getElementById('phoneBtn').onclick=openPhone;
+document.getElementById('closePhone').onclick=()=> $('phoneOverlay').hidden=true;
+document.querySelectorAll('[data-phone]').forEach(button=>button.addEventListener('click',()=>selectPhoneApp(button.dataset.phone)));
+document.getElementById('orderRide').onclick=orderRide;
+document.getElementById('bookFlight').onclick=bookFlight;
+document.getElementById('flightDestination').onchange=updateFlightFare;
 document.getElementById('closeActivities').onclick=()=> $('activityOverlay').hidden=true;
 document.getElementById('sleepBtn').onclick=()=>startActivity('sleep');
 document.querySelectorAll('[data-activity]').forEach(button=>button.addEventListener('click',()=>startActivity(button.dataset.activity)));
@@ -714,6 +924,13 @@ document.getElementById('generatorBtn').onclick=()=>{
  $('generatorBtn').textContent='Generator: '+(generatorNoise?'noisy':'quiet');
  toast(generatorNoise?'Generator noise is on.':'Generator noise is off.')
 };
+document.addEventListener('pointerdown',resetControlsTimeout,{passive:true});
+document.addEventListener('keydown',resetControlsTimeout);
+document.addEventListener('visibilitychange',()=>{
+ if(document.visibilityState==='visible'){resetControlsTimeout();if(activeCharId)startPresence()}
+ else if(activeCharId)sendPresence(false).catch(err=>console.error('Offline presence update failed:',err))
+});
+window.addEventListener('pagehide',()=>{if(activeCharId)sendPresence(false).catch(err=>console.error('Presence close update failed:',err))});
 document.getElementById('closeBank').onclick=()=> $('bankOverlay').hidden=true;
 document.getElementById('sendCoins').onclick=sendCoins;
 document.getElementById('chatBtn').onclick=async()=>{
@@ -741,6 +958,7 @@ document.getElementById('installBtn').onclick=async()=>{
 if(ios&&!matchMedia('(display-mode: standalone)').matches)$('installBtn').hidden=false;
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(err=>console.error('PWA service worker registration failed:',err)));
 try{
+ updateSimbar();
  connectHouse(defaultConfig.url,defaultConfig.key).catch(err=>{
   db=null;currentUserId='local';updateChoices();$('profileStatus').textContent=connectionMessage(err);console.error('Shared household connection failed:',err)
  });
