@@ -9,7 +9,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#ffd9a0;font-family:"T
 canvas{display:block}
 #btns{position:fixed;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:3;display:flex;flex-direction:column;gap:8px}
 #btns button{width:46px;height:46px;border-radius:50%;border:0;background:#2a1f2dd9;color:#fff;font-size:20px}
-#hint{position:fixed;left:0;right:0;bottom:calc(86px + env(safe-area-inset-bottom));text-align:center;color:#2a1f2d;font-size:13px;pointer-events:none}
+#hint{position:fixed;left:0;right:0;bottom:calc(86px + env(safe-area-inset-bottom));text-align:center;color:#2a1f2d;font-size:13px;pointer-events:none;transition:opacity .25s}
 #home{position:fixed;left:8px;top:calc(8px + env(safe-area-inset-top));max-width:min(260px,calc(100vw - 160px));padding:7px 9px;border-radius:10px;background:#2a1f2dd9;color:#fdf3e4;font-size:10px;line-height:1.45;pointer-events:none}
 #clock{position:fixed;top:env(safe-area-inset-top);right:8px;padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:12px}
 #needs{position:fixed;right:8px;top:calc(42px + env(safe-area-inset-top));padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:11px;line-height:1.55}
@@ -28,6 +28,19 @@ canvas{display:block}
 .dialog .row{display:flex;gap:8px;margin-top:12px}.dialog .row>*{flex:1}
 .dialog button.secondary{background:#796c6c}
 .dialog .status{min-height:1.4em;color:#6a5346;font-size:13px}
+.auth-dialog{width:min(420px,100%);padding:26px;background:linear-gradient(150deg,#fffaf0,#f5e5cd)}
+.auth-mark{display:grid;place-items:center;width:44px;height:44px;margin-bottom:14px;border-radius:14px;background:#2a1f2d;color:#ffc857;font-size:22px;font-weight:bold}
+.auth-eyebrow{margin:0;color:#8f6858;font-size:10px;font-weight:bold;letter-spacing:.16em}
+.auth-dialog h2{margin:5px 0;font-size:26px}
+.auth-copy{margin:0 0 16px;color:#74645d;font-size:13px}
+.auth-google,.auth-link-google{width:100%;min-height:46px;border:1px solid #c9b8a2!important;background:#fff!important;color:#29232a!important;font-weight:bold!important}
+.auth-link-google{margin-top:8px}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:15px 0;color:#8c7b70;font-size:11px}
+.auth-divider:before,.auth-divider:after{content:"";height:1px;flex:1;background:#ddcdb9}
+.auth-guest{width:100%;margin-top:8px;background:transparent!important;color:#66545b!important}
+.auth-dialog .row{margin-top:8px}
+.auth-dialog #signInAccount{background:#574149}
+.auth-dialog #secureAccount{background:#a44d39}
 .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .choice-grid button{min-height:52px;text-align:left}
 #chatLog{max-height:40vh;overflow:auto;background:#fff;border-radius:9px;padding:10px;font-size:13px}
@@ -36,7 +49,7 @@ canvas{display:block}
 .slider-row input{grid-column:1/-1}
 .number{font-variant-numeric:tabular-nums}
 #btns{transition:opacity .25s}
-.controls-hidden .tools,.controls-hidden #btns{opacity:0;pointer-events:none}
+.controls-hidden .tools,.controls-hidden #btns,.controls-hidden #hint{opacity:0;pointer-events:none}
 #restoreControls{position:fixed;right:10px;bottom:calc(78px + env(safe-area-inset-bottom));z-index:3;border:0;border-radius:20px;padding:10px 13px;background:#2a1f2dee;color:white;font:inherit}
 #simbar{position:fixed;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;gap:6px;min-height:68px;padding:5px 8px calc(5px + env(safe-area-inset-bottom));box-sizing:border-box;overflow-x:auto;background:#211b27ed;scrollbar-width:thin}
 #simbar button{position:relative;flex:0 0 54px;height:58px;border:1px solid #786a77;border-radius:12px;background:#382d3d;color:#fff4df;padding:3px;font:10px "Trebuchet MS",sans-serif}
@@ -52,13 +65,13 @@ canvas{display:block}
 <div id="clock">Day 1 · 08:00 ☀️</div>
 <div id="needs" hidden></div>
 <div id="toast" aria-live="polite"></div>
-<div id="hint">Choose your character to begin. You can only control that character.</div>
+<div id="hint" hidden>Tap the ground to move</div>
 <div class="tools"><button id="profileBtn">My profile</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Activities</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div>
 <div id="btns"><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">－</button><button id="rot" aria-label="Rotate view">⟲</button></div>
 <button id="restoreControls" hidden>Show controls</button>
-<nav id="simbar" aria-label="Household characters"></nav>
-<div id="profileOverlay" class="overlay"><section class="dialog"><h1>TENU HOUSE</h1><h2>Who are you playing?</h2><p>Choose a household member. Doms is reserved for the household owner.</p><div id="profileChoices" class="choice-grid"></div><button id="accountBtn" class="secondary">Sign in / secure account</button><p id="profileStatus" class="status">Getting the house ready…</p></section></div>
-<div id="accountOverlay" class="overlay" hidden><section class="dialog"><h2>Secure your household account</h2><p>Use your email on another device to sign in as the same household player. To secure Doms, do this from the device that already owns Doms.</p><label for="accountEmail">Email</label><input id="accountEmail" type="email" autocomplete="email"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="current-password" minlength="8"><p id="accountStatus" class="status"></p><div class="row"><button id="signInAccount">Sign in</button><button id="secureAccount">Secure this player</button><button id="closeAccount" class="secondary">Close</button></div></section></div>
+<nav id="simbar" aria-label="Your character" hidden></nav>
+<div id="profileOverlay" class="overlay"><section class="dialog"><h1>TENU HOUSE</h1><h2>Who are you playing?</h2><p>Choose a household member to start playing.</p><div id="profileChoices" class="choice-grid"></div><button id="accountBtn" class="secondary">Sign in or create an account</button><p id="profileStatus" class="status">Getting the house ready…</p></section></div>
+<div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2>Welcome to TENU HOUSE</h2><p class="auth-copy">Sign in to keep your character across devices, or play as a guest and get started right away.</p><button id="googleSignIn" class="auth-google">Continue with Google</button><button id="linkGoogle" class="auth-link-google" hidden>Link Google to this player</button><div class="auth-divider">or use email</div><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"><div class="row"><button id="signInAccount">Sign in</button><button id="secureAccount">Create account</button></div><p id="accountStatus" class="status" aria-live="polite"></p><button id="continueAnonymous" class="auth-guest">Continue anonymously</button><button id="closeAccount" class="auth-guest">Back to character selection</button></section></div>
 <div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
 <div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Go to school<br>Earn 100 coins</button><button data-activity="market">Work at the market<br>Earn 300 coins</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay a household bill<br>Spend 250 coins</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep / rest</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
 <div id="bankOverlay" class="overlay" hidden><section class="dialog"><h2>Household wallet</h2><p id="bankBalance">Loading balance…</p><p>Send fictional TENU coins to another household player.</p><label for="bankRecipient">Send to</label><select id="bankRecipient"></select><label for="bankAmount">Amount (1–10,000)</label><input id="bankAmount" type="number" min="1" max="10000" step="1"><p id="bankStatus" class="status"></p><div class="row"><button id="sendCoins">Send coins</button><button id="closeBank" class="secondary">Close</button></div></section></div>
@@ -337,7 +350,7 @@ function characterAt(e){
 }
 function tap(e){pt.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);rc.setFromCamera(pt,cam);
  const h=rc.intersectObjects(chars.map(c=>c.g),true);
- if(h.length){let obj=h[0].object;while(obj&&!obj.userData.c)obj=obj.parent;if(obj){touchedChar=obj.userData.c.i;touchedUntil=performance.now()+3500;$('hint').textContent=obj.userData.c.i===sel?'You are '+obj.userData.c.n+' · Tap the ground to walk.':'Only your chosen character can be controlled.'}return}
+ if(h.length){let obj=h[0].object;while(obj&&!obj.userData.c)obj=obj.parent;if(obj){touchedChar=obj.userData.c.i;touchedUntil=performance.now()+3500;$('hint').textContent=obj.userData.c.i===sel?'Tap the ground to move':'Choose your character from the profile menu.'}return}
  if(activeCharId&&rc.ray.intersectPlane(gp,v3)){const c=chars[sel];c.hold=12;
   go(c,Math.max(-32,Math.min(32,v3.x)),Math.max(-30,Math.min(30,v3.z)))}}
 document.getElementById('zi').onclick=()=>{zoom=Math.min(2.4,zoom*1.2);size()};
@@ -347,13 +360,14 @@ document.getElementById('rot').onclick=()=>{ang+=Math.PI/2;size()};
 // loop
 const clk=new THREE.Clock();
 const $=id=>document.getElementById(id),profileOverlay=$('profileOverlay');
-let currentUserId=null,currentProfile=null,roomRows={};
+let currentUserId=null,currentUser=null,currentProfile=null,roomRows={};
 let controlTimeout=null,presenceTimer=null,phoneMode='',lastPresenceWrite=0;
 function resetControlsTimeout(){
  document.body.classList.remove('controls-hidden');$('restoreControls').hidden=true;
  clearTimeout(controlTimeout);
  if(!activeCharId)return;
- controlTimeout=setTimeout(()=>{document.body.classList.add('controls-hidden');$('restoreControls').hidden=false},30000)
+ $('hint').hidden=false;
+ controlTimeout=setTimeout(()=>{document.body.classList.add('controls-hidden');$('hint').hidden=true;$('restoreControls').hidden=false},30000)
 }
 async function sendPresence(isOnline){
  if(!db||!activeCharId)return;
@@ -401,15 +415,12 @@ function drawHeadshot(canvas,c){
 }
 function updateSimbar(){
  const bar=$('simbar');if(!bar)return;bar.replaceChildren();
- chars.forEach(c=>{
-  const id=DEF[c.i][0],owner=profilesByChar[id],ownedByCurrent=Boolean(db&&owner?.user_id===currentUserId);
-  const button=document.createElement('button'),canvas=document.createElement('canvas'),name=document.createElement('span'),presence=document.createElement('span');
-  button.type='button';button.className=c.i===sel&&activeCharId?'selected':'';
-  button.disabled=Boolean(db&&owner&&owner.user_id!==currentUserId)||id==='Doms'&&!ownedByCurrent;
-  button.title=button.disabled&&id==='Doms'?'Doms is reserved for the household owner':button.disabled?'This character is controlled by another player':c.online?'Online now':'NPC when offline';
-  drawHeadshot(canvas,c);name.textContent=c.n;presence.className='presence'+(c.online?'':' offline');presence.textContent=c.online?'●':'○';
-  button.append(canvas,name,presence);button.onclick=()=>{resetControlsTimeout();chooseProfile(id)};bar.appendChild(button)
- })
+ const c=chars.find(z=>DEF[z.i][0]===activeCharId);
+ bar.hidden=!c;if(!c)return;
+ const button=document.createElement('button'),canvas=document.createElement('canvas'),name=document.createElement('span'),presence=document.createElement('span');
+ button.type='button';button.className='selected';button.title='Your character · '+(c.online?'online':'playing on this device');
+ drawHeadshot(canvas,c);name.textContent=c.n;presence.className='presence'+(c.online?'':' offline');presence.textContent=c.online?'●':'○';
+ button.append(canvas,name,presence);button.onclick=()=>{resetControlsTimeout();$('profileBtn').click()};bar.appendChild(button)
 }
 function applyAppearance(c,appearance){
  c.appearance={...c.appearance,...(appearance||{})};
@@ -433,7 +444,8 @@ function applyProfile(row){
  activeCharId=row.character_id;sel=c.i;currentProfile=row;
  applyRoom(c.roomIndex,roomRows[c.roomIndex]);
  $('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=false;updateNeedsHud();updateSimbar();resetControlsTimeout();
- $('hint').textContent='Playing as '+c.n+' · Tap the ground to move your character.';
+ $('hint').textContent='Tap the ground to move';
+ $('hint').hidden=false;
  c.online=true;updateSimbar();
  profileOverlay.hidden=true
 }
@@ -442,7 +454,7 @@ function updateChoices(){
  chars.forEach(c=>{
   const original=DEF[c.i][0],owner=profilesByChar[original],b=document.createElement('button');
   const isDoms=original==='Doms',isMine=Boolean(owner&&owner.user_id===currentUserId);
-  b.textContent=isDoms&&!isMine?c.n+' · reserved for Doms owner':(isMine?c.n+' · your profile':c.n+(db&&owner?(c.online?' · online':' · NPC when offline'):''))+' — '+c.relation;
+  b.textContent=isDoms&&!isMine?c.n+' · sign in to play':(isMine?c.n+' · your profile':c.n+(db&&owner?(c.online?' · online':' · NPC when offline'):''))+' — '+c.relation;
   b.disabled=isDoms?!isMine:Boolean(db&&owner&&owner.user_id!==currentUserId);
   b.onclick=()=>chooseProfile(original);
   list.appendChild(b)
@@ -521,7 +533,7 @@ async function connectHouse(url,key){
  const client=window.supabase.createClient(url.replace(/\/$/,''),key.trim(),{auth:{persistSession:true,autoRefreshToken:true},global:{fetch:fetchWithTimeout}});
  let {data:{session},error}=await withTimeout(client.auth.getSession(),7000);if(error)throw error;
  if(!session){const signed=await withTimeout(client.auth.signInAnonymously(),7000);if(signed.error)throw signed.error;session=signed.data.session}
- currentUserId=session.user.id;
+ currentUser=session.user;currentUserId=session.user.id;
  db=client;
  await refreshProfiles();
  const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
@@ -533,10 +545,10 @@ function connectionMessage(err){
  return 'Playing on this device for now. Character progress and game currency will save here; shared features may be unavailable.'
 }
 async function chooseProfile(characterId){
- const status=$('profileStatus');status.textContent='Reserving profile…';
+ const status=$('profileStatus');status.textContent='Starting your character…';
  try{
   if(!db){
-   if(characterId==='Doms'){status.textContent='Doms is reserved for the household owner. Sign in on the owner’s device.';return}
+   if(characterId==='Doms'){status.textContent='Sign in with the household Google account to continue as Doms.';return}
    const c=chars.find(z=>DEF[z.i][0]===characterId);if(!c)return;
    const saved=JSON.parse(localStorage.getItem(localProfilesKey)||'{}'),rooms=JSON.parse(localStorage.getItem(localRoomsKey)||'{}');
    profilesByChar={};roomRows=rooms;
@@ -555,22 +567,41 @@ async function chooseProfile(characterId){
   startPresence();
   try{await startChat()}catch(chatError){$('chatStatus').textContent='House chat is unavailable right now.';console.warn('House chat could not start:',chatError)}
  }catch(err){
-  status.textContent='That character could not be reserved. Please try another.';console.error('Profile selection failed:',err)
+  status.textContent='Could not select that character. Please sign in or try again.';console.error('Profile selection failed:',err)
  }
 }
 function openAccount(){
   $('accountStatus').textContent='';
-  const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
-  $('secureAccount').hidden=!mine;
+  const mine=Object.values(profilesByChar).some(row=>row.user_id===currentUserId);
+  $('linkGoogle').hidden=!(mine&&currentUser?.is_anonymous);
   $('accountOverlay').hidden=false
  }
+async function googleSignIn(){
+ const button=$('googleSignIn');button.disabled=true;$('accountStatus').textContent='Connecting to Google…';
+ try{
+  if(!db)throw Error('Sign-in is unavailable while offline.');
+  const {error}=await db.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin,queryParams:{prompt:'select_account'}}});
+  if(error)throw error
+ }catch(err){$('accountStatus').textContent='Google sign-in is unavailable right now. Try again or use email.';console.error('Google sign-in failed:',err);button.disabled=false}
+}
+async function linkGoogle(){
+ const button=$('linkGoogle');button.disabled=true;$('accountStatus').textContent='Linking your Google account…';
+ try{
+  if(!db||!currentUser?.is_anonymous)throw Error('Choose a guest character before linking Google.');
+  const {error}=await db.auth.linkIdentity({provider:'google',options:{redirectTo:location.origin,queryParams:{prompt:'select_account'}}});
+  if(error)throw error
+ }catch(err){
+  $('accountStatus').textContent='Could not link that Google account. If it is already in use, choose “Continue with Google” instead.';
+  console.error('Google account linking failed:',err);button.disabled=false
+ }
+}
  async function signInAccount(){
   const email=$('accountEmail').value.trim(),password=$('accountPassword').value;
   $('signInAccount').disabled=true;$('accountStatus').textContent='Signing in…';
   try{
    if(!db)throw Error('Household login is unavailable while offline.');
    const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;
-   currentUserId=data.user.id;await refreshProfiles();
+   currentUser=data.user;currentUserId=data.user.id;await refreshProfiles();
    const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
    $('accountOverlay').hidden=true;
    if(mine){applyProfile(mine);startPresence()}
@@ -582,13 +613,13 @@ function openAccount(){
  async function secureAccount(){
   const email=$('accountEmail').value.trim(),password=$('accountPassword').value;
   if(!email||password.length<8){$('accountStatus').textContent='Enter your email and a password with at least 8 characters.';return}
-  const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
-  if(!db||!mine){$('accountStatus').textContent='Choose your household character online before securing this account.';return}
-  $('secureAccount').disabled=true;$('accountStatus').textContent='Securing account…';
+  if(!db){$('accountStatus').textContent='Account creation is unavailable while offline.';return}
+  $('secureAccount').disabled=true;$('accountStatus').textContent='Creating your account…';
   try{
    const {data,error}=await db.auth.updateUser({email,password});if(error)throw error;
    if(data.user.id!==currentUserId)throw Error('Account identity changed unexpectedly.');
-   $('accountStatus').textContent='Account secured. Confirm the email if prompted; use these details to sign in on other devices.'
+   currentUser=data.user;
+   $('accountStatus').textContent='Account created. Confirm your email if asked, then use these details on other devices.'
   }catch(err){$('accountStatus').textContent='Could not secure this account right now.';console.error('Household account upgrade failed:',err)}
   finally{$('secureAccount').disabled=false}
  }
@@ -900,6 +931,9 @@ document.getElementById('customizeBtn').onclick=openCustomization;
 document.getElementById('restoreControls').onclick=resetControlsTimeout;
 document.getElementById('accountBtn').onclick=openAccount;
 document.getElementById('closeAccount').onclick=()=> $('accountOverlay').hidden=true;
+document.getElementById('continueAnonymous').onclick=()=> $('accountOverlay').hidden=true;
+document.getElementById('googleSignIn').onclick=googleSignIn;
+document.getElementById('linkGoogle').onclick=linkGoogle;
 document.getElementById('signInAccount').onclick=signInAccount;
 document.getElementById('secureAccount').onclick=secureAccount;
 document.getElementById('closeCustom').onclick=cancelCustomization;

@@ -4,9 +4,13 @@
 -- 3. Run supabase/migrations/20261020163000_virtual_wallets.sql.
 -- 4. Run supabase/migrations/20261020170000_household_needs_and_economy.sql.
 -- 5. Run supabase/migrations/20261020173000_doms_access_and_presence.sql.
---    This reserves Doms for the user currently holding that household profile.
---    If no Doms profile exists yet, the migration intentionally leaves Doms locked.
--- 6. Enable Anonymous Sign-Ins in Authentication > Providers > Anonymous.
+-- 6. Run supabase/migrations/20261020180000_google_doms_owner.sql.
+-- 7. Set the private doms_owner_email value in public.tenu_house_settings
+--    using the verified email that should own the Doms profile.
+-- 8. Enable Anonymous Sign-Ins in Authentication > Providers > Anonymous.
+-- 9. Enable Google in Authentication > Providers and configure its OAuth credentials.
+--    Add the deployed site's URL and https://<project-ref>.supabase.co/auth/v1/callback
+--    to the Google OAuth authorized redirect URIs.
 create table if not exists public.tenu_players (
   character_id text primary key check (character_id in ('MMA','Ukechi','Chibaby','Doms','Jahsfavour','Mummy','Dee')),
   user_id uuid not null unique references auth.users(id) on delete cascade,
