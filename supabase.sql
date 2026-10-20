@@ -1,5 +1,8 @@
--- Run this once in Supabase SQL Editor. Enable Anonymous Sign-Ins in
--- Authentication > Providers > Anonymous before using the game.
+-- Fresh Supabase setup:
+-- 1. Run this base schema in Supabase SQL Editor.
+-- 2. Run supabase/migrations/20261020160000_sims_style_customization.sql.
+-- 3. Run supabase/migrations/20261020163000_virtual_wallets.sql.
+-- 4. Enable Anonymous Sign-Ins in Authentication > Providers > Anonymous.
 create table if not exists public.tenu_players (
   character_id text primary key check (character_id in ('MMA','Ukechi','Chibaby','Doms','Jahsfavour','Mummy','Dee')),
   user_id uuid not null unique references auth.users(id) on delete cascade,

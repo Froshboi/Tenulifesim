@@ -7,11 +7,6 @@
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#ffd9a0;font-family:"Trebuchet MS",system-ui,sans-serif;touch-action:none}
 canvas{display:block}
-#chips{position:fixed;top:env(safe-area-inset-top);left:0;right:0;display:flex;flex-wrap:wrap;gap:6px;padding:8px;justify-content:center}
-.chip{background:#2a1f2dd9;color:#fdf3e4;border:2px solid transparent;border-radius:12px;padding:5px 8px;font-size:12px;min-width:64px}
-.chip small{display:block;font-size:9px;opacity:.8}
-.chip.on{border-color:#ffc857}
-#chips.locked .chip:not(.on){opacity:.58}
 #btns{position:fixed;right:10px;bottom:calc(44px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px}
 #btns button{width:46px;height:46px;border-radius:50%;border:0;background:#2a1f2dd9;color:#fff;font-size:20px}
 #hint{position:fixed;left:0;right:0;bottom:calc(12px + env(safe-area-inset-bottom));text-align:center;color:#2a1f2d;font-size:13px;pointer-events:none}
@@ -32,20 +27,31 @@ canvas{display:block}
 .choice-grid button{min-height:52px;text-align:left}
 #chatLog{max-height:40vh;overflow:auto;background:#fff;border-radius:9px;padding:10px;font-size:13px}
 #chatLog p{margin:4px 0;overflow-wrap:anywhere}
+.slider-row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
+.slider-row input{grid-column:1/-1}
+.number{font-variant-numeric:tabular-nums}
 [hidden]{display:none!important}
 </style></head><body>
-<div id="chips"></div>
-<div id="home">TENU HOUSE DEMO · BEDROOMS · Dee + Mummy · Ukechi + Doms · Chibaby + MMA · Jahsfavour (solo)</div>
+<div id="home">TENU HOUSE DEMO · Tap the ground to walk · Coins are fictional</div>
 <div id="hint">Choose your character to begin. You can only control that character.</div>
-<div class="tools"><button id="profileBtn">My profile</button><button id="customizeBtn" hidden>Customize</button><button id="chatBtn" hidden>House chat</button><button id="settingsBtn">Supabase setup</button><button id="installBtn" hidden>Install app</button></div>
+<div class="tools"><button id="profileBtn">My profile</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="chatBtn" hidden>House chat</button><button id="settingsBtn">Supabase setup</button><button id="installBtn" hidden>Install app</button></div>
 <div id="btns"><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">－</button><button id="rot" aria-label="Rotate view">⟲</button></div>
 <div id="profileOverlay" class="overlay"><section class="dialog"><h1>TENU HOUSE DEMO</h1><h2>Who are you playing?</h2><p>Pick a household member. Each profile can be controlled by one player at a time.</p><div id="profileChoices" class="choice-grid"></div><p id="profileStatus" class="status">Connecting to the household…</p><button id="profileSettings">Set up Supabase</button></section></div>
-<div id="settingsOverlay" class="overlay" hidden><section class="dialog"><h2>Connect this house</h2><p>Paste your Supabase project URL and anon/publishable key. These identify the public project, not a service-role secret. Run <a href="./supabase.sql" target="_blank" rel="noopener">supabase.sql</a> in the project SQL editor and enable Anonymous Sign-Ins in Supabase Auth.</p><label for="projectUrl">Project URL</label><input id="projectUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="url"><label for="anonKey">Anon / publishable key</label><input id="anonKey" type="password" autocomplete="off"><p class="status">Never paste a service-role key here. Guest profiles need no login. Anyone who can reach this site can join the household and read its chat.</p><p id="settingsStatus" class="status"></p><div class="row"><button id="saveSettings">Connect</button><button id="closeSettings" class="secondary">Cancel</button></div></section></div>
-<div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Customize your character &amp; room</h2><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Shirt</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair</label><input id="hairColor" type="color"><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
+<div id="settingsOverlay" class="overlay" hidden><section class="dialog"><h2>Connect this house</h2><p>New project: run <a href="./supabase.sql" target="_blank" rel="noopener">supabase.sql</a>, then both migrations below. Existing project: run only the <a href="./supabase/migrations/20261020160000_sims_style_customization.sql" target="_blank" rel="noopener">customization</a> and <a href="./supabase/migrations/20261020163000_virtual_wallets.sql" target="_blank" rel="noopener">wallet</a> migrations in order. Enable Anonymous Sign-Ins.</p><label for="projectUrl">Project URL</label><input id="projectUrl" type="url" autocomplete="url"><label for="anonKey">Anon / publishable key</label><input id="anonKey" type="password" autocomplete="off"><p class="status">Never use a service-role key in the app. Wallet coins are fictional game currency with no cash value.</p><p id="settingsStatus" class="status"></p><div class="row"><button id="saveSettings">Connect</button><button id="closeSettings" class="secondary">Cancel</button></div></section></div>
+<div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
+<div id="bankOverlay" class="overlay" hidden><section class="dialog"><h2>Household wallet</h2><p id="bankBalance">Loading balance…</p><p>Send fictional TENU coins to another household player.</p><label for="bankRecipient">Send to</label><select id="bankRecipient"></select><label for="bankAmount">Amount (1–10,000)</label><input id="bankAmount" type="number" min="1" max="10000" step="1"><p id="bankStatus" class="status"></p><div class="row"><button id="sendCoins">Send coins</button><button id="closeBank" class="secondary">Close</button></div></section></div>
 <div id="chatOverlay" class="overlay" hidden><section class="dialog"><h2>House chat</h2><div id="chatLog" aria-live="polite"></div><label for="chatMessage">Message</label><textarea id="chatMessage" maxlength="500" placeholder="Say something to the household"></textarea><p id="chatStatus" class="status"></p><div class="row"><button id="sendChat">Send</button><button id="closeChat" class="secondary">Close</button></div></section></div>
+<div id="browserOverlay" class="overlay" hidden><section class="dialog"><h1>Browser not supported</h1><p id="browserMessage"></p></section></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+(()=>{
+ const probe=document.createElement('canvas'),ios=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(/Macintosh/i.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
+ const missing=[];
+ if(!probe.getContext('webgl')&&!probe.getContext('experimental-webgl'))missing.push('WebGL graphics');
+ if(!window.WebSocket)missing.push('live chat support');
+ if(!window.fetch||!window.Promise)missing.push('modern web support');
+ if(missing.length){document.getElementById('browserOverlay').hidden=false;document.getElementById('browserMessage').textContent=(ios?'Please open TENU HOUSE DEMO in Safari on your iPhone or iPad. ':'Please update or switch to a modern browser. ')+'This browser is missing '+missing.join(', ')+'.';return}
 const R=new THREE.WebGLRenderer({antialias:true});
 R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;
 document.body.appendChild(R.domElement);
@@ -85,8 +91,10 @@ box(20.4,.25,.45,'#c0553a',-6,2.5,-17);
 [-13.5,-8.5,-3.5,1.5].forEach(x=>{box(1.8,2.2,.2,'#f2e3c6',x-1.6,1.1,-8.5);box(1.8,2.2,.2,'#f2e3c6',x+1.6,1.1,-8.5)});
 // Four beds correspond to the requested bedroom assignments.
 const bedrooms=[-13.5,-8.5,-3.5,1.5];
-const bedMeshes=[];
+const bedMeshes=[],floorMeshes=[],wallMeshes=[];
 bedrooms.forEach((x,i)=>{
+ floorMeshes.push(box(4.8,.025,7.8,'#dcc28c',x,.215,-12.5));
+ wallMeshes.push(box(4.8,2,.035,'#f2e3c6',x,1.25,-16.81));
  box(2.8,.35,2.8,'#6b4a34',x,.3,-14.2);
  bedMeshes.push(box(2.6,.25,2.6,['#c75b7a','#6c63d6','#e6a94d','#6b9fa8'][i],x,.58,-14.2));
  box(2.6,1.2,.2,'#8b6247',x,1,-15.65);
@@ -124,9 +132,10 @@ function person(skin,shirt,pants,hair){const g=new THREE.Group(),p=new THREE.Gro
  const torso=box(.7,.75,.4,shirt,0,1.05,0,p);
  const h=new THREE.Mesh(new THREE.IcosahedronGeometry(.32,1),M(skin));h.position.y=1.7;h.castShadow=true;p.add(h);
  const hairMesh=box(.62,.2,.62,hair,0,1.92,0,p);
+ const afroMesh=new THREE.Mesh(new THREE.IcosahedronGeometry(.39,1),M(hair));afroMesh.position.y=1.92;afroMesh.scale.set(1,1,.9);afroMesh.castShadow=true;afroMesh.visible=false;p.add(afroMesh);
  const ring=new THREE.Mesh(new THREE.RingGeometry(.6,.8,24),new THREE.MeshBasicMaterial({color:'#ffc857',side:2}));
  ring.rotation.x=-Math.PI/2;ring.position.y=.04;ring.visible=false;g.add(ring);
- return{g,p,ring,limbs:[L,Rr,aL,aR],torso,head:h,hairMesh}}
+ return{g,p,ring,limbs:[L,Rr,aL,aR],torso,head:h,hairMesh,afroMesh}}
 const DEF=[['MMA','Sister','family','🏠','#8d5524','#c45b72','#30364a','#171717'],
  ['Ukechi','Brother','family','🏠','#a0673a','#4e9d78','#333344','#171717'],
  ['Chibaby','Sister','family','🏠','#6b4226','#c45b72','#365b82','#171717'],
@@ -134,16 +143,12 @@ const DEF=[['MMA','Sister','family','🏠','#8d5524','#c45b72','#30364a','#17171
  ['Jahsfavour','Brother','family','🏠','#7a5138','#8164bd','#3b496d','#171717'],
  ['Mummy','Mum','chatter','💬','#a0673a','#c0394f','#f0e0c0','#171717'],
  ['Dee','Dad','sleeper','😴','#8d5524','#3a6ea5','#2b2b3c','#171717']];
-const chars=DEF.map((d,i)=>{const o=person(d[4],d[5],d[6],d[7]);Object.assign(o,{i,n:d[0],relation:d[1],q:d[2],ic:d[3],roomIndex:[2,1,1,2,3,0,0][i],path:[],act:null,hold:0,wait:2+i*2,st:'',ph:0,appearance:{skin:d[4],shirt:d[5],hair:d[7]},room:{color:['#c75b7a','#6c63d6','#e6a94d','#6b9fa8'][[2,1,1,2,3,0,0][i]]}});
+const chars=DEF.map((d,i)=>{const o=person(d[4],d[5],d[6],d[7]);Object.assign(o,{i,n:d[0],relation:d[1],q:d[2],ic:d[3],roomIndex:[2,1,1,2,3,0,0][i],path:[],act:null,hold:0,wait:2+i*2,st:'',ph:0,appearance:{skin:d[4],shirt:d[5],hair:d[7],hair_style:'short',body_build:1,height:1},room:{color:['#c75b7a','#6c63d6','#e6a94d','#6b9fa8'][[2,1,1,2,3,0,0][i]],wall_color:'#f2e3c6',floor_color:'#dcc28c'}});
+ o.nameTag=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,depthTest:false}));o.nameTag.position.y=3.05;o.nameTag.scale.set(2.1,.55,1);o.nameTag.renderOrder=10;o.nameTag.visible=false;o.g.add(o.nameTag);
+ o.nameCanvas=document.createElement('canvas');o.nameCanvas.width=384;o.nameCanvas.height=96;o.nameContext=o.nameCanvas.getContext('2d');
+ o.nameTexture=new THREE.CanvasTexture(o.nameCanvas);o.nameTag.material.map=o.nameTexture;drawNameTag(o);
  o.g.position.set(-14+i*2.5,0,-2.4);o.g.userData.c=o;S.add(o.g);return o});
-let sel=0,activeCharId=null,db=null,chatChannel=null,profilesByChar={};
-
-// chips
-const chipEl=document.getElementById('chips');
-const chips=chars.map(c=>{const b=document.createElement('button');b.className='chip';
- b.nameLabel=document.createElement('span');b.relationLabel=document.createElement('small');b.append(b.nameLabel,b.relationLabel);
- b.onclick=()=>{};
- chipEl.appendChild(b);return b});
+let sel=0,activeCharId=null,db=null,chatChannel=null,profilesByChar={},hoveredChar=-1,touchedChar=-1,touchedUntil=0;
 
 // Half-unit navigation grid; obstacle rectangles include a character-clearance margin.
 const GRID_STEP=.5,GRID_X=-18,GRID_Z=-19,GRID_W=53,GRID_H=64;
@@ -223,15 +228,22 @@ const rc=new THREE.Raycaster(),pt=new THREE.Vector2(),gp=new THREE.Plane(new THR
 let down=null,dragged=false;
 const cvs=R.domElement;
 cvs.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};dragged=false});
-cvs.addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-down.x,dy=e.clientY-down.y;
+cvs.addEventListener('pointermove',e=>{
+ if(!down){hoveredChar=characterAt(e);return}
+ const dx=e.clientX-down.x,dy=e.clientY-down.y;
  if(!dragged&&Math.hypot(dx,dy)<8)return;dragged=true;down={x:e.clientX,y:e.clientY};
  const k=(cam.right-cam.left)/innerWidth;
  view.x+=-Math.cos(ang)*dx*k+(-Math.sin(ang))*dy*k*1.4;view.z+=Math.sin(ang)*dx*k+(-Math.cos(ang))*dy*k*1.4;
  view.x=Math.max(-22,Math.min(14,view.x));view.z=Math.max(-18,Math.min(18,view.z));size()});
 cvs.addEventListener('pointerup',e=>{if(down&&!dragged)tap(e);down=null});
+function characterAt(e){
+ pt.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);rc.setFromCamera(pt,cam);
+ const hit=rc.intersectObjects(chars.map(c=>c.g),true)[0];if(!hit)return -1;
+ let obj=hit.object;while(obj&&!obj.userData.c)obj=obj.parent;return obj?obj.userData.c.i:-1
+}
 function tap(e){pt.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);rc.setFromCamera(pt,cam);
  const h=rc.intersectObjects(chars.map(c=>c.g),true);
- if(h.length)return;
+ if(h.length){let obj=h[0].object;while(obj&&!obj.userData.c)obj=obj.parent;if(obj){touchedChar=obj.userData.c.i;touchedUntil=performance.now()+3500;$('hint').textContent=obj.userData.c.i===sel?'You are '+obj.userData.c.n+' · Tap the ground to walk.':'Only your chosen character can be controlled.'}return}
  if(activeCharId&&rc.ray.intersectPlane(gp,v3)){const c=chars[sel];c.hold=12;
   go(c,Math.max(-17,Math.min(8,v3.x)),Math.max(-18,Math.min(12,v3.z)))}}
 document.getElementById('zi').onclick=()=>{zoom=Math.min(2.4,zoom*1.2);size()};
@@ -242,8 +254,14 @@ document.getElementById('rot').onclick=()=>{ang+=Math.PI/2;size()};
 const clk=new THREE.Clock();
 const $=id=>document.getElementById(id),profileOverlay=$('profileOverlay'),settingsOverlay=$('settingsOverlay');
 let currentUserId=null,currentProfile=null,roomRows={};
-const cfgKey='tenuSupabaseConfig';
-function showSettings(){const cfg=JSON.parse(localStorage.getItem(cfgKey)||'{}');$('projectUrl').value=cfg.url||'';$('anonKey').value=cfg.key||'';settingsOverlay.hidden=false}
+function updateNameTags(){
+ chars.forEach(c=>{
+  const visible=(c.i===sel&&activeCharId)||c.i===hoveredChar||(c.i===touchedChar&&performance.now()<touchedUntil);
+  c.nameTag.visible=Boolean(visible);c.ring.visible=Boolean((c.i===sel&&activeCharId)||c.i===hoveredChar||c.i===touchedChar&&performance.now()<touchedUntil)
+ })
+}
+const cfgKey='tenuSupabaseConfig',defaultConfig={url:'https://nxqbehhnloyzykfyyoum.supabase.co',key:'sb_publishable_nq74MhjrVf-Nu3-ygODveA_p2N7t2ad'};
+function showSettings(){const cfg=JSON.parse(localStorage.getItem(cfgKey)||'{}');$('projectUrl').value=cfg.url||defaultConfig.url;$('anonKey').value=cfg.key||defaultConfig.key;settingsOverlay.hidden=false}
 function applyAppearance(c,appearance){
  c.appearance=appearance||c.appearance;
  c.torso.material.color.set(c.appearance.shirt||DEF[c.i][5]);
@@ -251,14 +269,37 @@ function applyAppearance(c,appearance){
  [c.limbs[2],c.limbs[3]].forEach(l=>l.userData.colorMesh.material.color.set(c.appearance.skin||DEF[c.i][4]));
  c.hairMesh.material.color.set(c.appearance.hair||DEF[c.i][7])
 }
+function drawNameTag(c){
+ const ctx=c.nameContext,w=c.nameCanvas.width,h=c.nameCanvas.height,label=c.n;
+ ctx.clearRect(0,0,w,h);ctx.fillStyle='#241b29e8';ctx.fillRect(8,8,w-16,h-16);
+ ctx.strokeStyle='#ffc857';ctx.lineWidth=4;ctx.strokeRect(8,8,w-16,h-16);
+ ctx.fillStyle='#fff4df';ctx.font='bold 40px Trebuchet MS, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(label,w/2,h/2, w-32);
+ c.nameTexture.needsUpdate=true
+}
+function applyAppearance(c,appearance){
+ c.appearance={...c.appearance,...(appearance||{})};
+ const a=c.appearance,build=Math.max(.75,Math.min(1.3,Number(a.body_build)||1)),height=Math.max(.85,Math.min(1.15,Number(a.height)||1));
+ c.torso.material.color.set(a.shirt||DEF[c.i][5]);
+ c.head.material.color.set(a.skin||DEF[c.i][4]);
+ [c.limbs[2],c.limbs[3]].forEach(l=>l.userData.colorMesh.material.color.set(a.skin||DEF[c.i][4]));
+ c.hairMesh.material.color.set(a.hair||DEF[c.i][7]);c.afroMesh.material.color.set(a.hair||DEF[c.i][7]);
+ c.hairMesh.visible=a.hair_style!=='bald';c.afroMesh.visible=a.hair_style==='afro';
+ c.p.scale.set(1,height,1);c.torso.scale.x=build;c.limbs.forEach(l=>{l.scale.x=build})
+}
+function applyRoom(roomId,room){
+ if(!room)return;
+ if(room.color)bedMeshes[roomId].material.color.set(room.color);
+ if(room.wall_color)wallMeshes[roomId].material.color.set(room.wall_color);
+ if(room.floor_color)floorMeshes[roomId].material.color.set(room.floor_color)
+}
 function applyProfile(row){
  const c=chars.find(z=>DEF[z.i][0]===row.character_id);if(!c)return;
- c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance);
+ c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance);drawNameTag(c);
  activeCharId=row.character_id;sel=c.i;currentProfile=row;
- const room=roomRows[c.roomIndex];if(room)bedMeshes[c.roomIndex].material.color.set(room.color);
- $('customizeBtn').hidden=false;$('chatBtn').hidden=false;
+ applyRoom(c.roomIndex,roomRows[c.roomIndex]);
+ $('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('chatBtn').hidden=false;
  $('hint').textContent='Playing as '+c.n+' · Tap the ground to move your character.';
- profileOverlay.hidden=true;$('chips').classList.add('locked');updateChips()
+ profileOverlay.hidden=true
 }
 function updateChoices(){
  const list=$('profileChoices');list.replaceChildren();
@@ -279,10 +320,10 @@ async function refreshProfiles(){
  const {data,error}=await db.from('tenu_players').select('character_id,user_id,character_name,appearance');
  if(error)throw error;
  profilesByChar=Object.fromEntries(data.map(row=>[row.character_id,row]));
- chars.forEach(c=>{const row=profilesByChar[DEF[c.i][0]];if(row){c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance)}});
- const {data:rooms,error:roomError}=await db.from('tenu_rooms').select('room_id,color');
+ chars.forEach(c=>{const row=profilesByChar[DEF[c.i][0]];if(row){c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance);drawNameTag(c)}});
+ const {data:rooms,error:roomError}=await db.from('tenu_rooms').select('room_id,color,wall_color,floor_color');
  if(roomError)throw roomError;roomRows=Object.fromEntries(rooms.map(row=>[row.room_id,row]));
- rooms.forEach(row=>{if(bedMeshes[row.room_id])bedMeshes[row.room_id].material.color.set(row.color)});
+ rooms.forEach(row=>applyRoom(row.room_id,row));
  updateChoices()
 }
 async function startChat(){
@@ -312,6 +353,10 @@ async function connectHouse(url,key){
  $('profileStatus').textContent=mine?'Welcome back, '+(mine.character_name||mine.character_id)+'. Select your profile to continue.':'Connected. Choose an available household character.';
  profileOverlay.hidden=false;$('settingsBtn').textContent='Supabase connected';
 }
+function connectionMessage(err){
+ if(['42703','PGRST205','42883'].includes(err?.code))return 'The database is missing the new customization or wallet migrations. Run both ordered files linked in Supabase setup, then reload.';
+ return 'Supabase connection failed: '+(err?.message||'Unknown connection error')
+}
 async function chooseProfile(characterId){
  const status=$('profileStatus');status.textContent='Reserving profile…';
  try{
@@ -330,25 +375,67 @@ function openCustomization(){
  $('shirtColor').value=currentProfile.appearance?.shirt||DEF[sel][5];
  $('skinColor').value=currentProfile.appearance?.skin||DEF[sel][4];
  $('hairColor').value=currentProfile.appearance?.hair||DEF[sel][7];
+ $('hairStyle').value=currentProfile.appearance?.hair_style||'short';
+ $('bodyBuild').value=currentProfile.appearance?.body_build||1;$('bodyHeight').value=currentProfile.appearance?.height||1;
+ $('bodyBuildValue').textContent=Number($('bodyBuild').value).toFixed(2);$('bodyHeightValue').textContent=Number($('bodyHeight').value).toFixed(2);
  $('roomColor').value=roomRows[chars[sel].roomIndex]?.color||chars[sel].room.color;
+ $('wallColor').value=roomRows[chars[sel].roomIndex]?.wall_color||chars[sel].room.wall_color;
+ $('floorColor').value=roomRows[chars[sel].roomIndex]?.floor_color||chars[sel].room.floor_color;
  $('customStatus').textContent='Changes are saved to this profile and room in Supabase.';
  $('customOverlay').hidden=false
+}
+function previewCustomization(){
+ if(!currentProfile)return;
+ const c=chars[sel],appearance={...currentProfile.appearance,shirt:$('shirtColor').value,skin:$('skinColor').value,hair:$('hairColor').value,hair_style:$('hairStyle').value,body_build:Number($('bodyBuild').value),height:Number($('bodyHeight').value)};
+ applyAppearance(c,appearance);$('bodyBuildValue').textContent=appearance.body_build.toFixed(2);$('bodyHeightValue').textContent=appearance.height.toFixed(2)
+}
+function previewRoom(){
+ if(!currentProfile)return;
+ applyRoom(chars[sel].roomIndex,{color:$('roomColor').value,wall_color:$('wallColor').value,floor_color:$('floorColor').value})
+}
+function cancelCustomization(){
+ if(currentProfile){applyAppearance(chars[sel],currentProfile.appearance);applyRoom(chars[sel].roomIndex,roomRows[chars[sel].roomIndex])}
+ $('customOverlay').hidden=true
 }
 async function saveCustomization(){
  const c=chars[sel],name=$('customName').value.trim();
  if(!name){$('customStatus').textContent='Please enter a display name.';return}
- const appearance={...currentProfile.appearance,shirt:$('shirtColor').value,skin:$('skinColor').value,hair:$('hairColor').value};
- const roomColor=$('roomColor').value,button=$('saveCustom');button.disabled=true;
+ const appearance={...currentProfile.appearance,shirt:$('shirtColor').value,skin:$('skinColor').value,hair:$('hairColor').value,hair_style:$('hairStyle').value,body_build:Number($('bodyBuild').value),height:Number($('bodyHeight').value)};
+ const roomColor=$('roomColor').value,wallColor=$('wallColor').value,floorColor=$('floorColor').value,button=$('saveCustom');button.disabled=true;
  try{
-  const {error}=await db.rpc('save_tenu_customization',{p_character_id:activeCharId,p_character_name:name,p_appearance:appearance,p_room_color:roomColor});
+  const {error}=await db.rpc('save_tenu_customization',{p_character_id:activeCharId,p_character_name:name,p_appearance:appearance,p_room_color:roomColor,p_wall_color:wallColor,p_floor_color:floorColor});
   if(error)throw error;
-  currentProfile={...currentProfile,character_name:name,appearance};c.n=name;c.appearance=appearance;
-  c.torso.material.color.set(appearance.shirt);c.head.material.color.set(appearance.skin);
-  [c.limbs[2],c.limbs[3]].forEach(l=>l.userData.colorMesh.material.color.set(appearance.skin));
-  c.hairMesh.material.color.set(appearance.hair);
-  roomRows[c.roomIndex]={room_id:c.roomIndex,color:roomColor};chars.filter(z=>z.roomIndex===c.roomIndex).forEach(z=>z.room.color=roomColor);
-  bedMeshes[c.roomIndex].material.color.set(roomColor);updateChips();$('customStatus').textContent='Saved to your Supabase profile.';
- }catch(err){$('customStatus').textContent='Save failed: '+err.message;console.error('Customization save failed:',err)}
+  currentProfile={...currentProfile,character_name:name,appearance};c.n=name;applyAppearance(c,appearance);drawNameTag(c);
+  roomRows[c.roomIndex]={room_id:c.roomIndex,color:roomColor,wall_color:wallColor,floor_color:floorColor};
+  chars.filter(z=>z.roomIndex===c.roomIndex).forEach(z=>z.room={color:roomColor,wall_color:wallColor,floor_color:floorColor});
+  applyRoom(c.roomIndex,roomRows[c.roomIndex]);$('customStatus').textContent='Saved to your Supabase profile.';
+ }catch(err){applyAppearance(c,currentProfile.appearance);applyRoom(c.roomIndex,roomRows[c.roomIndex]);$('customStatus').textContent='Save failed: '+err.message;console.error('Customization save failed:',err)}
+ finally{button.disabled=false}
+}
+async function loadWallet(){
+ const {data,error}=await db.from('tenu_bank_accounts').select('balance').eq('character_id',activeCharId).single();
+ if(error)throw error;
+ $('bankBalance').textContent='Balance: '+Number(data.balance).toLocaleString()+' TENU coins · fictional game currency';
+ const list=$('bankRecipient');list.replaceChildren();
+ chars.filter(c=>DEF[c.i][0]!==activeCharId&&profilesByChar[DEF[c.i][0]]).forEach(c=>{
+  const option=document.createElement('option');option.value=DEF[c.i][0];option.textContent=c.n;list.appendChild(option)
+ })
+}
+async function openBank(){
+ $('bankOverlay').hidden=false;$('bankStatus').textContent='';
+ try{await loadWallet()}catch(err){$('bankBalance').textContent='Wallet unavailable';$('bankStatus').textContent=err.message;console.error('Wallet load failed:',err)}
+}
+async function sendCoins(){
+ const amount=Number($('bankAmount').value),recipient=$('bankRecipient').value;
+ if(!Number.isSafeInteger(amount)||amount<1||amount>10000){$('bankStatus').textContent='Enter a whole amount from 1 to 10,000 coins.';return}
+ if(!recipient){$('bankStatus').textContent='No other household player has claimed a character yet.';return}
+ const button=$('sendCoins');button.disabled=true;$('bankStatus').textContent='Sending…';
+ try{
+  const {error}=await db.rpc('transfer_tenu_coins',{p_transfer_id:crypto.randomUUID(),p_from_character_id:activeCharId,p_to_character_id:recipient,p_amount:amount});
+  if(error)throw error;
+  $('bankAmount').value='';$('bankStatus').textContent='Coins sent.';
+  await loadWallet()
+ }catch(err){$('bankStatus').textContent='Transfer failed: '+err.message;console.error('Wallet transfer failed:',err)}
  finally{button.disabled=false}
 }
 function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
@@ -365,9 +452,8 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
    if(c.act.at!=='sofa')c.p.position.y=Math.abs(Math.sin(t*6))*.05;
    if(c.act.t>c.act.max){c.p.position.y=0;endAct(c);c.wait=5+Math.random()*6}}
   else{c.st='';if(c.hold<=0&&(c.wait-=dt)<=0){decide(c);c.wait=4+Math.random()*4}}});
- updateChips();
+ updateNameTags();
  R.render(S,cam);requestAnimationFrame(frame)}
-function updateChips(){chips.forEach((b,i)=>{b.nameLabel.textContent=chars[i].n+' '+chars[i].st;b.relationLabel.textContent=profilesByChar[DEF[i][0]]&&profilesByChar[DEF[i][0]].user_id!==currentUserId?'In use · '+chars[i].relation:chars[i].relation;b.classList.toggle('on',i===sel)})}
 document.getElementById('settingsBtn').onclick=()=>{try{showSettings()}catch(err){$('settingsStatus').textContent='Could not read saved settings: '+err.message;settingsOverlay.hidden=false}};
 document.getElementById('profileSettings').onclick=()=>{try{showSettings()}catch(err){$('settingsStatus').textContent='Could not read saved settings: '+err.message;settingsOverlay.hidden=false}};
 document.getElementById('closeSettings').onclick=()=>settingsOverlay.hidden=true;
@@ -377,7 +463,7 @@ document.getElementById('saveSettings').onclick=async()=>{
   const url=$('projectUrl').value.trim(),key=$('anonKey').value.trim();
   localStorage.setItem(cfgKey,JSON.stringify({url,key}));$('settingsStatus').textContent='Connecting…';
   await connectHouse(url,key);settingsOverlay.hidden=true;$('settingsBtn').textContent='Supabase connected';
- }catch(err){$('settingsStatus').textContent=err.message;$('profileStatus').textContent=err.message;console.error('Supabase connection failed:',err)}
+ }catch(err){$('settingsStatus').textContent=connectionMessage(err);$('profileStatus').textContent=connectionMessage(err);console.error('Supabase connection failed:',err)}
  finally{button.disabled=false}
 };
 document.getElementById('profileBtn').onclick=async()=>{
@@ -386,8 +472,13 @@ document.getElementById('profileBtn').onclick=async()=>{
  catch(err){$('profileStatus').textContent='Could not load profiles: '+err.message;profileOverlay.hidden=false}
 };
 document.getElementById('customizeBtn').onclick=openCustomization;
-document.getElementById('closeCustom').onclick=()=> $('customOverlay').hidden=true;
+document.getElementById('closeCustom').onclick=cancelCustomization;
 document.getElementById('saveCustom').onclick=saveCustomization;
+['shirtColor','skinColor','hairColor','hairStyle','bodyBuild','bodyHeight'].forEach(id=>$(id).addEventListener('input',previewCustomization));
+['roomColor','wallColor','floorColor'].forEach(id=>$(id).addEventListener('input',previewRoom));
+document.getElementById('bankBtn').onclick=openBank;
+document.getElementById('closeBank').onclick=()=> $('bankOverlay').hidden=true;
+document.getElementById('sendCoins').onclick=sendCoins;
 document.getElementById('chatBtn').onclick=async()=>{
  $('chatOverlay').hidden=false;
  try{await startChat()}catch(err){$('chatStatus').textContent='Could not load chat: '+err.message;console.error('Chat load failed:',err)}
@@ -409,9 +500,10 @@ document.getElementById('installBtn').onclick=async()=>{
 };
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(err=>console.error('PWA service worker registration failed:',err)));
 try{
- const savedConfig=JSON.parse(localStorage.getItem(cfgKey)||'null');
- if(savedConfig?.url&&savedConfig?.key)connectHouse(savedConfig.url,savedConfig.key).catch(err=>{$('profileStatus').textContent='Supabase connection failed: '+err.message;console.error('Supabase startup failed:',err)});
+ const savedConfig=JSON.parse(localStorage.getItem(cfgKey)||'null')||defaultConfig;
+ if(savedConfig?.url&&savedConfig?.key)connectHouse(savedConfig.url,savedConfig.key).catch(err=>{$('profileStatus').textContent=connectionMessage(err);console.error('Supabase startup failed:',err)});
  else $('profileStatus').textContent='Connect your Supabase project to claim a character and use chat.';
 }catch(err){$('profileStatus').textContent='Saved Supabase settings are invalid. Reconnect below.';console.error('Could not read Supabase settings:',err)}
 size();frame();
+})();
 </script></body></html>
