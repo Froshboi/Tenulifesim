@@ -52,12 +52,20 @@ canvas{display:block}
 #btns{transition:opacity .25s}
 .controls-hidden .tools,.controls-hidden #btns,.controls-hidden #hint{opacity:0;pointer-events:none}
 #restoreControls{position:fixed;right:10px;bottom:calc(78px + env(safe-area-inset-bottom));z-index:3;border:0;border-radius:20px;padding:10px 13px;background:#2a1f2dee;color:white;font:inherit}
-#simbar{position:fixed;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;gap:6px;min-height:68px;padding:5px 8px calc(5px + env(safe-area-inset-bottom));box-sizing:border-box;overflow-x:auto;background:#211b27ed;scrollbar-width:thin}
-#simbar button{position:relative;flex:0 0 54px;height:58px;border:1px solid #786a77;border-radius:12px;background:#382d3d;color:#fff4df;padding:3px;font:10px "Trebuchet MS",sans-serif}
-#simbar button.selected{border:2px solid #ffc857;background:#55404d}
+#simbar{position:fixed;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;min-height:58px;padding:3px 8px calc(3px + env(safe-area-inset-bottom));box-sizing:border-box;overflow:hidden;background:#211b27ed}
+#simbar button{position:relative;display:flex;align-items:center;gap:9px;width:100%;height:52px;border:1px solid #786a77;border-radius:12px;background:#382d3d;color:#fff4df;padding:4px 9px;text-align:left;font:12px "Trebuchet MS",sans-serif}
+#simbar button.selected{border:1px solid #ffc857;background:#55404d}
 #simbar button:disabled{opacity:.65}
-#simbar canvas{display:block;width:34px;height:34px;margin:0 auto 2px;border-radius:50%}
-#simbar .presence{position:absolute;right:1px;top:1px;font-size:8px;color:#80e59e}
+#simbar canvas{display:block;flex:0 0 42px;width:42px;height:42px;border:1px solid #ffc857;border-radius:50%;object-fit:cover}
+#simbar .sim-info{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+#simbar .sim-name{overflow:hidden;font-size:12px;font-weight:bold;text-overflow:ellipsis;white-space:nowrap}
+#simbar .needs-row{display:flex;align-items:center;gap:8px}
+#simbar .need{display:flex;flex:1;align-items:center;gap:3px;min-width:0}
+#simbar .need-label{width:9px;color:#fff4df;font-size:8px;font-weight:bold}
+#simbar .need-track{height:5px;flex:1;overflow:hidden;border-radius:4px;background:#211b27}
+#simbar .need-fill{height:100%;border-radius:4px;transition:width .25s}
+#simbar .need-value{width:20px;color:#e9dfe9;font-size:8px;text-align:right}
+#simbar .presence{flex:0 0 9px;font-size:9px;color:#80e59e}
 #simbar .presence.offline{color:#c6b8c6}
 #phoneOverlay .choice-grid button{min-height:58px}
 [hidden]{display:none!important}
@@ -407,21 +415,38 @@ function drawNameTag(c){
  c.nameTexture.needsUpdate=true
 }
 function drawHeadshot(canvas,c){
- const ctx=canvas.getContext('2d'),skin=c.appearance.skin||DEF[c.i][4],hair=c.appearance.hair||DEF[c.i][7];
- ctx.clearRect(0,0,64,64);ctx.fillStyle=c.appearance.shirt||DEF[c.i][5];ctx.fillRect(0,0,64,64);
- ctx.fillStyle=skin;ctx.beginPath();ctx.ellipse(32,34,19,23,0,0,Math.PI*2);ctx.fill();
- if(c.appearance.hair_style!=='bald'){ctx.fillStyle=hair;ctx.beginPath();ctx.ellipse(32,19,c.appearance.hair_style==='afro'?24:20,c.appearance.hair_style==='afro'?16:9,0,Math.PI,Math.PI*2);ctx.fill()}
- ctx.fillStyle='#211b20';ctx.beginPath();ctx.arc(25,34,2,0,Math.PI*2);ctx.arc(39,34,2,0,Math.PI*2);ctx.fill();
- ctx.strokeStyle='#733c36';ctx.lineWidth=2;ctx.beginPath();ctx.arc(32,42,5,.2,Math.PI-.2);ctx.stroke()
+ const ctx=canvas.getContext('2d'),skin=c.appearance.skin||DEF[c.i][4],hair=c.appearance.hair||DEF[c.i][7],shirt=c.appearance.shirt||DEF[c.i][5];
+ const gradient=ctx.createLinearGradient(0,0,96,96);gradient.addColorStop(0,'#ffe1aa');gradient.addColorStop(1,'#c75b7a');
+ ctx.clearRect(0,0,96,96);ctx.fillStyle=gradient;ctx.fillRect(0,0,96,96);
+ ctx.fillStyle=shirt;ctx.beginPath();ctx.moveTo(10,96);ctx.quadraticCurveTo(13,68,33,66);ctx.lineTo(63,66);ctx.quadraticCurveTo(84,71,88,96);ctx.fill();
+ ctx.fillStyle=skin;ctx.beginPath();ctx.ellipse(48,43,25,30,0,0,Math.PI*2);ctx.fill();
+ if(c.appearance.hair_style!=='bald'){
+  ctx.fillStyle=hair;ctx.beginPath();
+  if(c.appearance.hair_style==='afro'){ctx.arc(48,28,29,Math.PI,Math.PI*2);ctx.lineTo(77,42);ctx.quadraticCurveTo(65,35,62,39);ctx.lineTo(34,39);ctx.quadraticCurveTo(27,35,19,42)}
+  else{ctx.ellipse(48,28,26,15,0,Math.PI,Math.PI*2);ctx.lineTo(74,37);ctx.quadraticCurveTo(61,31,57,36);ctx.lineTo(35,36);ctx.quadraticCurveTo(28,32,22,39)}
+  ctx.closePath();ctx.fill()
+ }
+ ctx.fillStyle='#29212a';ctx.beginPath();ctx.ellipse(39,47,2.5,3.5,0,0,Math.PI*2);ctx.ellipse(57,47,2.5,3.5,0,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='#733c36';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(42,59);ctx.quadraticCurveTo(48,63,54,59);ctx.stroke()
 }
 function updateSimbar(){
  const bar=$('simbar');if(!bar)return;bar.replaceChildren();
  const c=chars.find(z=>DEF[z.i][0]===activeCharId);
  bar.hidden=!c;if(!c)return;
- const button=document.createElement('button'),canvas=document.createElement('canvas'),name=document.createElement('span'),presence=document.createElement('span');
+ const button=document.createElement('button'),canvas=document.createElement('canvas'),info=document.createElement('span'),name=document.createElement('span'),needs=document.createElement('span'),presence=document.createElement('span');
+ canvas.width=96;canvas.height=96;
  button.type='button';button.className='selected';button.title='Your character · '+(c.online?'online':'playing on this device');
- drawHeadshot(canvas,c);name.textContent=c.n;presence.className='presence'+(c.online?'':' offline');presence.textContent=c.online?'●':'○';
- button.append(canvas,name,presence);button.onclick=()=>{resetControlsTimeout();$('profileBtn').click()};bar.appendChild(button)
+ drawHeadshot(canvas,c);info.className='sim-info';name.className='sim-name';name.textContent=c.n;
+ needs.className='needs-row';
+ [['E','Energy',c.needs.energy,'#64c987'],['H','Hunger',c.needs.hunger,'#ffc857'],['F','Fun',c.needs.fun,'#73c8f2']].forEach(([label,title,value,color])=>{
+  const item=document.createElement('span'),letter=document.createElement('span'),track=document.createElement('span'),fill=document.createElement('span'),amount=document.createElement('span');
+  const percent=Math.max(0,Math.min(100,Number(value)||0));
+  item.className='need';item.title=title+' '+Math.round(percent)+'%';letter.className='need-label';letter.textContent=label;
+  track.className='need-track';fill.className='need-fill';fill.style.width=percent+'%';fill.style.backgroundColor=color;
+  amount.className='need-value';amount.textContent=Math.round(percent)+'%';track.append(fill);item.append(letter,track,amount);needs.append(item)
+ });
+ info.append(name,needs);presence.className='presence'+(c.online?'':' offline');presence.textContent=c.online?'●':'○';
+ button.append(canvas,info,presence);button.onclick=()=>{resetControlsTimeout();$('profileBtn').click()};bar.appendChild(button)
 }
 function applyAppearance(c,appearance){
  c.appearance={...c.appearance,...(appearance||{})};
@@ -444,7 +469,7 @@ function applyProfile(row){
  c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance);drawNameTag(c);
  activeCharId=row.character_id;sel=c.i;currentProfile=row;
  applyRoom(c.roomIndex,roomRows[c.roomIndex]);
- $('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=false;updateNeedsHud();updateSimbar();resetControlsTimeout();
+ $('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=true;updateNeedsHud();updateSimbar();resetControlsTimeout();
  $('hint').textContent='Tap the ground to move';
  $('hint').hidden=false;
  c.online=true;updateSimbar();
@@ -915,7 +940,7 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  uiTimer+=dt;
  if(uiTimer>=1){
   uiTimer=0;const hour=Math.floor(gameMinute/60)%24,minute=Math.floor(gameMinute%60),clockText=String(hour).padStart(2,'0')+':'+String(minute).padStart(2,'0');
-  $('clock').textContent='Day '+gameDay+' · '+clockText+(daylight>.25?' ☀️':' 🌙');updateNeedsHud();chars.forEach(drawNameTag);
+  $('clock').textContent='Day '+gameDay+' · '+clockText+(daylight>.25?' ☀️':' 🌙');updateNeedsHud();updateSimbar();chars.forEach(drawNameTag);
   clockSaveTimer+=1;needsSaveTimer+=1;
   if(clockSaveTimer>=15){clockSaveTimer=0;try{localStorage.setItem(savedClockKey,JSON.stringify({minute:gameMinute,day:gameDay}))}catch(err){console.warn('Clock could not be saved:',err)}}
   if(needsSaveTimer>=20){needsSaveTimer=0;persistNeeds().catch(err=>console.error('Needs could not be saved:',err))}
