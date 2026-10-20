@@ -51,7 +51,6 @@ begin
   if v_owner_email is null or v_owner_email = ''
      or v_user_email is distinct from v_owner_email
      or v_confirmed_at is null then
-    delete from public.tenu_house_admins where user_id = p_user_id;
     return;
   end if;
 
