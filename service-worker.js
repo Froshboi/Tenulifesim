@@ -1,4 +1,4 @@
-const CACHE='tenu-house-v6';
+const CACHE='tenu-house-v7';
 const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon.svg'];
 
 self.addEventListener('install',event=>{

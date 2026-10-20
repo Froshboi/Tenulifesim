@@ -13,6 +13,7 @@ canvas{display:block}
 #hint{position:fixed;left:0;right:0;bottom:calc(86px + env(safe-area-inset-bottom));text-align:center;color:#2a1f2d;font-size:13px;pointer-events:none;transition:opacity .25s}
 #home{position:fixed;left:8px;top:calc(8px + env(safe-area-inset-top));max-width:min(260px,calc(100vw - 160px));padding:7px 9px;border-radius:10px;background:#2a1f2dd9;color:#fdf3e4;font-size:10px;line-height:1.45;pointer-events:none}
 #clock{position:fixed;top:env(safe-area-inset-top);right:8px;padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:12px}
+#balance{position:fixed;top:calc(38px + env(safe-area-inset-top));right:8px;z-index:1;border:1px solid #ffc857;border-radius:10px;padding:6px 10px;background:#2a1f2dee;color:#fff4df;font: bold 11px "Trebuchet MS",sans-serif}
 #needs{position:fixed;right:8px;top:calc(42px + env(safe-area-inset-top));padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:11px;line-height:1.55}
 #needs progress{width:68px;height:7px;vertical-align:middle;accent-color:#64c987}
 #toast{position:fixed;left:50%;top:calc(94px + env(safe-area-inset-top));transform:translateX(-50%);padding:9px 14px;border-radius:10px;background:#2a1f2dee;color:white;font-size:13px;pointer-events:none;opacity:0;transition:opacity .2s}
@@ -42,6 +43,15 @@ canvas{display:block}
 .auth-dialog .row{margin-top:8px}
 .auth-dialog #signInAccount{background:#574149}
 .auth-dialog #secureAccount{background:#a44d39}
+.walkthrough-dialog{width:min(410px,100%);padding:24px;background:linear-gradient(145deg,#fff8e8,#f3e0c4)}
+.walkthrough-step{display:grid;place-items:center;width:50px;height:50px;margin-bottom:12px;border-radius:16px;background:#2a1f2d;color:#ffc857;font-size:25px}
+.walkthrough-kicker{margin:0;color:#916955;font-size:10px;font-weight:bold;letter-spacing:.14em}
+.walkthrough-dialog h2{margin:5px 0 8px;font-size:24px}
+.walkthrough-copy{min-height:68px;color:#695850;font-size:14px}
+.walkthrough-dots{display:flex;gap:7px;margin:14px 0}
+.walkthrough-dots span{width:7px;height:7px;border-radius:50%;background:#d8c7b2}
+.walkthrough-dots span.active{width:20px;border-radius:6px;background:#c75b7a}
+.walkthrough-dialog .row button:first-child{background:#574149}
 .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .choice-grid button{min-height:52px;text-align:left}
 #chatLog{max-height:40vh;overflow:auto;background:#fff;border-radius:9px;padding:10px;font-size:13px}
@@ -62,8 +72,8 @@ canvas{display:block}
 #simbar .needs-row{display:flex;align-items:center;gap:8px}
 #simbar .need{display:flex;flex:1;align-items:center;gap:3px;min-width:0}
 #simbar .need-label{width:9px;color:#fff4df;font-size:8px;font-weight:bold}
-#simbar .need-track{height:5px;flex:1;overflow:hidden;border-radius:4px;background:#211b27}
-#simbar .need-fill{height:100%;border-radius:4px;transition:width .25s}
+#simbar .need-track{display:block;height:7px;flex:1;overflow:hidden;border-radius:5px;background:#17131b}
+#simbar .need-fill{display:block;height:100%;min-width:2px;border-radius:5px;transition:width .25s}
 #simbar .need-value{width:20px;color:#e9dfe9;font-size:8px;text-align:right}
 #simbar .presence{flex:0 0 9px;font-size:9px;color:#80e59e}
 #simbar .presence.offline{color:#c6b8c6}
@@ -72,14 +82,16 @@ canvas{display:block}
 </style></head><body>
 <div id="home">NDDC Close · Tenu Close No. 4 · Tap to walk</div>
 <div id="clock">Day 1 · 08:00 ☀️</div>
+<button id="balance" hidden aria-label="Game wallet">10,000 coins</button>
 <div id="needs" hidden></div>
 <div id="toast" aria-live="polite"></div>
 <div id="hint" hidden>Tap the ground to move</div>
-<div class="tools"><button id="profileBtn">My profile</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Activities</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div>
+<div class="tools"><button id="profileBtn">My profile</button><button id="howToPlayBtn">How to play</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Earn coins</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div>
 <div id="btns"><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">－</button><button id="rot" aria-label="Rotate view">⟲</button></div>
 <button id="restoreControls" hidden>Show controls</button>
 <nav id="simbar" aria-label="Your character" hidden></nav>
 <div id="profileOverlay" class="overlay"><section class="dialog"><h1>TENU HOUSE</h1><h2>Who are you playing?</h2><p>Choose a household member to start playing.</p><div id="profileChoices" class="choice-grid"></div><button id="accountBtn" class="secondary">Sign in or create an account</button><p id="profileStatus" class="status">Getting the house ready…</p></section></div>
+<div id="walkthroughOverlay" class="overlay" hidden><section class="dialog walkthrough-dialog"><div class="walkthrough-step" id="walkthroughIcon">⌖</div><p class="walkthrough-kicker">QUICK START · <span id="walkthroughCount">1 OF 4</span></p><h2 id="walkthroughTitle">Make yourself at home</h2><p id="walkthroughCopy" class="walkthrough-copy"></p><div id="walkthroughDots" class="walkthrough-dots"></div><div class="row"><button id="walkthroughNext">Next</button><button id="walkthroughSkip" class="secondary">Skip</button></div></section></div>
 <div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2>Welcome to TENU HOUSE</h2><p class="auth-copy">Sign in to keep your character across devices, or play as a guest and get started right away.</p><button id="googleSignIn" class="auth-google">Continue with Google</button><button id="linkGoogle" class="auth-link-google" hidden>Link Google to this player</button><div class="auth-divider">or use email</div><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"><div class="row"><button id="signInAccount">Sign in</button><button id="secureAccount">Create account</button></div><p id="accountStatus" class="status" aria-live="polite"></p><button id="continueAnonymous" class="auth-guest">Continue anonymously</button><button id="closeAccount" class="auth-guest">Back to character selection</button></section></div>
 <div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
 <div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Go to school<br>Earn 100 coins</button><button data-activity="market">Work at the market<br>Earn 300 coins</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay a household bill<br>Spend 250 coins</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep / rest</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
@@ -448,6 +460,37 @@ function updateSimbar(){
  info.append(name,needs);presence.className='presence'+(c.online?'':' offline');presence.textContent=c.online?'●':'○';
  button.append(canvas,info,presence);button.onclick=()=>{resetControlsTimeout();$('profileBtn').click()};bar.appendChild(button)
 }
+function updateSimbarNeeds(){
+ const c=chars.find(z=>DEF[z.i][0]===activeCharId);if(!c)return;
+ $('simbar').querySelectorAll('.need').forEach((item,index)=>{
+  const key=['energy','hunger','fun'][index],value=Math.max(0,Math.min(100,Number(c.needs[key])||0)),percent=Math.round(value);
+  item.title=['Energy','Hunger','Fun'][index]+' '+percent+'%';
+  item.querySelector('.need-fill').style.width=value+'%';
+  item.querySelector('.need-value').textContent=percent+'%'
+ })
+}
+const walkthroughSteps=[
+ {icon:'⌖',title:'Make yourself at home',copy:'Tap a household member to choose who you play. Tap the ground to walk around the compound. Your portrait and needs stay in the bar at the bottom.'},
+ {icon:'♡',title:'Keep your needs up',copy:'Energy, hunger and fun drain as time passes. Rest on the bed or sofa, grab food from the fridge, and relax by the TV. Your live meters are in the bottom bar.'},
+ {icon:'₦',title:'Earn TENU coins',copy:'Open Earn coins, then take a work shift for 400 coins, go to school for 100, or work at the market for 300. Each activity can pay once per game day.'},
+ {icon:'✦',title:'Spend and explore',copy:'Use your coins for groceries, clothes, a phone, bills, rides and flights. Customize your character, and tap How to play any time to see these tips again.'}
+];
+function showWalkthrough(){
+ walkthroughIndex=0;renderWalkthrough();$('walkthroughOverlay').hidden=false
+}
+function renderWalkthrough(){
+ const step=walkthroughSteps[walkthroughIndex];
+ $('walkthroughIcon').textContent=step.icon;$('walkthroughTitle').textContent=step.title;$('walkthroughCopy').textContent=step.copy;
+ $('walkthroughCount').textContent=(walkthroughIndex+1)+' OF '+walkthroughSteps.length;
+ $('walkthroughNext').textContent=walkthroughIndex===walkthroughSteps.length-1?'Let’s play':'Next';
+ const dots=$('walkthroughDots');dots.replaceChildren();
+ walkthroughSteps.forEach((_,index)=>{const dot=document.createElement('span');if(index===walkthroughIndex)dot.className='active';dots.append(dot)})
+}
+function closeWalkthrough(){
+ $('walkthroughOverlay').hidden=true;
+ try{localStorage.setItem('tenuWalkthroughSeen:'+activeCharId,'1')}catch(err){console.warn('Walkthrough preference could not be saved:',err)}
+}
+let walkthroughIndex=0;
 function applyAppearance(c,appearance){
  c.appearance={...c.appearance,...(appearance||{})};
  const a=c.appearance,build=Math.max(.75,Math.min(1.3,Number(a.body_build)||1)),height=Math.max(.85,Math.min(1.15,Number(a.height)||1));
@@ -469,11 +512,13 @@ function applyProfile(row){
  c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance);drawNameTag(c);
  activeCharId=row.character_id;sel=c.i;currentProfile=row;
  applyRoom(c.roomIndex,roomRows[c.roomIndex]);
- $('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=true;updateNeedsHud();updateSimbar();resetControlsTimeout();
+ $('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=true;$('balance').hidden=false;updateNeedsHud();updateSimbar();resetControlsTimeout();
  $('hint').textContent='Tap the ground to move';
  $('hint').hidden=false;
  c.online=true;updateSimbar();
  profileOverlay.hidden=true
+ loadWallet().catch(err=>console.error('Wallet balance could not be loaded:',err));
+ try{if(localStorage.getItem('tenuWalkthroughSeen:'+activeCharId)!=='1')showWalkthrough()}catch(err){console.warn('Walkthrough preference could not be read:',err);showWalkthrough()}
 }
 function updateChoices(){
  const list=$('profileChoices');list.replaceChildren();
@@ -708,7 +753,7 @@ async function loadWallet(){
    economyOnline=false;$('activityStatus').textContent='Using this device’s game wallet until shared banking is ready.';$('bankStatus').textContent='Using this device’s game wallet until shared banking is ready.';console.warn('Shared wallet tables are not ready:',error.message)
   }else{console.error('Wallet balance could not be loaded:',error);$('bankStatus').textContent='Could not load the shared wallet right now.'}
  }
- localWallet[activeCharId]=balance;saveWallet();$('bankBalance').textContent='Balance: '+balance.toLocaleString()+' TENU coins · game currency';
+ localWallet[activeCharId]=balance;saveWallet();$('balance').textContent='TENU '+balance.toLocaleString()+' coins';$('bankBalance').textContent='Balance: '+balance.toLocaleString()+' TENU coins · game currency';
  $('activityBalance').textContent='Wallet: '+balance.toLocaleString()+' TENU coins';
  const list=$('bankRecipient');list.replaceChildren();
  chars.filter(c=>DEF[c.i][0]!==activeCharId&&(!db||profilesByChar[DEF[c.i][0]])).forEach(c=>{
@@ -937,6 +982,7 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
    }}
   else{c.st='';if(c.i===sel&&activeCharId===DEF[c.i][0])c.wait=2;
    else if(c.hold<=0&&(c.wait-=dt)<=0){decide(c);c.wait=4+Math.random()*4}}});
+ updateSimbarNeeds();
  uiTimer+=dt;
  if(uiTimer>=1){
   uiTimer=0;const hour=Math.floor(gameMinute/60)%24,minute=Math.floor(gameMinute%60),clockText=String(hour).padStart(2,'0')+':'+String(minute).padStart(2,'0');
@@ -953,6 +999,13 @@ document.getElementById('profileBtn').onclick=async()=>{
  try{await refreshProfiles();profileOverlay.hidden=false;$('profileStatus').textContent='Choose your household character. You can only control your own profile.'}
  catch(err){$('profileStatus').textContent='The household list is unavailable right now.';profileOverlay.hidden=false;console.error('Profile list refresh failed:',err)}
 };
+document.getElementById('balance').onclick=()=>openBank().catch(err=>{console.error('Wallet could not open:',err);$('bankStatus').textContent='The wallet is unavailable right now.'});
+document.getElementById('howToPlayBtn').onclick=showWalkthrough;
+document.getElementById('walkthroughNext').onclick=()=>{
+ if(walkthroughIndex<walkthroughSteps.length-1){walkthroughIndex++;renderWalkthrough()}
+ else closeWalkthrough()
+};
+document.getElementById('walkthroughSkip').onclick=closeWalkthrough;
 document.getElementById('customizeBtn').onclick=openCustomization;
 document.getElementById('restoreControls').onclick=resetControlsTimeout;
 document.getElementById('accountBtn').onclick=openAccount;
