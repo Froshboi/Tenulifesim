@@ -11,9 +11,18 @@ canvas{display:block}
 #btns{position:fixed;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:3;display:flex;flex-direction:column;gap:8px}
 #btns button{width:46px;height:46px;border-radius:50%;border:0;background:#2a1f2dd9;color:#fff;font-size:20px}
 #hint{position:fixed;left:0;right:0;bottom:calc(86px + env(safe-area-inset-bottom));text-align:center;color:#2a1f2d;font-size:13px;pointer-events:none;transition:opacity .25s}
-#home{position:fixed;left:8px;top:calc(8px + env(safe-area-inset-top));max-width:min(260px,calc(100vw - 160px));padding:7px 9px;border-radius:10px;background:#2a1f2dd9;color:#fdf3e4;font-size:10px;line-height:1.45;pointer-events:none}
+#home{position:fixed;left:62px;top:calc(8px + env(safe-area-inset-top));max-width:min(210px,calc(100vw - 190px));padding:7px 9px;border-radius:10px;background:#2a1f2dd9;color:#fdf3e4;font-size:10px;line-height:1.45;pointer-events:none}
 #clock{position:fixed;top:env(safe-area-inset-top);right:8px;padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:12px}
 #balance{position:fixed;top:calc(38px + env(safe-area-inset-top));right:8px;z-index:1;border:1px solid #ffc857;border-radius:10px;padding:6px 10px;background:#2a1f2dee;color:#fff4df;font: bold 11px "Trebuchet MS",sans-serif}
+#menuToggle{position:fixed;left:8px;top:calc(8px + env(safe-area-inset-top));z-index:4;width:44px;height:38px;border:1px solid #796879;border-radius:10px;background:#2a1f2dee;color:#fff4df;font-size:20px}
+.menu-overlay{position:fixed;inset:0;z-index:4;display:grid;align-items:end;background:#17121a80}
+.menu-sheet{box-sizing:border-box;width:100%;max-height:min(72dvh,560px);overflow:auto;padding:14px 14px calc(14px + env(safe-area-inset-bottom));border-radius:20px 20px 0 0;background:#fff4df;color:#2a1f2d;box-shadow:0 -10px 36px #0005}
+.menu-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.menu-header strong{font-size:17px}
+.menu-header button{width:38px;height:36px;border:0;border-radius:10px;background:#796c6c;color:white;font-size:20px}
+.menu-actions.tools{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.menu-actions button{min-height:44px;padding:9px 10px;border:0;border-radius:10px;background:#2a1f2d;color:#fff4df;text-align:left;font:13px "Trebuchet MS",sans-serif}
+.menu-actions button[hidden]{display:none}
 #needs{position:fixed;right:8px;top:calc(42px + env(safe-area-inset-top));padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:11px;line-height:1.55}
 #needs progress{width:68px;height:7px;vertical-align:middle;accent-color:#64c987}
 #toast{position:fixed;left:50%;top:calc(94px + env(safe-area-inset-top));transform:translateX(-50%);padding:9px 14px;border-radius:10px;background:#2a1f2dee;color:white;font-size:13px;pointer-events:none;opacity:0;transition:opacity .2s}
@@ -60,7 +69,7 @@ canvas{display:block}
 .slider-row input{grid-column:1/-1}
 .number{font-variant-numeric:tabular-nums}
 #btns{transition:opacity .25s}
-.controls-hidden .tools,.controls-hidden #btns,.controls-hidden #hint{opacity:0;pointer-events:none}
+.controls-hidden #btns,.controls-hidden #hint{opacity:0;pointer-events:none}
 #restoreControls{position:fixed;right:10px;bottom:calc(78px + env(safe-area-inset-bottom));z-index:3;border:0;border-radius:20px;padding:10px 13px;background:#2a1f2dee;color:white;font:inherit}
 #simbar{position:fixed;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;min-height:58px;padding:3px 8px calc(3px + env(safe-area-inset-bottom));box-sizing:border-box;overflow:hidden;background:#211b27ed}
 #simbar button{position:relative;display:flex;align-items:center;gap:9px;width:100%;height:52px;border:1px solid #786a77;border-radius:12px;background:#382d3d;color:#fff4df;padding:4px 9px;text-align:left;font:12px "Trebuchet MS",sans-serif}
@@ -86,7 +95,8 @@ canvas{display:block}
 <div id="needs" hidden></div>
 <div id="toast" aria-live="polite"></div>
 <div id="hint" hidden>Tap the ground to move</div>
-<div class="tools"><button id="profileBtn">My profile</button><button id="howToPlayBtn">How to play</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Earn coins</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div>
+<button id="menuToggle" aria-label="Open game menu" aria-controls="menuOverlay" aria-expanded="false">☰</button>
+<div id="menuOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Game menu"><div class="menu-header"><strong>House &amp; player</strong><button id="menuClose" aria-label="Close game menu">×</button></div><div class="tools menu-actions"><button id="profileBtn">My profile</button><button id="howToPlayBtn">How to play</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Earn coins</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div></section></div>
 <div id="btns"><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">－</button><button id="rot" aria-label="Rotate view">⟲</button></div>
 <button id="restoreControls" hidden>Show controls</button>
 <nav id="simbar" aria-label="Your character" hidden></nav>
@@ -128,9 +138,10 @@ const M=c=>new THREE.MeshLambertMaterial({color:c,flatShading:true});
 function box(w,h,d,c,x,y,z,p=S){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M(c));m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;p.add(m);return m}
 function cyl(rt,rb,h,c,x,y,z,p=S,seg=8){const m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg),M(c));m.position.set(x,y,z);m.castShadow=true;p.add(m);return m}
 function sign(text,x,y,z,color='#d94d3f'){
- const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;
- const ctx=canvas.getContext('2d');ctx.fillStyle=color;ctx.fillRect(0,0,512,128);
- ctx.fillStyle='#fff4df';ctx.font='bold 56px Trebuchet MS,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,64,480);
+ const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=256;
+ const ctx=canvas.getContext('2d');ctx.fillStyle=color;ctx.fillRect(0,0,1024,256);
+ ctx.strokeStyle='#fff4df';ctx.lineWidth=10;ctx.strokeRect(5,5,1014,246);
+ ctx.fillStyle='#fff4df';ctx.font='bold 112px Trebuchet MS,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#0008';ctx.shadowBlur=5;ctx.fillText(text,512,128,960);ctx.shadowBlur=0;
  const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(canvas),depthTest:false}));
  sprite.position.set(x,y,z);sprite.scale.set(5,1.25,1);sprite.renderOrder=2;S.add(sprite);return sprite
 }
@@ -186,6 +197,25 @@ box(3.2,.5,1.2,'#c75b7a',-12,.35,-4.2);box(3.2,.9,.3,'#b04a69',-12,.8,-4.9);
 const tvScreen=box(2.2,.9,.2,'#14141c',-12,1.4,-7.8);box(2.4,.6,.5,'#6b4a34',-12,.3,-7.5);
 const roomLight=new THREE.PointLight('#ffd18a',1.4,17);roomLight.position.set(-8,4,-6);S.add(roomLight);
 const tvLight=new THREE.PointLight('#8cbaff',.8,9);tvLight.position.set(-12,2,-7);S.add(tvLight);
+const windowGlows=[];
+function addWindowGlow(x,y,z,rotation=0){
+ const pane=new THREE.Mesh(new THREE.BoxGeometry(1.15,.8,.07),new THREE.MeshBasicMaterial({color:'#ffc96e'}));
+ pane.position.set(x,y,z);pane.rotation.y=rotation;S.add(pane);
+ const light=new THREE.PointLight('#ffbd68',.65,8,2);light.position.set(x,y,z);S.add(light);
+ windowGlows.push({pane,light})
+}
+addWindowGlow(4.18,1.35,-5,Math.PI/2);addWindowGlow(4.18,1.35,-11,Math.PI/2);
+addWindowGlow(-13,1.35,-17.18);addWindowGlow(-8.5,1.35,-17.18);
+const streetLamps=[];
+function addStreetLamp(x,z){
+ box(.16,4.8,.16,'#4d4847',x,2.4,z);
+ box(.16,.16,1.25,'#4d4847',x,4.7,z-.48);
+ const bulb=new THREE.Mesh(new THREE.SphereGeometry(.22,8,6),new THREE.MeshBasicMaterial({color:'#ffd27c'}));
+ bulb.position.set(x,4.45,z-.95);S.add(bulb);
+ const light=new THREE.PointLight('#ffc46b',1.2,15,2);light.position.copy(bulb.position);S.add(light);
+ streetLamps.push({bulb,light})
+}
+[-20,-4,12,28].forEach(z=>addStreetLamp(7.2,z));
 box(2.2,.5,2.4,'#6c63d6',-6.5,.35,-6.2);box(2.2,.15,.8,'#fff',-6.5,.7,-7.5);
 box(1.1,2.2,1.1,'#eef2f8',1.1,1.1,-6.1);box(.1,.8,.1,'#999',.5,1.4,-5.5);
 box(2.6,.9,.8,'#8d623f',-1.5,.45,-3.2);
@@ -913,13 +943,18 @@ async function tryDomsGift(){
  }catch(err){$('activityStatus').textContent='The gift could not be sent right now.';console.error('Doms gift failed:',err)}
  finally{$('domsGift').disabled=false}
 }
-const dayColor=new THREE.Color('#ffd9a0'),nightColor=new THREE.Color('#202b4c');
+const dayColor=new THREE.Color('#ffd9a0'),nightColor=new THREE.Color('#3b4a60');
 let outageRemaining=0,eventTimer=38,generatorNoise=false,uiTimer=0;
+function setMenuOpen(open){
+ const overlay=$('menuOverlay');overlay.hidden=!open;
+ $('menuToggle').setAttribute('aria-expanded',String(open));
+ if(open)resetControlsTimeout()
+}
 function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  gameMinute+=dt*6;if(gameMinute>=1440){gameMinute-=1440;gameDay++}
  const phase=gameMinute/1440,daylight=Math.max(0,Math.sin((phase-.25)*Math.PI*2));
  S.background.copy(nightColor).lerp(dayColor,daylight);
- sun.intensity=.12+.78*daylight;hemi.intensity=.24+.64*daylight;
+ sun.intensity=.2+.72*daylight;hemi.intensity=.5+.5*daylight;
  sun.color.set(daylight>.2?'#fff3d1':'#99a9d5');
  eventTimer-=dt;
  if(eventTimer<=0){
@@ -928,10 +963,12 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
   eventTimer=45+Math.random()*55
  }
  if(outageRemaining>0)outageRemaining=Math.max(0,outageRemaining-dt);
- const powered=outageRemaining<=0;
- roomLight.intensity=powered ? .15+1.25*(1-daylight) : 0;
- tvLight.intensity=powered ? .1+.7*(1-daylight) : 0;
- tvScreen.material.color.set(powered?'#14141c':'#08080a');
+ const mainsPower=outageRemaining<=0,lightsPowered=mainsPower||generatorNoise;
+ roomLight.intensity=lightsPowered ? .25+1.25*(1-daylight) : 0;
+ tvLight.intensity=mainsPower ? .1+.7*(1-daylight) : 0;
+ tvScreen.material.color.set(mainsPower?'#14141c':'#08080a');
+ windowGlows.forEach(({pane,light})=>{const on=lightsPowered&&daylight<.7;pane.visible=on;light.intensity=on ? .65 : 0});
+ streetLamps.forEach(({bulb,light})=>{const on=lightsPowered&&daylight<.55;bulb.material.color.set(on?'#ffd27c':'#393943');light.intensity=on?1.2:0});
  veh.forEach(o=>{o.z+=o.v*dt;o.g.position.z=o.z;if(o.z>45)o.z=-45;if(o.z<-45)o.z=45;o.g.position.z=o.z});
  pedestrians.forEach(o=>{
   const p=o.g.position;p.z+=o.dir*o.speed*dt;
@@ -993,6 +1030,11 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  }
  updateNameTags();
  R.render(S,cam);requestAnimationFrame(frame)}
+document.getElementById('menuToggle').onclick=()=>setMenuOpen($('menuOverlay').hidden);
+document.getElementById('menuClose').onclick=()=>setMenuOpen(false);
+document.getElementById('menuOverlay').addEventListener('click',event=>{if(event.target===$('menuOverlay'))setMenuOpen(false)});
+document.querySelector('.menu-actions').addEventListener('click',event=>{if(event.target.closest('button'))setMenuOpen(false)});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('menuOverlay').hidden)setMenuOpen(false)});
 document.getElementById('profileBtn').onclick=async()=>{
  resetControlsTimeout();
  if(!db){updateChoices();profileOverlay.hidden=false;$('profileStatus').textContent='Choose who you want to play as.';return}
