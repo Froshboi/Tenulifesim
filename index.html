@@ -8,9 +8,10 @@
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#ffd9a0;font-family:"Trebuchet MS",system-ui,sans-serif;touch-action:none}
 canvas{display:block}
-#btns{position:fixed;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:3;display:flex;flex-direction:column;gap:8px}
-#btns button{width:46px;height:46px;border-radius:50%;border:0;background:#2a1f2dd9;color:#fff;font-size:20px}
+#btns{position:fixed;right:8px;top:calc(72px + env(safe-area-inset-top));z-index:3;display:flex;gap:5px;padding:4px;border-radius:18px;background:#2a1f2da8}
+#btns button{width:36px;height:36px;border-radius:50%;border:0;background:#2a1f2dee;color:#fff;font-size:18px}
 #hint{position:fixed;left:0;right:0;bottom:calc(86px + env(safe-area-inset-bottom));text-align:center;color:#2a1f2d;font-size:13px;pointer-events:none;transition:opacity .25s}
+#hint.dismissed{opacity:0}
 #home{position:fixed;left:62px;top:calc(8px + env(safe-area-inset-top));max-width:min(210px,calc(100vw - 190px));padding:7px 9px;border-radius:10px;background:#2a1f2dd9;color:#fdf3e4;font-size:10px;line-height:1.45;pointer-events:none}
 #clock{position:fixed;top:env(safe-area-inset-top);right:8px;padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:12px}
 #balance{position:fixed;top:calc(38px + env(safe-area-inset-top));right:8px;z-index:1;border:1px solid #ffc857;border-radius:10px;padding:6px 10px;background:#2a1f2dee;color:#fff4df;font: bold 11px "Trebuchet MS",sans-serif}
@@ -87,6 +88,9 @@ canvas{display:block}
 #simbar .presence{flex:0 0 9px;font-size:9px;color:#80e59e}
 #simbar .presence.offline{color:#c6b8c6}
 #phoneOverlay .choice-grid button{min-height:58px}
+.dialog #accountBtn{display:block;width:100%;min-height:46px;margin-top:14px;background:#2a1f2d;color:#fff4df;font-weight:bold;box-shadow:0 3px 0 #17121a}
+.dialog #accountBtn:hover{background:#433248}
+.dialog #accountBtn:focus-visible{outline:3px solid #ffc857;outline-offset:2px}
 [hidden]{display:none!important}
 </style></head><body>
 <div id="home">NDDC Close · Tenu Close No. 4 · Tap to walk</div>
@@ -399,7 +403,14 @@ function characterAt(e){
  const hit=rc.intersectObjects(chars.map(c=>c.g),true)[0];if(!hit)return -1;
  let obj=hit.object;while(obj&&!obj.userData.c)obj=obj.parent;return obj?obj.userData.c.i:-1
 }
-function tap(e){pt.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);rc.setFromCamera(pt,cam);
+let hasTappedWorld=false;
+function dismissMovementHint(){
+ if(hasTappedWorld)return;
+ hasTappedWorld=true;
+ const hint=$('hint');hint.classList.add('dismissed');
+ setTimeout(()=>{hint.hidden=true},300)
+}
+function tap(e){dismissMovementHint();pt.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);rc.setFromCamera(pt,cam);
  const h=rc.intersectObjects(chars.map(c=>c.g),true);
  if(h.length){let obj=h[0].object;while(obj&&!obj.userData.c)obj=obj.parent;if(obj){touchedChar=obj.userData.c.i;touchedUntil=performance.now()+3500;$('hint').textContent=obj.userData.c.i===sel?'Tap the ground to move':'Choose your character from the profile menu.'}return}
  if(activeCharId&&rc.ray.intersectPlane(gp,v3)){const c=chars[sel];c.hold=12;
@@ -417,7 +428,7 @@ function resetControlsTimeout(){
  document.body.classList.remove('controls-hidden');$('restoreControls').hidden=true;
  clearTimeout(controlTimeout);
  if(!activeCharId)return;
- $('hint').hidden=false;
+ $('hint').hidden=hasTappedWorld;
  controlTimeout=setTimeout(()=>{document.body.classList.add('controls-hidden');$('hint').hidden=true;$('restoreControls').hidden=false},30000)
 }
 async function sendPresence(isOnline){
@@ -544,7 +555,8 @@ function applyProfile(row){
  applyRoom(c.roomIndex,roomRows[c.roomIndex]);
  $('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=true;$('balance').hidden=false;updateNeedsHud();updateSimbar();resetControlsTimeout();
  $('hint').textContent='Tap the ground to move';
- $('hint').hidden=false;
+ $('hint').classList.remove('dismissed');
+ $('hint').hidden=hasTappedWorld;
  c.online=true;updateSimbar();
  profileOverlay.hidden=true
  loadWallet().catch(err=>console.error('Wallet balance could not be loaded:',err));
