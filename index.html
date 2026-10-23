@@ -60,14 +60,10 @@ canvas{display:block}
 .auth-eyebrow{margin:0;color:#8f6858;font-size:10px;font-weight:bold;letter-spacing:.16em}
 .auth-dialog h2{margin:5px 0;font-size:26px}
 .auth-copy{margin:0 0 16px;color:#74645d;font-size:13px}
-.auth-google,.auth-link-google{width:100%;min-height:46px;border:1px solid #c9b8a2!important;background:#fff!important;color:#29232a!important;font-weight:bold!important}
-.auth-link-google{margin-top:8px}
-.auth-divider{display:flex;align-items:center;gap:10px;margin:15px 0;color:#8c7b70;font-size:11px}
-.auth-divider:before,.auth-divider:after{content:"";height:1px;flex:1;background:#ddcdb9}
-.auth-guest{width:100%;margin-top:8px;background:transparent!important;color:#66545b!important}
-.auth-dialog .row{margin-top:8px}
-.auth-dialog #signInAccount{background:#574149}
-.auth-dialog #secureAccount{background:#a44d39}
+.auth-routes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 10px}
+.auth-routes button{min-height:44px;border:1px solid #c9b8a2;background:#fff;color:#55464a}
+.auth-routes button[aria-pressed="true"]{border-color:#a44d39;background:#a44d39;color:#fff;font-weight:bold}
+.auth-dialog #authSubmit{width:100%;min-height:46px;margin-top:14px;background:#2a1f2d;font-weight:bold}
 .walkthrough-dialog{width:min(410px,100%);padding:24px;background:linear-gradient(145deg,#fff8e8,#f3e0c4)}
 .walkthrough-step{display:grid;place-items:center;width:50px;height:50px;margin-bottom:12px;border-radius:16px;background:#2a1f2d;color:#ffc857;font-size:25px}
 .walkthrough-kicker{margin:0;color:#916955;font-size:10px;font-weight:bold;letter-spacing:.14em}
@@ -190,9 +186,9 @@ canvas{display:block}
 <button id="restoreControls" hidden>Show controls</button>
 <nav id="simbar" aria-label="Your character" hidden></nav>
 <button id="quickCook" hidden>Cook bole &amp; fish</button>
-<div id="profileOverlay" class="overlay"><section class="dialog profile-dialog" aria-labelledby="profileTitle"><div class="profile-brand"><span class="profile-brand-mark" aria-hidden="true">T</span><span class="profile-brand-copy">TENU HOUSE · PORT HARCOURT</span></div><h1 id="profileTitle">Who’s joining the house?</h1><p class="profile-intro">Choose an available household member, or sign in to continue your saved character.</p><div id="profileChoices" class="profile-grid" aria-label="Household members"></div><button id="accountBtn" type="button">Save progress · sign in or create an account</button><p id="profileStatus" class="status" aria-live="polite">Getting the house ready…</p></section></div>
+<div id="profileOverlay" class="overlay"><section class="dialog profile-dialog" aria-labelledby="profileTitle"><div class="profile-brand"><span class="profile-brand-mark" aria-hidden="true">T</span><span class="profile-brand-copy">TENU HOUSE · PORT HARCOURT</span></div><h1 id="profileTitle">Who’s joining the house?</h1><p class="profile-intro">Choose an available household member, or create an account / log back in to continue your saved character.</p><div id="profileChoices" class="profile-grid" aria-label="Household members"></div><button id="accountBtn" type="button">Create account or log back in</button><p id="profileStatus" class="status" aria-live="polite">Getting the house ready…</p></section></div>
 <div id="walkthroughOverlay" class="overlay" hidden><section class="dialog walkthrough-dialog"><div class="walkthrough-step" id="walkthroughIcon">⌖</div><p class="walkthrough-kicker">QUICK START · <span id="walkthroughCount">1 OF 4</span></p><h2 id="walkthroughTitle">Make yourself at home</h2><p id="walkthroughCopy" class="walkthrough-copy"></p><div id="walkthroughDots" class="walkthrough-dots"></div><div class="row"><button id="walkthroughNext">Next</button><button id="walkthroughSkip" class="secondary">Skip</button></div></section></div>
-<div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2>Welcome to TENU HOUSE</h2><p class="auth-copy">Sign in to keep your character across devices, or play as a guest and get started right away.</p><button id="googleSignIn" class="auth-google">Continue with Google</button><button id="linkGoogle" class="auth-link-google" hidden>Link Google to this player</button><div class="auth-divider">or use email</div><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"><div class="row"><button id="signInAccount">Sign in</button><button id="secureAccount">Create account</button></div><p id="accountStatus" class="status" aria-live="polite"></p><button id="continueAnonymous" class="auth-guest">Continue anonymously</button><button id="closeAccount" class="auth-guest">Back to character selection</button></section></div>
+<div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2 id="authTitle">Create your account</h2><p id="authCopy" class="auth-copy">Use your email and password to save your household player.</p><div class="auth-routes" role="group" aria-label="Account options"><button id="authCreateMode" type="button" aria-pressed="true">Create account</button><button id="authLoginMode" type="button" aria-pressed="false">Log back in</button></div><form id="accountForm"><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com" required><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required><button id="authSubmit" type="submit">Create account</button></form><p id="accountStatus" class="status" aria-live="polite"></p></section></div>
 <div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
 <div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Trans-Amadi class<br>Play the class quiz</button><button data-activity="market">Mile 1 Market shift<br>Stock the bole stall</button><button data-activity="market_shop">Shop at Mile 1 Market<br>Visit the market</button><button data-activity="fun">Watch TV<br>Play the rhythm game</button><button data-activity="generator">Pull-start generator<br>Fast downward swipes</button><button data-activity="water">Pump borehole<br>Tap to the rhythm</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay NEPA bill<br>Spend 250 coins</button><button id="buyDiesel">Buy generator diesel<br>Spend 300 coins · 5 min</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep · swat mosquitoes</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
 <div id="venueShopOverlay" class="overlay" hidden><section class="dialog"><h2 id="venueShopTitle">Mile 1 Market</h2><p>Welcome! Choose what you would like to buy with TENU coins.</p><div class="choice-grid"><button data-buy="groceries">Fresh groceries<br>120 coins</button><button data-buy="outfit">New outfit<br>350 coins</button><button data-buy="phone">Phone upgrade<br>900 coins</button></div><p id="venueShopStatus" class="status"></p><div class="row"><button id="closeVenueShop" class="secondary">Leave shop</button></div></section></div>
@@ -1093,7 +1089,7 @@ async function chooseProfile(characterId){
  $('profileChoices').querySelectorAll('button').forEach(button=>button.disabled=true);
  try{
   if(!db){
-   if(characterId==='Doms'){status.textContent='Sign in with the household Google account to continue as Doms.';return}
+   if(characterId==='Doms'){status.textContent='Sign in with the verified household-owner email to continue as Doms.';return}
    const c=chars.find(z=>DEF[z.i][0]===characterId);if(!c)return;
    const saved=JSON.parse(localStorage.getItem(localProfilesKey)||'{}'),rooms=JSON.parse(localStorage.getItem(localRoomsKey)||'{}');
    profilesByChar={};roomRows=rooms;
@@ -1119,58 +1115,69 @@ async function chooseProfile(characterId){
  }
 }
 function openAccount(){
-  $('accountStatus').textContent='';
-  const mine=Object.values(profilesByChar).some(row=>row.user_id===currentUserId);
-  $('linkGoogle').hidden=!(mine&&currentUser?.is_anonymous);
-  $('accountOverlay').hidden=false
- }
-async function googleSignIn(){
- const button=$('googleSignIn');button.disabled=true;$('accountStatus').textContent='Connecting to Google…';
- try{
-  if(!db)throw Error('Sign-in is unavailable while offline.');
-  const {error}=await db.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin,queryParams:{prompt:'select_account'}}});
-  if(error)throw error
- }catch(err){$('accountStatus').textContent='Google sign-in is unavailable right now. Try again or use email.';console.error('Google sign-in failed:',err);button.disabled=false}
+ setAccountMode('create');$('accountStatus').textContent='';$('accountOverlay').hidden=false
 }
-async function linkGoogle(){
- const button=$('linkGoogle');button.disabled=true;$('accountStatus').textContent='Linking your Google account…';
- try{
-  if(!db||!currentUser?.is_anonymous)throw Error('Choose a guest character before linking Google.');
-  const {error}=await db.auth.linkIdentity({provider:'google',options:{redirectTo:location.origin,queryParams:{prompt:'select_account'}}});
-  if(error)throw error
- }catch(err){
-  $('accountStatus').textContent='Could not link that Google account. If it is already in use, choose “Continue with Google” instead.';
-  console.error('Google account linking failed:',err);button.disabled=false
- }
+let accountMode='create';
+function setAccountMode(mode){
+ accountMode=mode;
+ const creating=mode==='create';
+ $('authTitle').textContent=creating?'Create your account':'Log back in';
+ $('authCopy').textContent=creating?'Use your email and password to save your household player.':'Enter the email and password for your existing account.';
+ $('authCreateMode').setAttribute('aria-pressed',String(creating));
+ $('authLoginMode').setAttribute('aria-pressed',String(!creating));
+ $('authSubmit').textContent=creating?'Create account':'Log back in';
+ $('accountPassword').autocomplete=creating?'new-password':'current-password';
+ $('accountStatus').textContent=''
 }
- async function signInAccount(){
-  const email=$('accountEmail').value.trim(),password=$('accountPassword').value;
-  $('signInAccount').disabled=true;$('accountStatus').textContent='Signing in…';
-  try{
-   if(!db)throw Error('Household login is unavailable while offline.');
-   const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;
-   currentUser=data.user;currentUserId=data.user.id;await refreshProfiles();
-   const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
-   $('accountOverlay').hidden=true;
-   if(mine)startSignedInProfile(mine);
-   else{profileOverlay.hidden=false;$('profileStatus').textContent='Choose an available household member to start playing.'}
-   updateChoices()
-  }catch(err){$('accountStatus').textContent='Could not sign in with those details.';console.error('Household sign-in failed:',err)}
-  finally{$('signInAccount').disabled=false}
- }
- async function secureAccount(){
-  const email=$('accountEmail').value.trim(),password=$('accountPassword').value;
-  if(!email||password.length<8){$('accountStatus').textContent='Enter your email and a password with at least 8 characters.';return}
-  if(!db){$('accountStatus').textContent='Account creation is unavailable while offline.';return}
-  $('secureAccount').disabled=true;$('accountStatus').textContent='Creating your account…';
-  try{
+async function signInAccount(){
+ const email=$('accountEmail').value.trim(),password=$('accountPassword').value,button=$('authSubmit');
+ button.disabled=true;$('accountStatus').textContent='Logging back in…';
+ try{
+  if(!db)throw Error('Household login is unavailable while offline.');
+  const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;
+  currentUser=data.user;currentUserId=data.user.id;await refreshProfiles();
+  const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
+  $('accountOverlay').hidden=true;
+  if(mine)startSignedInProfile(mine);
+  else{
+   profileOverlay.hidden=false;
+   $('profileStatus').textContent='Signed in, but no household player is linked. For Doms, verify this email and ensure the household owner email is configured in Supabase.'
+  }
+  updateChoices()
+ }catch(err){$('accountStatus').textContent=err?.message||'Could not log back in with those details.';console.error('Household sign-in failed:',err)}
+ finally{button.disabled=false}
+}
+async function secureAccount(){
+ const email=$('accountEmail').value.trim(),password=$('accountPassword').value,button=$('authSubmit');
+ if(!email||password.length<8){$('accountStatus').textContent='Enter your email and a password with at least 8 characters.';return}
+ if(!db){$('accountStatus').textContent='Account creation is unavailable while offline.';return}
+ button.disabled=true;$('accountStatus').textContent='Creating your account…';
+ try{
+  if(currentUser?.is_anonymous){
    const {data,error}=await db.auth.updateUser({email,password});if(error)throw error;
    if(data.user.id!==currentUserId)throw Error('Account identity changed unexpectedly.');
    currentUser=data.user;
-   $('accountStatus').textContent='Account created. Confirm your email if asked, then use these details on other devices.'
-  }catch(err){$('accountStatus').textContent='Could not secure this account right now.';console.error('Household account upgrade failed:',err)}
-  finally{$('secureAccount').disabled=false}
+   $('accountStatus').textContent='Account created. Confirm the email sent to you; this keeps your current household player.'
+  }else{
+   const {data,error}=await db.auth.signUp({email,password,options:{emailRedirectTo:location.origin}});if(error)throw error;
+   if(data.session){
+    currentUser=data.user;currentUserId=data.user.id;await refreshProfiles();
+    const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
+    if(mine){$('accountOverlay').hidden=true;startSignedInProfile(mine)}
+    else $('accountStatus').textContent='Account created. Confirm your email, then log back in. Doms is linked only when its verified owner email is configured in Supabase.'
+   }else{
+    $('accountStatus').textContent='Account created. Check your email to confirm it, then choose “Log back in”. For Doms, the verified email must also be configured as the household owner in Supabase.'
+   }
+  }
+ }catch(err){
+  const detail=String(err?.message||'');
+  $('accountStatus').textContent=/already registered|already been registered|user already registered/i.test(detail)
+   ?'This email already has an account. Choose “Log back in”.'
+   :detail||'Could not create the account. Check the email and password, then try again.';
+  console.error('Household account creation failed:',err)
  }
+ finally{button.disabled=false}
+}
 function openCustomization(){
  if(!currentProfile)return;
  $('customName').value=currentProfile.character_name||DEF[sel][0];
@@ -1395,7 +1402,10 @@ function startMiniGame(type,onResult){
   swipe.addEventListener('pointerup',event=>{
    if(!miniGame?.pointerStart)return;
    const distance=event.clientY-miniGame.pointerStart.y,elapsed=performance.now()-miniGame.pointerStart.time;miniGame.pointerStart=null;
-   if(distance>=65&&elapsed<=450){miniGame.score++;$('miniGameScore').textContent='Good pulls: '+miniGame.score+'/3';if(miniGame.score===3)finishMiniGame('perfect')}
+   miniGame.clicks++;
+   if(distance>=65&&elapsed<=450)miniGame.score++;
+   $('miniGameScore').textContent='Good pulls: '+miniGame.score+'/3 · pulls: '+miniGame.clicks+'/3';
+   if(miniGame.clicks===3)finishMiniGame(miniGame.score===3?'perfect':miniGame.score>0?'good':'fail')
   });
   swipe.addEventListener('pointercancel',()=>{if(miniGame)miniGame.pointerStart=null})
  }else if(type==='fun'){
@@ -1869,12 +1879,12 @@ document.getElementById('walkthroughSkip').onclick=closeWalkthrough;
 document.getElementById('customizeBtn').onclick=openCustomization;
 document.getElementById('restoreControls').onclick=resetControlsTimeout;
 document.getElementById('accountBtn').onclick=openAccount;
-document.getElementById('closeAccount').onclick=()=> $('accountOverlay').hidden=true;
-document.getElementById('continueAnonymous').onclick=()=> $('accountOverlay').hidden=true;
-document.getElementById('googleSignIn').onclick=googleSignIn;
-document.getElementById('linkGoogle').onclick=linkGoogle;
-document.getElementById('signInAccount').onclick=signInAccount;
-document.getElementById('secureAccount').onclick=secureAccount;
+document.getElementById('authCreateMode').onclick=()=>setAccountMode('create');
+document.getElementById('authLoginMode').onclick=()=>setAccountMode('login');
+document.getElementById('accountForm').addEventListener('submit',event=>{
+ event.preventDefault();
+ if(accountMode==='create')secureAccount();else signInAccount()
+});
 document.getElementById('closeCustom').onclick=cancelCustomization;
 document.getElementById('saveCustom').onclick=saveCustomization;
 ['shirtColor','skinColor','hairColor','hairStyle','bodyBuild','bodyHeight'].forEach(id=>$(id).addEventListener('input',previewCustomization));

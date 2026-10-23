@@ -9,12 +9,9 @@
 -- 8. Run supabase/migrations/20261023180000_profile_claims_and_shared_build.sql.
 -- 9. Run supabase/migrations/20261023190000_tenu_minigame_rewards.sql.
 -- 10. Run supabase/migrations/20261023200000_more_minigames.sql.
--- 11. Set the private doms_owner_email value in public.tenu_house_settings
---    using the verified email that should own the Doms profile.
--- 12. Enable Anonymous Sign-Ins in Authentication > Providers > Anonymous.
--- 13. Enable Google in Authentication > Providers and configure its OAuth credentials.
---    Add the deployed site's URL and https://<project-ref>.supabase.co/auth/v1/callback
---    to the Google OAuth authorized redirect URIs.
+-- 11. Set public.tenu_house_settings.setting_value for doms_owner_email to the
+--     household owner's email; that account must confirm the email to receive Doms.
+-- 12. Enable Anonymous Sign-Ins and Email provider in Authentication > Providers.
 create table if not exists public.tenu_players (
   character_id text primary key check (character_id in ('MMA','Ukechi','Chibaby','Doms','Jahsfavour','Mummy','Dee')),
   user_id uuid not null unique references auth.users(id) on delete cascade,
