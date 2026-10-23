@@ -78,6 +78,7 @@ canvas{display:block}
 .auth-routes button[aria-pressed="true"]{border-color:#a44d39;background:#a44d39;color:#fff;font-weight:bold}
 .auth-dialog #authSubmit{width:100%;min-height:46px;margin-top:14px;background:#2a1f2d;font-weight:bold}
 .auth-link{display:block;margin:10px auto 0;border:0!important;background:transparent!important;color:#684f5a!important;text-decoration:underline}
+.auth-magic{display:block;width:100%;margin:5px auto 0;border:0!important;background:transparent!important;color:#684f5a!important;text-decoration:underline}
 .auth-guest{width:100%;margin-top:8px;background:#796c6c!important}
 .walkthrough-dialog{width:min(410px,100%);padding:24px;background:linear-gradient(145deg,#fff8e8,#f3e0c4)}
 .walkthrough-step{display:grid;place-items:center;width:50px;height:50px;margin-bottom:12px;border-radius:16px;background:#2a1f2d;color:#ffc857;font-size:25px}
@@ -180,6 +181,13 @@ canvas{display:block}
 #simbar .need-value{width:20px;color:#e9dfe9;font-size:8px;text-align:right}
 #simbar .presence{flex:0 0 9px;font-size:9px;color:#80e59e}
 #simbar .presence.offline{color:#c6b8c6}
+#simbar{bottom:calc(60px + env(safe-area-inset-bottom))}
+#bottomNav{position:fixed;left:0;right:0;bottom:0;z-index:3;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:5px 8px calc(5px + env(safe-area-inset-bottom));background:#211b27ed}
+#bottomNav button{min-height:46px;border:1px solid #786a77;border-radius:12px;background:#382d3d;color:#fff4df;font:bold 12px "Trebuchet MS",sans-serif}
+#bottomNav button[aria-current="page"]{border-color:#ffc857;background:#55404d;color:#ffc857}
+#contextActions{position:fixed;z-index:3;display:grid;grid-template-columns:repeat(2,minmax(82px,1fr));gap:5px;width:min(190px,calc(100vw - 24px));padding:7px;border:1px solid #ffc857;border-radius:13px;background:#2a1f2df2;box-shadow:0 4px 14px #0005}
+#contextActions strong{grid-column:1/-1;color:#fff4df;font-size:10px;text-align:center}
+#contextActions button{min-height:34px;border:0;border-radius:8px;background:#fff4df;color:#2a1f2d;font:bold 10px "Trebuchet MS",sans-serif}
 #phoneOverlay .choice-grid button{min-height:58px}
 .dialog #accountBtn{display:block;width:100%;min-height:46px;margin-top:14px;background:#2a1f2d;color:#fff4df;font-weight:bold;box-shadow:0 3px 0 #17121a}
 .dialog #accountBtn:hover{background:#433248}
@@ -200,10 +208,12 @@ canvas{display:block}
 <div id="btns"><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">－</button><button id="rot" aria-label="Rotate view">⟲</button></div>
 <button id="restoreControls" hidden>Show controls</button>
 <nav id="simbar" aria-label="Your character" hidden></nav>
+<nav id="bottomNav" aria-label="Main navigation" hidden><button type="button" data-tab="home" aria-current="page">⌂ Home</button><button type="button" data-tab="buy">＋ Buy</button><button type="button" data-tab="map">⌖ Map</button></nav>
+<div id="contextActions" hidden><strong id="contextStatus">Ready at home</strong><button type="button" data-context="cook">🍲 Eat</button><button type="button" data-context="sleep">🛏 Sleep</button><button type="button" data-context="fun">📺 Watch TV</button><button type="button" data-context="outside">🚶 Go outside</button></div>
 <button id="quickCook" hidden>Cook bole &amp; fish</button>
 <div id="profileOverlay" class="overlay"><section class="dialog profile-dialog" aria-labelledby="profileTitle"><div class="profile-brand"><span class="profile-brand-mark" aria-hidden="true">T</span><span class="profile-brand-copy">TENU HOUSE · PORT HARCOURT</span></div><h1 id="profileTitle">Who’s joining the house?</h1><p class="profile-intro">Choose an available household member, or create an account / log back in to continue your saved character.</p><div id="profileChoices" class="profile-grid" aria-label="Household members"></div><button id="accountBtn" type="button">Create account or log back in</button><p id="profileStatus" class="status" aria-live="polite">Getting the house ready…</p></section></div>
 <div id="walkthroughOverlay" class="overlay" hidden><section class="dialog walkthrough-dialog"><div class="walkthrough-step" id="walkthroughIcon">⌖</div><p class="walkthrough-kicker">QUICK START · <span id="walkthroughCount">1 OF 4</span></p><h2 id="walkthroughTitle">Make yourself at home</h2><p id="walkthroughCopy" class="walkthrough-copy"></p><div id="walkthroughDots" class="walkthrough-dots"></div><div class="row"><button id="walkthroughNext">Next</button><button id="walkthroughSkip" class="secondary">Skip</button></div></section></div>
-<div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2 id="authTitle">Create your account</h2><p id="authCopy" class="auth-copy">Use your email and password to save your household player.</p><div class="auth-routes" role="group" aria-label="Account options"><button id="authCreateMode" type="button" aria-pressed="true">Create account</button><button id="authLoginMode" type="button" aria-pressed="false">Log back in</button></div><form id="accountForm"><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com" required><div id="accountPasswordField"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required></div><button id="authSubmit" type="submit">Create account</button></form><button id="forgotPassword" class="auth-link" type="button" hidden>Forgot password?</button><button id="backToLogin" class="auth-link" type="button" hidden>Back to log in</button><button id="continueAsGuest" class="auth-guest" type="button">Continue as guest</button><p id="accountStatus" class="status" aria-live="polite"></p></section></div>
+<div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2 id="authTitle">Create your account</h2><p id="authCopy" class="auth-copy">Use your email and password to save your household player.</p><div class="auth-routes" role="group" aria-label="Account options"><button id="authCreateMode" type="button" aria-pressed="true">Create account</button><button id="authLoginMode" type="button" aria-pressed="false">Log back in</button></div><form id="accountForm"><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com" required><div id="accountPasswordField"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required></div><button id="authSubmit" type="submit">Create account</button></form><button id="emailMagicLink" class="auth-magic" type="button" hidden>Email me a sign-in link</button><button id="forgotPassword" class="auth-link" type="button" hidden>Forgot password?</button><button id="backToLogin" class="auth-link" type="button" hidden>Back to log in</button><button id="continueAsGuest" class="auth-guest" type="button">Continue as guest</button><p id="accountStatus" class="status" aria-live="polite"></p></section></div>
 <div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
 <div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Trans-Amadi class<br>Play the class quiz</button><button data-activity="market">Mile 1 Market shift<br>Stock the bole stall</button><button data-activity="market_shop">Shop at Mile 1 Market<br>Visit the market</button><button data-activity="fun">Watch TV<br>Play the rhythm game</button><button data-activity="generator">Pull-start generator<br>Fast downward swipes</button><button data-activity="water">Pump borehole<br>Tap to the rhythm</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay NEPA bill<br>Spend 250 coins</button><button id="buyDiesel">Buy generator diesel<br>Spend 300 coins · 5 min</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep · swat mosquitoes</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
 <div id="venueShopOverlay" class="overlay" hidden><section class="dialog" aria-label="Mile 1 Market"><h2 id="venueShopTitle">Mile 1 Market · Shop &amp; rides</h2><p>Browse real illustrated goods, generator supplies and rides around Port Harcourt.</p><div id="marketCatalog" class="market-catalog"></div><p id="venueShopStatus" class="status" aria-live="polite"></p><div class="row"><button id="closeVenueShop" class="secondary">Leave shop</button></div></section></div>
@@ -851,7 +861,7 @@ function applyProfile(row){
  c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance);drawNameTag(c);
  activeCharId=row.character_id;sel=c.i;currentProfile=row;
  applyRoom(c.roomIndex,roomRows[c.roomIndex]);
- $('buildBtn').hidden=false;$('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=true;$('balance').hidden=false;updateNeedsHud();updateSimbar();resetControlsTimeout();
+ $('buildBtn').hidden=false;$('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=true;$('balance').hidden=false;$('bottomNav').hidden=false;updateNeedsHud();updateSimbar();resetControlsTimeout();
  $('hint').textContent='Tap the ground to move';
  $('hint').classList.remove('dismissed');
  $('hint').hidden=hasTappedWorld;
@@ -1155,8 +1165,23 @@ function setAccountMode(mode){
  $('accountPassword').required=!resetting;
  $('accountPassword').autocomplete=creating?'new-password':'current-password';
  $('forgotPassword').hidden=!loggingIn;$('backToLogin').hidden=!resetting;
+ $('emailMagicLink').hidden=!loggingIn;
  $('continueAsGuest').hidden=resetting;
  $('accountStatus').textContent=''
+}
+async function sendEmailMagicLink(){
+ const email=$('accountEmail').value.trim(),button=$('emailMagicLink');
+ if(!email){$('accountEmail').reportValidity();$('accountEmail').focus();return}
+ if(!db){$('accountStatus').textContent='Email sign-in is unavailable while offline.';return}
+ button.disabled=true;$('accountStatus').textContent='Sending a sign-in link…';
+ try{
+  const {error}=await db.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin,shouldCreateUser:false}});
+  if(error)throw error;
+  $('accountStatus').textContent='If this email has an account, a secure sign-in link is on its way. Check your inbox and spam folder.'
+ }catch(err){
+  $('accountStatus').textContent=err?.message||'Could not send a sign-in link. Try logging in with your password.';
+  console.error('Email sign-in link failed:',err)
+ }finally{button.disabled=false}
 }
 async function signInAccount(){
  const email=$('accountEmail').value.trim(),password=$('accountPassword').value,button=$('authSubmit');
@@ -1646,6 +1671,20 @@ function startActivity(activity){
  if(['cook','market','school','sleep','fun','generator','water'].includes(activity)&&isMiniGameCoolingDown(activity)){
   toast('Please wait before playing this game again.');return
  }
+ function updateContextActions(){
+  const actions=$('contextActions'),c=chars[sel];
+  if(!activeCharId||!c||!profileOverlay.hidden||!$('walkthroughOverlay').hidden||!$('accountOverlay').hidden){
+   actions.hidden=true;return
+  }
+  const anchor=new THREE.Vector3(c.g.position.x,3.5,c.g.position.z).project(cam);
+  const x=(anchor.x*.5+.5)*innerWidth,y=(-anchor.y*.5+.5)*innerHeight;
+  if(anchor.z<0||anchor.z>1||x<0||x>innerWidth||y<0||y>innerHeight){actions.hidden=true;return}
+  const width=actions.offsetWidth||190,height=actions.offsetHeight||88;
+  actions.style.left=Math.max(8,Math.min(innerWidth-width-8,x-width/2))+'px';
+  actions.style.top=Math.max(58,Math.min(innerHeight-height-72,y-height-14))+'px';
+  $('contextStatus').textContent=c.act?(c.act.at==='sleep'?'Sleeping':c.act.at==='tv'?'Watching TV':c.act.at==='cook'?'Cooking':'Walking'):'Ready · '+c.n;
+  actions.hidden=false
+ }
  $('activityOverlay').hidden=true;c.hold=60;c.activityDone=false;
  if(activity==='sleep')return go(c,bedrooms[c.roomIndex],-14.2,{max:2,at:'pre_sleep',action:'sleep'});
  go(c,dest[0],dest[1],{max:activity==='school'?6:3,at:activity,action:activity})
@@ -1956,8 +1995,26 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
   if(needsSaveTimer>=20){needsSaveTimer=0;persistNeeds().catch(err=>console.error('Needs could not be saved:',err))}
  }
  updateNameTags();
+ updateContextActions();
  R.render(S,cam);requestAnimationFrame(frame)}
 document.getElementById('menuToggle').onclick=()=>setMenuOpen($('menuOverlay').hidden);
+document.querySelectorAll('#bottomNav [data-tab]').forEach(button=>button.addEventListener('click',()=>{
+ const tab=button.dataset.tab;
+ document.querySelectorAll('#bottomNav [data-tab]').forEach(item=>item.setAttribute('aria-current',String(item===button?'page':'false')));
+ if(tab==='home'){
+  const c=chars[sel];view.set(c.g.position.x,0,c.g.position.z);zoom=1.25;size();toast('Home · '+c.n)
+ }else if(tab==='buy'){
+  setMenuOpen(false);openBuildCatalog()
+ }else{
+  view.set(0,0,-5);zoom=.62;size();toast('Compound map')
+ }
+}));
+document.querySelectorAll('#contextActions [data-context]').forEach(button=>button.addEventListener('click',event=>{
+ event.stopPropagation();
+ const action=button.dataset.context,c=chars[sel];
+ if(action==='outside'){c.hold=20;go(c,8,-2);toast(c.n+' is heading outside.');return}
+ startActivity(action==='cook'?'cook':action)
+}));
 document.getElementById('menuClose').onclick=()=>setMenuOpen(false);
 document.getElementById('menuOverlay').addEventListener('click',event=>{if(event.target===$('menuOverlay'))setMenuOpen(false)});
 document.querySelector('.menu-actions').addEventListener('click',event=>{if(event.target.closest('button'))setMenuOpen(false)});
@@ -1985,6 +2042,7 @@ document.getElementById('restoreControls').onclick=resetControlsTimeout;
 document.getElementById('accountBtn').onclick=openAccount;
 document.getElementById('authCreateMode').onclick=()=>setAccountMode('create');
 document.getElementById('authLoginMode').onclick=()=>setAccountMode('login');
+document.getElementById('emailMagicLink').onclick=sendEmailMagicLink;
 document.getElementById('forgotPassword').onclick=sendPasswordReset;
 document.getElementById('backToLogin').onclick=()=>setAccountMode('login');
 document.getElementById('continueAsGuest').onclick=()=>{
