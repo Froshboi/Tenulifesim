@@ -12,6 +12,8 @@
 -- 11. Set public.tenu_house_settings.setting_value for doms_owner_email to the
 --     household owner's email; that account must confirm the email to receive Doms.
 -- 12. Enable Anonymous Sign-Ins and Email provider in Authentication > Providers.
+-- 13. Add the deployed site URL to Authentication > URL Configuration > Redirect URLs
+--     so email confirmation and password-reset links can return to the game.
 create table if not exists public.tenu_players (
   character_id text primary key check (character_id in ('MMA','Ukechi','Chibaby','Doms','Jahsfavour','Mummy','Dee')),
   user_id uuid not null unique references auth.users(id) on delete cascade,

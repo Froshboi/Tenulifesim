@@ -64,6 +64,8 @@ canvas{display:block}
 .auth-routes button{min-height:44px;border:1px solid #c9b8a2;background:#fff;color:#55464a}
 .auth-routes button[aria-pressed="true"]{border-color:#a44d39;background:#a44d39;color:#fff;font-weight:bold}
 .auth-dialog #authSubmit{width:100%;min-height:46px;margin-top:14px;background:#2a1f2d;font-weight:bold}
+.auth-link{display:block;margin:10px auto 0;border:0!important;background:transparent!important;color:#684f5a!important;text-decoration:underline}
+.auth-guest{width:100%;margin-top:8px;background:#796c6c!important}
 .walkthrough-dialog{width:min(410px,100%);padding:24px;background:linear-gradient(145deg,#fff8e8,#f3e0c4)}
 .walkthrough-step{display:grid;place-items:center;width:50px;height:50px;margin-bottom:12px;border-radius:16px;background:#2a1f2d;color:#ffc857;font-size:25px}
 .walkthrough-kicker{margin:0;color:#916955;font-size:10px;font-weight:bold;letter-spacing:.14em}
@@ -188,7 +190,7 @@ canvas{display:block}
 <button id="quickCook" hidden>Cook bole &amp; fish</button>
 <div id="profileOverlay" class="overlay"><section class="dialog profile-dialog" aria-labelledby="profileTitle"><div class="profile-brand"><span class="profile-brand-mark" aria-hidden="true">T</span><span class="profile-brand-copy">TENU HOUSE · PORT HARCOURT</span></div><h1 id="profileTitle">Who’s joining the house?</h1><p class="profile-intro">Choose an available household member, or create an account / log back in to continue your saved character.</p><div id="profileChoices" class="profile-grid" aria-label="Household members"></div><button id="accountBtn" type="button">Create account or log back in</button><p id="profileStatus" class="status" aria-live="polite">Getting the house ready…</p></section></div>
 <div id="walkthroughOverlay" class="overlay" hidden><section class="dialog walkthrough-dialog"><div class="walkthrough-step" id="walkthroughIcon">⌖</div><p class="walkthrough-kicker">QUICK START · <span id="walkthroughCount">1 OF 4</span></p><h2 id="walkthroughTitle">Make yourself at home</h2><p id="walkthroughCopy" class="walkthrough-copy"></p><div id="walkthroughDots" class="walkthrough-dots"></div><div class="row"><button id="walkthroughNext">Next</button><button id="walkthroughSkip" class="secondary">Skip</button></div></section></div>
-<div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2 id="authTitle">Create your account</h2><p id="authCopy" class="auth-copy">Use your email and password to save your household player.</p><div class="auth-routes" role="group" aria-label="Account options"><button id="authCreateMode" type="button" aria-pressed="true">Create account</button><button id="authLoginMode" type="button" aria-pressed="false">Log back in</button></div><form id="accountForm"><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com" required><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required><button id="authSubmit" type="submit">Create account</button></form><p id="accountStatus" class="status" aria-live="polite"></p></section></div>
+<div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2 id="authTitle">Create your account</h2><p id="authCopy" class="auth-copy">Use your email and password to save your household player.</p><div class="auth-routes" role="group" aria-label="Account options"><button id="authCreateMode" type="button" aria-pressed="true">Create account</button><button id="authLoginMode" type="button" aria-pressed="false">Log back in</button></div><form id="accountForm"><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com" required><div id="accountPasswordField"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required></div><button id="authSubmit" type="submit">Create account</button></form><button id="forgotPassword" class="auth-link" type="button" hidden>Forgot password?</button><button id="backToLogin" class="auth-link" type="button" hidden>Back to log in</button><button id="continueAsGuest" class="auth-guest" type="button">Continue as guest</button><p id="accountStatus" class="status" aria-live="polite"></p></section></div>
 <div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
 <div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Trans-Amadi class<br>Play the class quiz</button><button data-activity="market">Mile 1 Market shift<br>Stock the bole stall</button><button data-activity="market_shop">Shop at Mile 1 Market<br>Visit the market</button><button data-activity="fun">Watch TV<br>Play the rhythm game</button><button data-activity="generator">Pull-start generator<br>Fast downward swipes</button><button data-activity="water">Pump borehole<br>Tap to the rhythm</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay NEPA bill<br>Spend 250 coins</button><button id="buyDiesel">Buy generator diesel<br>Spend 300 coins · 5 min</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep · swat mosquitoes</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
 <div id="venueShopOverlay" class="overlay" hidden><section class="dialog"><h2 id="venueShopTitle">Mile 1 Market</h2><p>Welcome! Choose what you would like to buy with TENU coins.</p><div class="choice-grid"><button data-buy="groceries">Fresh groceries<br>120 coins</button><button data-buy="outfit">New outfit<br>350 coins</button><button data-buy="phone">Phone upgrade<br>900 coins</button></div><p id="venueShopStatus" class="status"></p><div class="row"><button id="closeVenueShop" class="secondary">Leave shop</button></div></section></div>
@@ -1070,6 +1072,14 @@ async function connectHouse(url,key){
   return fetch(input,{...init,signal:controller.signal}).finally(()=>clearTimeout(timer))
  };
  const client=window.supabase.createClient(url.replace(/\/$/,''),key.trim(),{auth:{persistSession:true,autoRefreshToken:true},global:{fetch:fetchWithTimeout}});
+ client.auth.onAuthStateChange((event,session)=>{
+  if(session){currentUser=session.user;currentUserId=session.user.id}
+  if(event==='PASSWORD_RECOVERY'){
+   $('accountOverlay').hidden=false;profileOverlay.hidden=true;
+   setAccountMode('reset');$('accountPassword').value='';
+   $('accountStatus').textContent='Choose a new password for your account.'
+  }
+ });
  let {data:{session},error}=await withTimeout(client.auth.getSession(),7000);if(error)throw error;
  if(!session){const signed=await withTimeout(client.auth.signInAnonymously(),7000);if(signed.error)throw signed.error;session=signed.data.session}
  currentUser=session.user;currentUserId=session.user.id;
@@ -1120,13 +1130,18 @@ function openAccount(){
 let accountMode='create';
 function setAccountMode(mode){
  accountMode=mode;
- const creating=mode==='create';
- $('authTitle').textContent=creating?'Create your account':'Log back in';
- $('authCopy').textContent=creating?'Use your email and password to save your household player.':'Enter the email and password for your existing account.';
+ const creating=mode==='create',loggingIn=mode==='login',resetting=mode==='reset';
+ $('authTitle').textContent=creating?'Create your account':resetting?'Reset your password':'Log back in';
+ $('authCopy').textContent=creating?'Use your email and password to save your household player.':resetting?'We’ll email you a secure link to choose a new password.':'Enter the email and password for your existing account.';
  $('authCreateMode').setAttribute('aria-pressed',String(creating));
- $('authLoginMode').setAttribute('aria-pressed',String(!creating));
- $('authSubmit').textContent=creating?'Create account':'Log back in';
+ $('authLoginMode').setAttribute('aria-pressed',String(loggingIn));
+ $('authCreateMode').hidden=resetting;$('authLoginMode').hidden=resetting;
+ $('authSubmit').textContent=creating?'Create account':resetting?'Send reset link':'Log back in';
+ $('accountPasswordField').hidden=resetting;
+ $('accountPassword').required=!resetting;
  $('accountPassword').autocomplete=creating?'new-password':'current-password';
+ $('forgotPassword').hidden=!loggingIn;$('backToLogin').hidden=!resetting;
+ $('continueAsGuest').hidden=resetting;
  $('accountStatus').textContent=''
 }
 async function signInAccount(){
@@ -1177,6 +1192,35 @@ async function secureAccount(){
   console.error('Household account creation failed:',err)
  }
  finally{button.disabled=false}
+}
+async function sendPasswordReset(){
+ const email=$('accountEmail').value.trim(),button=$('forgotPassword');
+ if(!email){$('accountEmail').reportValidity();$('accountEmail').focus();return}
+ if(!db){$('accountStatus').textContent='Password reset is unavailable while offline.';return}
+ button.disabled=true;$('accountStatus').textContent='Sending password reset email…';
+ try{
+  const redirectTo=new URL(location.pathname,location.origin).href;
+  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo});if(error)throw error;
+  $('accountStatus').textContent='If an account exists for that email, a password reset link is on its way. Check your inbox and spam folder.'
+ }catch(err){
+  $('accountStatus').textContent=err?.message||'Could not send the reset email. Try again shortly.';
+  console.error('Password reset request failed:',err)
+ }finally{button.disabled=false}
+}
+async function saveRecoveredPassword(){
+ const password=$('accountPassword').value,button=$('authSubmit');
+ if(password.length<8){$('accountStatus').textContent='Choose a password with at least 8 characters.';return}
+ if(!db){$('accountStatus').textContent='Password reset is unavailable while offline.';return}
+ button.disabled=true;$('accountStatus').textContent='Saving your new password…';
+ try{
+  const {data,error}=await db.auth.updateUser({password});if(error)throw error;
+  currentUser=data.user;currentUserId=data.user.id;
+  setAccountMode('login');
+  $('accountStatus').textContent='Password updated. You can now log back in with your new password.'
+ }catch(err){
+  $('accountStatus').textContent=err?.message||'Could not update the password. Open a fresh reset link and try again.';
+  console.error('Password update failed:',err)
+ }finally{button.disabled=false}
 }
 function openCustomization(){
  if(!currentProfile)return;
@@ -1881,9 +1925,17 @@ document.getElementById('restoreControls').onclick=resetControlsTimeout;
 document.getElementById('accountBtn').onclick=openAccount;
 document.getElementById('authCreateMode').onclick=()=>setAccountMode('create');
 document.getElementById('authLoginMode').onclick=()=>setAccountMode('login');
+document.getElementById('forgotPassword').onclick=sendPasswordReset;
+document.getElementById('backToLogin').onclick=()=>setAccountMode('login');
+document.getElementById('continueAsGuest').onclick=()=>{
+ $('accountOverlay').hidden=true;
+ if(!activeCharId)$('profileStatus').textContent='Choose a household member to play as a guest. Create an account any time to save this player across devices.'
+};
 document.getElementById('accountForm').addEventListener('submit',event=>{
  event.preventDefault();
- if(accountMode==='create')secureAccount();else signInAccount()
+ if(accountMode==='create')secureAccount();
+ else if(accountMode==='reset')saveRecoveredPassword();
+ else signInAccount()
 });
 document.getElementById('closeCustom').onclick=cancelCustomization;
 document.getElementById('saveCustom').onclick=saveCustomization;
