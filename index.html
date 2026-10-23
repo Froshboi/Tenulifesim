@@ -135,6 +135,13 @@ canvas{display:block}
 .mini-game-actions button{flex:1;min-height:44px}
 .mini-game-score{font-size:15px;font-weight:bold}
 .mini-game-progress span{display:block;height:100%;width:0;background:#55c57a;transition:width .15s}
+.rhythm-track{position:relative;height:190px;overflow:hidden;border:2px solid #fff4df;border-radius:18px;background:linear-gradient(#342b39,#211b27);touch-action:none}
+.rhythm-target{position:absolute;left:calc(50% - 19px);top:0;width:38px;height:38px;border-radius:50%;background:#f3c95f;box-shadow:0 0 16px #f3c95f99}
+.rhythm-hit-zone{position:absolute;left:0;right:0;top:72%;height:16%;border-top:2px solid #53bd6d;border-bottom:2px solid #53bd6d;background:#53bd6d22}
+.mosquito-field{position:relative;min-height:220px;overflow:hidden;touch-action:manipulation}
+.mosquito-target{position:absolute;min-width:46px;min-height:46px;padding:0;border:0;background:transparent;font-size:28px;touch-action:manipulation}
+.swipe-area{display:grid;min-height:200px;place-content:center;gap:12px;border:2px dashed #f3c95f;border-radius:18px;background:#ffffff0b;touch-action:none;font-weight:bold}
+.swipe-area span{font-size:42px}
 .venue-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .venue-options button{min-height:60px}
 .venue-options button strong,.venue-options button span{display:block}
@@ -187,7 +194,7 @@ canvas{display:block}
 <div id="walkthroughOverlay" class="overlay" hidden><section class="dialog walkthrough-dialog"><div class="walkthrough-step" id="walkthroughIcon">⌖</div><p class="walkthrough-kicker">QUICK START · <span id="walkthroughCount">1 OF 4</span></p><h2 id="walkthroughTitle">Make yourself at home</h2><p id="walkthroughCopy" class="walkthrough-copy"></p><div id="walkthroughDots" class="walkthrough-dots"></div><div class="row"><button id="walkthroughNext">Next</button><button id="walkthroughSkip" class="secondary">Skip</button></div></section></div>
 <div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2>Welcome to TENU HOUSE</h2><p class="auth-copy">Sign in to keep your character across devices, or play as a guest and get started right away.</p><button id="googleSignIn" class="auth-google">Continue with Google</button><button id="linkGoogle" class="auth-link-google" hidden>Link Google to this player</button><div class="auth-divider">or use email</div><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"><div class="row"><button id="signInAccount">Sign in</button><button id="secureAccount">Create account</button></div><p id="accountStatus" class="status" aria-live="polite"></p><button id="continueAnonymous" class="auth-guest">Continue anonymously</button><button id="closeAccount" class="auth-guest">Back to character selection</button></section></div>
 <div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
-<div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Trans-Amadi class<br>Play the class quiz</button><button data-activity="market">Mile 1 Market shift<br>Stock the bole stall</button><button data-activity="market_shop">Shop at Mile 1 Market<br>Visit the market</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay NEPA bill<br>Spend 250 coins</button><button id="buyDiesel">Buy generator diesel<br>Spend 300 coins · 5 min</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep / rest</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
+<div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Trans-Amadi class<br>Play the class quiz</button><button data-activity="market">Mile 1 Market shift<br>Stock the bole stall</button><button data-activity="market_shop">Shop at Mile 1 Market<br>Visit the market</button><button data-activity="fun">Watch TV<br>Play the rhythm game</button><button data-activity="generator">Pull-start generator<br>Fast downward swipes</button><button data-activity="water">Pump borehole<br>Tap to the rhythm</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay NEPA bill<br>Spend 250 coins</button><button id="buyDiesel">Buy generator diesel<br>Spend 300 coins · 5 min</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep · swat mosquitoes</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
 <div id="venueShopOverlay" class="overlay" hidden><section class="dialog"><h2 id="venueShopTitle">Mile 1 Market</h2><p>Welcome! Choose what you would like to buy with TENU coins.</p><div class="choice-grid"><button data-buy="groceries">Fresh groceries<br>120 coins</button><button data-buy="outfit">New outfit<br>350 coins</button><button data-buy="phone">Phone upgrade<br>900 coins</button></div><p id="venueShopStatus" class="status"></p><div class="row"><button id="closeVenueShop" class="secondary">Leave shop</button></div></section></div>
 <div id="miniGameOverlay" class="overlay mini-game-overlay" hidden><section class="dialog mini-game-dialog" role="dialog" aria-modal="true" aria-labelledby="miniGameTitle"><header class="mini-game-head"><div><p id="miniGameKicker" class="mini-game-kicker">TENU HOUSE · QUICK GAME</p><h2 id="miniGameTitle">Cook bole &amp; fish</h2></div><button id="closeMiniGame" aria-label="Close mini-game">×</button></header><p id="miniGameCopy" class="mini-game-copy"></p><div id="miniGameArena" class="mini-game-arena"></div><p id="miniGameScore" class="mini-game-score" aria-live="polite"></p><div class="mini-game-actions"><button id="autoMiniGame" class="secondary">Auto · small meal</button><button id="miniGameAction" class="mini-game-tap">Tap!</button></div></section></div>
 <div id="bankOverlay" class="overlay" hidden><section class="dialog"><h2>Household wallet</h2><p id="bankBalance">Loading balance…</p><p>Send fictional TENU coins to another household player.</p><label for="bankRecipient">Send to</label><select id="bankRecipient"></select><label for="bankAmount">Amount (1–10,000)</label><input id="bankAmount" type="number" min="1" max="10000" step="1"><p id="bankStatus" class="status"></p><div class="row"><button id="sendCoins">Send coins</button><button id="closeBank" class="secondary">Close</button></div></section></div>
@@ -1311,7 +1318,7 @@ async function sendCoins(){
  }catch(err){$('bankStatus').textContent='Could not send those coins. Check your balance and try again.';console.error('Wallet transfer failed:',err)}
  finally{button.disabled=false}
 }
-const activityDestinations={work:[2,-3],school:[22,-24],market:[21,-6],market_shop:[21,-6],groceries:[17,-5],outfit:[17,-5],phone:[17,-5],bill:[-2,1],cook:[1.1,-6.1],sleep:[-8.5,-12]};
+const activityDestinations={work:[2,-3],school:[22,-24],market:[21,-6],market_shop:[21,-6],groceries:[17,-5],outfit:[17,-5],phone:[17,-5],bill:[-2,1],cook:[1.1,-6.1],sleep:[-8.5,-12],fun:[-12,-7.8],generator:[1,-3],water:[1,-5]};
 const MINI_GAME_DURATION=7000;
 const MINI_GAME_COOLDOWN=30000,miniGameCooldownsKey='tenuMinigameCooldownsV1';
 let miniGameCooldowns={};
@@ -1354,39 +1361,80 @@ function finishMiniGame(result){
 }
 function startMiniGame(type,onResult){
  if(miniGame)return;
- if(!['cook','market','school'].includes(type))throw Error('Unknown mini-game');
- const names={cook:'Roast bole & fish',market:'Stock the Mile 1 stall',school:'Trans-Amadi class'};
+ if(!['cook','market','school','sleep','fun','generator','water'].includes(type))throw Error('Unknown mini-game');
+ const names={cook:'Roast bole & fish',market:'Stock the Mile 1 stall',school:'Trans-Amadi class',sleep:'Swat the mosquitoes',fun:'Port Harcourt rhythm',generator:'Pull-start the generator',water:'Pump the borehole'};
  const instructions={
   cook:'Tap Roast when the marker is inside the green zone. Land all three taps for a perfect meal.',
   market:'Time three taps as the moving basket reaches the green stall zone.',
-  school:'Answer three quick questions before class ends.'
+  school:'Answer three quick questions before class ends.',
+  sleep:'Swat all five mosquitoes before the 8-second timer ends. Three or four swats still help.',
+  fun:'Tap when the falling beat reaches the glowing line. Land five beats for a perfect show.',
+  generator:'Swipe down quickly three times to pull-start. Each attempt uses a little diesel.',
+  water:'Tap when the pump marker reaches the green zone. Five good strokes fill the tank.'
  };
- miniGame={type,onResult,startedAt:performance.now(),clicks:0,score:0,questionIndex:0,markerElement:null};
- $('miniGameKicker').textContent=type==='cook'?'MILE 1 BOLE STALL':'TENU HOUSE · QUICK GAME';
+ miniGame={type,onResult,startedAt:performance.now(),duration:type==='sleep'||type==='generator'?8000:MINI_GAME_DURATION,clicks:0,score:0,questionIndex:0,markerElement:null,progressElement:null,pointerStart:null};
+ $('miniGameKicker').textContent=type==='cook'?'MILE 1 BOLE STALL':type==='fun'?'TENU HOUSE · LIVING ROOM':'TENU HOUSE · QUICK GAME';
  $('miniGameTitle').textContent=names[type];$('miniGameCopy').textContent=instructions[type];
- $('miniGameScore').textContent=type==='school'?'Correct answers: 0/3':'Good timing: 0/3';
+ $('miniGameScore').textContent=type==='school'?'Correct answers: 0/3':type==='sleep'?'Mosquitoes swatted: 0/5':type==='generator'?'Good pulls: 0/3':type==='fun'?'Beats hit: 0/5':type==='water'?'Good strokes: 0/5':'Good timing: 0/3';
  const arena=$('miniGameArena');arena.replaceChildren();
  if(type==='school')setMiniGameQuestion();
- else{
+ else if(type==='sleep'){
+  const field=document.createElement('div');field.className='mosquito-field';
+  const mosquitoPositions=[[10,10],[68,12],[38,34],[8,65],[70,66]];
+  for(let i=0;i<5;i++){
+   const mosquito=document.createElement('button');mosquito.type='button';mosquito.className='mosquito-target';mosquito.textContent='🦟';mosquito.setAttribute('aria-label','Swat mosquito '+(i+1));
+   mosquito.style.left=mosquitoPositions[i][0]+'%';mosquito.style.top=mosquitoPositions[i][1]+'%';
+   mosquito.onclick=()=>{if(!miniGame)return;miniGame.score++;mosquito.remove();$('miniGameScore').textContent='Mosquitoes swatted: '+miniGame.score+'/5';if(miniGame.score===5)finishMiniGame('perfect')};
+   field.append(mosquito)
+  }
+  arena.append(field)
+ }else if(type==='generator'){
+  const swipe=document.createElement('div');swipe.className='swipe-area';swipe.setAttribute('role','button');swipe.setAttribute('aria-label','Swipe down quickly to pull-start the generator');
+  swipe.innerHTML='<span aria-hidden="true">⬇</span><span>Swipe down quickly</span>';arena.append(swipe);
+  swipe.addEventListener('pointerdown',event=>{if(!miniGame)return;event.preventDefault();swipe.setPointerCapture(event.pointerId);miniGame.pointerStart={y:event.clientY,time:performance.now()}});
+  swipe.addEventListener('pointerup',event=>{
+   if(!miniGame?.pointerStart)return;
+   const distance=event.clientY-miniGame.pointerStart.y,elapsed=performance.now()-miniGame.pointerStart.time;miniGame.pointerStart=null;
+   if(distance>=65&&elapsed<=450){miniGame.score++;$('miniGameScore').textContent='Good pulls: '+miniGame.score+'/3';if(miniGame.score===3)finishMiniGame('perfect')}
+  });
+  swipe.addEventListener('pointercancel',()=>{if(miniGame)miniGame.pointerStart=null})
+ }else if(type==='fun'){
   const prompt=document.createElement('strong'),track=document.createElement('div');
-  prompt.textContent=type==='cook'?'Watch the heat. Tap at the right moment!':'Catch each basket in the green stall zone.';
+  prompt.textContent='Tap the beat as it falls into the glowing line.';
+  track.className='rhythm-track';track.setAttribute('aria-label','Falling rhythm target');
+  const zone=document.createElement('span'),marker=document.createElement('span');zone.className='rhythm-hit-zone';marker.className='rhythm-target';track.append(zone,marker);arena.append(prompt,track);miniGame.markerElement=marker
+ }else{
+  const prompt=document.createElement('strong'),track=document.createElement('div');
+  prompt.textContent=type==='cook'?'Watch the heat. Tap at the right moment!':type==='water'?'Tap to the pump rhythm in the green zone.':'Catch each basket in the green stall zone.';
   track.className='heat-track';track.setAttribute('aria-label','Moving timing marker');
   const zone=document.createElement('span'),marker=document.createElement('span');
   zone.className='heat-zone';marker.className='heat-marker';track.append(zone,marker);arena.append(prompt,track);
+  if(type==='water'){
+   const progress=document.createElement('div'),fill=document.createElement('span');
+   progress.className='mini-game-progress';progress.setAttribute('aria-label','Borehole tank fill level');
+   progress.setAttribute('role','progressbar');progress.setAttribute('aria-valuemin','0');progress.setAttribute('aria-valuemax','5');
+   progress.append(fill);arena.append(progress);miniGame.progressElement={bar:progress,fill}
+  }
   miniGame.markerElement=marker
  }
- $('miniGameAction').textContent=type==='cook'?'Roast!':'Stock it!';
- $('miniGameAction').disabled=type==='school';$('autoMiniGame').hidden=type!=='cook';
+ const actions={cook:'Roast!',market:'Stock it!',school:'Answer',sleep:'Swat!',fun:'Hit the beat!',generator:'Pull!',water:'Pump!'};
+ $('miniGameAction').textContent=actions[type];$('miniGameAction').disabled=type==='school'||type==='sleep'||type==='generator';
+ $('miniGameAction').hidden=type==='sleep'||type==='generator';$('autoMiniGame').hidden=type!=='cook';
  $('miniGameOverlay').hidden=false;
  const tick=now=>{
   if(!miniGame)return;
   const elapsed=now-miniGame.startedAt;
   if(miniGame.markerElement){
-   const phase=(elapsed%1700)/1700,position=phase<.5?phase*200:200-phase*200;
-   miniGame.markerElement.style.left=position+'%'
+   if(type==='fun')miniGame.markerElement.style.top=((elapsed%1150)/1150*90)+'%';
+   else{
+    const period=type==='water'?1100:1700,phase=(elapsed%period)/period,position=phase<.5?phase*200:200-phase*200;
+    miniGame.markerElement.style.left=position+'%'
+   }
   }
-  if(elapsed>=MINI_GAME_DURATION){
-   const result=miniGame.score===3?'perfect':miniGame.score>0?'good':'fail';
+  if(elapsed>=miniGame.duration){
+   const target={cook:3,market:3,school:3,sleep:5,fun:5,generator:3,water:5}[type];
+   const goodThreshold=type==='sleep'||type==='fun'||type==='water'?3:1;
+   const result=miniGame.score>=target?'perfect':miniGame.score>=goodThreshold?'good':'fail';
    finishMiniGame(result);return
   }
   miniGameFrame=requestAnimationFrame(tick)
@@ -1394,12 +1442,23 @@ function startMiniGame(type,onResult){
  miniGameFrame=requestAnimationFrame(tick)
 }
 function tapMiniGame(){
- if(!miniGame||miniGame.type==='school'||miniGame.clicks>=3)return;
+ if(!miniGame||miniGame.type==='school'||miniGame.type==='sleep'||miniGame.type==='generator')return;
+ const target=miniGame.type==='fun'||miniGame.type==='water'?5:3;
+ if(miniGame.clicks>=target)return;
  miniGame.clicks++;
- const position=Number.parseFloat(miniGame.markerElement.style.left)||0;
- if(position>=40&&position<=60)miniGame.score++;
- $('miniGameScore').textContent='Good timing: '+miniGame.score+'/3';
- $('miniGameAction').disabled=miniGame.clicks>=3
+ let hit=false;
+ if(miniGame.type==='fun'){
+  const position=Number.parseFloat(miniGame.markerElement.style.top)||0;hit=position>=72&&position<=88
+ }else{
+  const position=Number.parseFloat(miniGame.markerElement.style.left)||0;hit=position>=40&&position<=60
+ }
+ if(hit)miniGame.score++;
+ if(miniGame.type==='water'&&miniGame.progressElement){
+  miniGame.progressElement.fill.style.width=(miniGame.score/5*100)+'%';
+  miniGame.progressElement.bar.setAttribute('aria-valuenow',String(miniGame.score))
+ }
+ $('miniGameScore').textContent=miniGame.type==='fun'?'Beats hit: '+miniGame.score+'/5':miniGame.type==='water'?'Good strokes: '+miniGame.score+'/5':'Good timing: '+miniGame.score+'/3';
+ $('miniGameAction').disabled=miniGame.clicks>=target
 }
 async function completeMiniGame(type,result){
  if(!result||miniGameSubmitting)return;
@@ -1410,12 +1469,21 @@ async function completeMiniGame(type,result){
   if(db){
    if(!economyOnline)throw Error('Shared wallet unavailable');
    const {data,error}=await db.rpc('complete_tenu_minigame',{p_game:type,p_result:result});if(error)throw error;
-   outcome={...outcome,...data}
+   outcome={...outcome,...data};
+   if(type==='generator'&&Number.isFinite(Number(data.fuel_seconds))){
+    generatorDiesel=Number(data.fuel_seconds);saveGeneratorDiesel()
+   }
   }else{
    const restores={perfect:60,good:40,fail:15,auto:20};
-   const rewards={cook:{perfect:10,good:0,fail:0,auto:0},market:{perfect:40,good:20,fail:0},school:{perfect:50,good:25,fail:0}};
+   const restoresByGame={cook:{hunger:restores[result]},sleep:{energy:{perfect:70,good:45,fail:15}[result]},fun:{fun:{perfect:60,good:40,fail:15}[result]}};
+   const rewards={cook:{perfect:10,good:0,fail:0,auto:0},market:{perfect:40,good:20,fail:0},school:{perfect:50,good:25,fail:0},fun:{perfect:5,good:2,fail:0},water:{perfect:5,good:2,fail:0}};
    outcome.coins=rewards[type]?.[result]||0;
-   if(type==='cook')outcome.needs.hunger=Math.min(100,outcome.needs.hunger+restores[result]);
+   const restored=restoresByGame[type];
+   if(restored)for(const [need,amount] of Object.entries(restored))outcome.needs[need]=Math.min(100,outcome.needs[need]+amount);
+   if(type==='generator'){
+    if(generatorDiesel<5)throw Error('No generator diesel left');
+    generatorDiesel-=5;saveGeneratorDiesel();outcome.fuel_seconds=generatorDiesel
+   }
    if(outcome.coins){localWallet[activeCharId]=outcome.balance+outcome.coins;outcome.balance=localWallet[activeCharId];saveWallet()}
   }
   miniGameCooldowns[miniGameCooldownKey(type)]=Date.now()+MINI_GAME_COOLDOWN;
@@ -1425,13 +1493,22 @@ async function completeMiniGame(type,result){
    localWallet[activeCharId]=Number(outcome.balance);
    $('balance').textContent='TENU '+Number(outcome.balance).toLocaleString()+' coins';
    $('activityBalance').textContent='Wallet: '+Number(outcome.balance).toLocaleString()+' TENU coins'
-  }else{
-   saveWallet();
-   if(type==='cook')saveLocalNeeds()
+  }else{saveWallet();saveLocalNeeds()}
+  if(type==='generator'&&result!=='fail'){
+   generatorNoise=true;$('generatorBtn').textContent='Generator: running · '+Math.ceil(generatorDiesel/60)+'m';
+   toast('Generator started. Diesel is running low.')
   }
   if(type==='cook'){
    const progress=getDailyGoalProgress();if(progress){progress.cooked=true;saveDailyGoalProgress();renderDailyGoals();completeDailyGoal('cook')}
    toast(result==='perfect'?'Perfect roast! Full meal and +'+Number(outcome.coins||0)+' coins.':result==='good'?'Bole & fish ready. Hunger restored.':result==='auto'?'Auto-cooked meal ready.':'The food got burnt, but you salvaged a small bite.')
+  }else if(type==='sleep'){
+   toast(result==='perfect'?'All five mosquitoes swatted. Sleep well!':result==='good'?'Most mosquitoes swatted. You got some rest.':'The mosquitoes won this round. A little rest still helps.')
+  }else if(type==='fun'){
+   toast(result==='perfect'?'Perfect rhythm! Fun restored.':result==='good'?'Nice rhythm. Fun restored.':'The beat got away, but you still enjoyed a little TV.')
+  }else if(type==='water'){
+   toast(result==='perfect'?'Borehole tank filled! +'+Number(outcome.coins||0)+' coins.':result==='good'?'Good pumping! +'+Number(outcome.coins||0)+' coins.':'The pump needs another try.')
+  }else if(type==='generator'){
+   toast(result==='fail'?'The generator did not start. That pull used diesel.':result==='perfect'?'Generator started with a perfect pull!':'Generator started. Keep an eye on the diesel.')
   }else{
    if(Number(outcome.coins)>0){
     const progress=getDailyGoalProgress();if(progress){progress.earned+=Number(outcome.coins);saveDailyGoalProgress();renderDailyGoals();if(progress.earned>=500)completeDailyGoal('earn_500')}
@@ -1453,16 +1530,27 @@ async function openActivities(){
 function startActivity(activity){
  const c=chars[sel],dest=activityDestinations[activity];if(!dest)return;
  if(miniGameSubmitting){toast('Please wait for the current game result.');return}
- if(['cook','market','school'].includes(activity)&&isMiniGameCoolingDown(activity)){
+ if(['cook','market','school','sleep','fun','generator','water'].includes(activity)&&isMiniGameCoolingDown(activity)){
   toast('Please wait before playing this game again.');return
  }
  $('activityOverlay').hidden=true;c.hold=60;c.activityDone=false;
- if(activity==='sleep')return go(c,bedrooms[c.roomIndex],-14.2,{max:45,at:'sleep',action:'sleep'});
+ if(activity==='sleep')return go(c,bedrooms[c.roomIndex],-14.2,{max:2,at:'pre_sleep',action:'sleep'});
  go(c,dest[0],dest[1],{max:activity==='school'?6:3,at:activity,action:activity})
 }
 async function finishActivity(c,activity){
  const earn={work:400}[activity];
- if(activity==='sleep'){toast(c.n+' is sleeping. Energy restored.');return}
+ if(['sleep','fun','generator','water'].includes(activity)){
+  if(c.i===sel&&activeCharId===DEF[c.i][0]){
+   if(activity==='generator'){
+    try{
+     if(db)await refreshGeneratorFuel();
+     if(generatorDiesel<5)throw Error('Not enough generator diesel');
+     startMiniGame(activity,result=>completeMiniGame(activity,result))
+    }catch(err){toast('Buy generator diesel before trying to pull-start it.');$('activityStatus').textContent='Generator mini-game is unavailable without diesel.';console.error('Generator fuel check failed:',err)}
+   }else startMiniGame(activity,result=>completeMiniGame(activity,result))
+  }
+  return
+ }
  if(activity==='cook'){
   if(c.i===sel&&activeCharId===DEF[c.i][0])startMiniGame('cook',result=>completeMiniGame('cook',result));
   return
@@ -1519,18 +1607,24 @@ async function buyItem(item){
  }catch(err){$('activityStatus').textContent='Not enough coins, or the shop is temporarily unavailable.';console.error('Purchase failed:',err)}
 }
 function saveGeneratorDiesel(){try{localStorage.setItem(generatorDieselKey,String(generatorDiesel))}catch(err){console.warn('Generator diesel could not be saved:',err)}}
+async function refreshGeneratorFuel(){
+ if(!db)return;
+ const {data,error}=await db.rpc('get_tenu_generator_fuel');if(error)throw error;
+ generatorDiesel=Math.max(0,Number(data)||0);saveGeneratorDiesel()
+}
 async function purchaseGeneratorDiesel(){
  const button=$('buyDiesel');button.disabled=true;$('activityStatus').textContent='Buying diesel…';
  try{
   if(db){
    if(!economyOnline)throw Error('Shared wallet unavailable');
    const {data,error}=await db.rpc('purchase_tenu_diesel');if(error)throw error;
+   await refreshGeneratorFuel()
   }else{
    localWallet[activeCharId]=Number(localWallet[activeCharId]??10000);
    if(localWallet[activeCharId]<300)throw Error('Insufficient game coins');
-   localWallet[activeCharId]-=300;saveWallet()
+   localWallet[activeCharId]-=300;saveWallet();generatorDiesel+=300;saveGeneratorDiesel()
   }
-  generatorDiesel+=300;saveGeneratorDiesel();$('activityStatus').textContent='Diesel added · '+Math.ceil(generatorDiesel/60)+' minutes available.';
+  $('activityStatus').textContent='Diesel added · '+Math.ceil(generatorDiesel/60)+' minutes available.';
   toast('Generator diesel topped up.');await loadWallet()
  }catch(err){$('activityStatus').textContent='Could not buy diesel. Check your balance and latest house update.';console.error('Generator diesel purchase failed:',err)}
  finally{button.disabled=false}
@@ -1632,7 +1726,7 @@ async function tryDomsGift(){
  finally{$('domsGift').disabled=false}
 }
 const dayColor=new THREE.Color('#ffd9a0'),nightColor=new THREE.Color('#3b4a60');
-let outageRemaining=0,eventTimer=38,generatorNoise=false,uiTimer=0,fuelSaveTimer=0;
+let outageRemaining=0,eventTimer=38,generatorNoise=false,uiTimer=0,fuelSaveTimer=0,fuelSyncTimer=0,generatorFuelSyncing=false;
 function setMenuOpen(open){
  const overlay=$('menuOverlay');overlay.hidden=!open;
  $('menuToggle').setAttribute('aria-expanded',String(open));
@@ -1656,7 +1750,18 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  if(generatorNoise){
   generatorDiesel=Math.max(0,generatorDiesel-dt);fuelSaveTimer+=dt;
   if(generatorDiesel===0){generatorNoise=false;toast('Generator diesel is empty. Buy more to run it again.');saveGeneratorDiesel()}
-  else if(fuelSaveTimer>=10){fuelSaveTimer=0;saveGeneratorDiesel()}
+  else if(db){
+   fuelSyncTimer+=dt;
+   if(fuelSyncTimer>=30&&!generatorFuelSyncing){
+    fuelSyncTimer=0;generatorFuelSyncing=true;
+    db.rpc('consume_tenu_generator_diesel',{p_seconds:30}).then(({data,error})=>{
+     if(error)throw error;
+     generatorDiesel=Math.max(0,Number(data)||0);saveGeneratorDiesel();
+     if(generatorDiesel===0){generatorNoise=false;toast('Generator diesel is empty. Buy more to run it again.')}
+    }).catch(err=>{generatorNoise=false;console.error('Generator fuel sync failed:',err);toast('Generator stopped because its diesel could not be verified.')})
+     .finally(()=>{generatorFuelSyncing=false})
+   }
+  }else if(fuelSaveTimer>=10){fuelSaveTimer=0;saveGeneratorDiesel()}
   $('generatorBtn').textContent=generatorNoise?'Generator: running · '+Math.ceil(generatorDiesel/60)+'m':'Generator: quiet'
  }
  const mainsPower=outageRemaining<=0,lightsPowered=mainsPower||generatorNoise;
@@ -1791,10 +1896,13 @@ document.getElementById('sleepBtn').onclick=()=>startActivity('sleep');
 document.querySelectorAll('[data-activity]').forEach(button=>button.addEventListener('click',()=>startActivity(button.dataset.activity)));
 document.querySelectorAll('[data-buy]').forEach(button=>button.addEventListener('click',()=>buyItem(button.dataset.buy)));
 document.getElementById('domsGift').onclick=tryDomsGift;
-document.getElementById('generatorBtn').onclick=()=>{
- if(generatorNoise){generatorNoise=false;saveGeneratorDiesel();$('generatorBtn').textContent='Generator: quiet';toast('Generator switched off.')}
- else if(generatorDiesel>0){generatorNoise=true;$('generatorBtn').textContent='Generator: running · '+Math.ceil(generatorDiesel/60)+'m';toast('Generator noise is on.')}
- else toast('No diesel left. Buy generator diesel from Earn coins.')
+document.getElementById('generatorBtn').onclick=async()=>{
+ if(generatorNoise){generatorNoise=false;saveGeneratorDiesel();$('generatorBtn').textContent='Generator: quiet';toast('Generator switched off.');return}
+ try{
+  if(db)await refreshGeneratorFuel();
+  if(generatorDiesel>0){generatorNoise=true;fuelSyncTimer=0;$('generatorBtn').textContent='Generator: running · '+Math.ceil(generatorDiesel/60)+'m';toast('Generator noise is on.')}
+  else toast('No diesel left. Buy generator diesel from Earn coins.')
+ }catch(err){$('activityStatus').textContent='Generator diesel is unavailable.';console.error('Generator could not be started:',err);toast('Could not verify generator diesel.')}
 };
 document.getElementById('dailyCookBtn').onclick=()=>{setMenuOpen(false);startActivity('cook')};
 document.getElementById('quickCook').onclick=()=>startActivity('cook');
