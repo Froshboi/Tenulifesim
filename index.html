@@ -118,6 +118,27 @@ canvas{display:block}
 #phoneOverlay .row{margin-top:14px}
 #phoneOverlay .phone-back{width:100%;margin:4px 0 0;background:transparent;color:#f4c65e}
 #phoneOverlay .status{color:#f4c65e}
+#quickCook{position:fixed;z-index:3;transform:translate(-50%,-50%);padding:9px 12px;border:1px solid #fff1c6;border-radius:18px;background:#8c4829;color:#fff4df;font:bold 12px "Trebuchet MS",sans-serif;box-shadow:0 3px 10px #0005}
+.mini-game-overlay{z-index:10;padding:0;background:#17131ceF}
+.mini-game-dialog{display:flex;flex-direction:column;justify-content:center;width:100%;height:100dvh;max-height:none;padding:clamp(18px,5vw,32px);border-radius:0;background:radial-gradient(circle at 50% 0,#41404b,#17131c 70%);color:#fff4df}
+.mini-game-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.mini-game-head button{width:44px;height:44px;background:#ffffff1a;font-size:22px}
+.mini-game-kicker{margin:0;color:#f3c95f;font-size:11px;font-weight:bold;letter-spacing:.14em}
+.mini-game-dialog h2{margin:6px 0;font-size:clamp(25px,8vw,34px)}
+.mini-game-copy{color:#d3cad7}
+.mini-game-arena{display:grid;align-content:center;gap:20px;min-height:230px;margin:18px 0;padding:20px;border:1px solid #ffffff24;border-radius:22px;background:#ffffff0b;text-align:center}
+.heat-track,.mini-game-progress{position:relative;height:32px;overflow:hidden;border:2px solid #fff4df;border-radius:18px;background:#342b39;touch-action:manipulation}
+.heat-zone{position:absolute;left:40%;width:20%;height:100%;background:#53bd6d99}
+.heat-marker{position:absolute;top:0;width:9px;height:100%;border-radius:5px;background:#ffd166;box-shadow:0 0 12px #ffd166}
+.mini-game-tap{width:100%;min-height:62px;border:0;border-radius:16px;background:#f3c95f!important;color:#27202b!important;font-size:18px!important;font-weight:bold}
+.mini-game-actions{display:flex;gap:8px;margin-top:12px}
+.mini-game-actions button{flex:1;min-height:44px}
+.mini-game-score{font-size:15px;font-weight:bold}
+.mini-game-progress span{display:block;height:100%;width:0;background:#55c57a;transition:width .15s}
+.venue-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.venue-options button{min-height:60px}
+.venue-options button strong,.venue-options button span{display:block}
+.venue-options button span{margin-top:4px;color:#e6d6bd;font-size:10px}
 #chatLog{max-height:40vh;overflow:auto;background:#fff;border-radius:9px;padding:10px;font-size:13px}
 #chatLog p{margin:4px 0;overflow-wrap:anywhere}
 .slider-row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
@@ -161,14 +182,17 @@ canvas{display:block}
 <div id="btns"><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">－</button><button id="rot" aria-label="Rotate view">⟲</button></div>
 <button id="restoreControls" hidden>Show controls</button>
 <nav id="simbar" aria-label="Your character" hidden></nav>
+<button id="quickCook" hidden>Cook bole &amp; fish</button>
 <div id="profileOverlay" class="overlay"><section class="dialog profile-dialog" aria-labelledby="profileTitle"><div class="profile-brand"><span class="profile-brand-mark" aria-hidden="true">T</span><span class="profile-brand-copy">TENU HOUSE · PORT HARCOURT</span></div><h1 id="profileTitle">Who’s joining the house?</h1><p class="profile-intro">Choose an available household member, or sign in to continue your saved character.</p><div id="profileChoices" class="profile-grid" aria-label="Household members"></div><button id="accountBtn" type="button">Save progress · sign in or create an account</button><p id="profileStatus" class="status" aria-live="polite">Getting the house ready…</p></section></div>
 <div id="walkthroughOverlay" class="overlay" hidden><section class="dialog walkthrough-dialog"><div class="walkthrough-step" id="walkthroughIcon">⌖</div><p class="walkthrough-kicker">QUICK START · <span id="walkthroughCount">1 OF 4</span></p><h2 id="walkthroughTitle">Make yourself at home</h2><p id="walkthroughCopy" class="walkthrough-copy"></p><div id="walkthroughDots" class="walkthrough-dots"></div><div class="row"><button id="walkthroughNext">Next</button><button id="walkthroughSkip" class="secondary">Skip</button></div></section></div>
 <div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2>Welcome to TENU HOUSE</h2><p class="auth-copy">Sign in to keep your character across devices, or play as a guest and get started right away.</p><button id="googleSignIn" class="auth-google">Continue with Google</button><button id="linkGoogle" class="auth-link-google" hidden>Link Google to this player</button><div class="auth-divider">or use email</div><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"><div class="row"><button id="signInAccount">Sign in</button><button id="secureAccount">Create account</button></div><p id="accountStatus" class="status" aria-live="polite"></p><button id="continueAnonymous" class="auth-guest">Continue anonymously</button><button id="closeAccount" class="auth-guest">Back to character selection</button></section></div>
 <div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
-<div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Go to school<br>Earn 100 coins</button><button data-activity="market">Work at the market<br>Earn 300 coins</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay NEPA bill<br>Spend 250 coins</button><button id="buyDiesel">Buy generator diesel<br>Spend 300 coins · 5 min</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep / rest</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
+<div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Trans-Amadi class<br>Play the class quiz</button><button data-activity="market">Mile 1 Market shift<br>Stock the bole stall</button><button data-activity="market_shop">Shop at Mile 1 Market<br>Visit the market</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay NEPA bill<br>Spend 250 coins</button><button id="buyDiesel">Buy generator diesel<br>Spend 300 coins · 5 min</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep / rest</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
+<div id="venueShopOverlay" class="overlay" hidden><section class="dialog"><h2 id="venueShopTitle">Mile 1 Market</h2><p>Welcome! Choose what you would like to buy with TENU coins.</p><div class="choice-grid"><button data-buy="groceries">Fresh groceries<br>120 coins</button><button data-buy="outfit">New outfit<br>350 coins</button><button data-buy="phone">Phone upgrade<br>900 coins</button></div><p id="venueShopStatus" class="status"></p><div class="row"><button id="closeVenueShop" class="secondary">Leave shop</button></div></section></div>
+<div id="miniGameOverlay" class="overlay mini-game-overlay" hidden><section class="dialog mini-game-dialog" role="dialog" aria-modal="true" aria-labelledby="miniGameTitle"><header class="mini-game-head"><div><p id="miniGameKicker" class="mini-game-kicker">TENU HOUSE · QUICK GAME</p><h2 id="miniGameTitle">Cook bole &amp; fish</h2></div><button id="closeMiniGame" aria-label="Close mini-game">×</button></header><p id="miniGameCopy" class="mini-game-copy"></p><div id="miniGameArena" class="mini-game-arena"></div><p id="miniGameScore" class="mini-game-score" aria-live="polite"></p><div class="mini-game-actions"><button id="autoMiniGame" class="secondary">Auto · small meal</button><button id="miniGameAction" class="mini-game-tap">Tap!</button></div></section></div>
 <div id="bankOverlay" class="overlay" hidden><section class="dialog"><h2>Household wallet</h2><p id="bankBalance">Loading balance…</p><p>Send fictional TENU coins to another household player.</p><label for="bankRecipient">Send to</label><select id="bankRecipient"></select><label for="bankAmount">Amount (1–10,000)</label><input id="bankAmount" type="number" min="1" max="10000" step="1"><p id="bankStatus" class="status"></p><div class="row"><button id="sendCoins">Send coins</button><button id="closeBank" class="secondary">Close</button></div></section></div>
 <div id="chatOverlay" class="overlay" hidden><section class="dialog"><h2>House chat</h2><div id="chatLog" aria-live="polite"></div><label for="chatMessage">Message</label><textarea id="chatMessage" maxlength="500" placeholder="Say something to the household"></textarea><p id="chatStatus" class="status"></p><div class="row"><button id="sendChat">Send</button><button id="closeChat" class="secondary">Close</button></div></section></div>
-<div id="phoneOverlay" class="overlay" hidden><section class="dialog phone-dialog" aria-label="Phone apps"><div class="phone-topline"><span>9:41</span><span>●●●  ▰</span></div><header class="phone-heading"><span class="phone-heading-mark">T</span><div><h2 id="phoneTitle">Your phone</h2><p id="phoneSubtitle">Apps for life around the city</p></div></header><div id="phoneApps" class="phone-app-grid"><button class="phone-app" data-phone="bolt"><span class="phone-app-icon" style="background:#32b67a">B</span><span class="phone-app-label">Bolt</span></button><button class="phone-app" data-phone="uber"><span class="phone-app-icon" style="background:#343942">U</span><span class="phone-app-label">Uber</span></button><button class="phone-app" data-phone="keke"><span class="phone-app-icon" style="background:#e7aa32">K</span><span class="phone-app-label">Keke</span></button><button class="phone-app" data-phone="flight"><span class="phone-app-icon" style="background:#4d83cc">✈</span><span class="phone-app-label">Flights</span></button><button class="phone-app" data-phone="maps"><span class="phone-app-icon" style="background:#4b9c75">⌖</span><span class="phone-app-label">Maps</span></button></div><section id="phoneDetail" class="phone-detail" hidden><h3 id="phoneDetailTitle"></h3><p id="phoneDetailCopy"></p><label id="flightDestinationWrap" for="flightDestination" hidden>Destination<select id="flightDestination"><option value="abuja">Port Harcourt → Abuja</option><option value="port-harcourt">Port Harcourt · return trip</option><option value="enugu">Port Harcourt → Enugu</option></select></label><label id="rideDestinationWrap" for="rideDestination" hidden>Where to?<select id="rideDestination"><option value="home">Home · Tenu Close No. 4</option><option value="market">TENU Market</option><option value="school">Trans-Amadi Community School</option><option value="neighbor">Neighbour · Tenu Close No. 5</option></select></label><p id="phoneStatus" class="status" aria-live="polite"></p><div class="row"><button id="orderRide" hidden>Confirm ride</button><button id="bookFlight" hidden>Book flight</button></div></section><button id="phoneBack" class="phone-back" hidden>‹ All apps</button><button id="closePhone" class="secondary">Close</button></section></div>
+<div id="phoneOverlay" class="overlay" hidden><section class="dialog phone-dialog" aria-label="Phone apps"><div class="phone-topline"><span>9:41</span><span>●●●  ▰</span></div><header class="phone-heading"><span class="phone-heading-mark">T</span><div><h2 id="phoneTitle">Your phone</h2><p id="phoneSubtitle">Apps for life around the city</p></div></header><div id="phoneApps" class="phone-app-grid"><button class="phone-app" data-phone="bolt"><span class="phone-app-icon" style="background:#32b67a">B</span><span class="phone-app-label">Bolt</span></button><button class="phone-app" data-phone="uber"><span class="phone-app-icon" style="background:#343942">U</span><span class="phone-app-label">Uber</span></button><button class="phone-app" data-phone="keke"><span class="phone-app-icon" style="background:#e7aa32">K</span><span class="phone-app-label">Keke</span></button><button class="phone-app" data-phone="flight"><span class="phone-app-icon" style="background:#4d83cc">✈</span><span class="phone-app-label">Flights</span></button><button class="phone-app" data-phone="maps"><span class="phone-app-icon" style="background:#4b9c75">⌖</span><span class="phone-app-label">Maps</span></button></div><section id="phoneDetail" class="phone-detail" hidden><h3 id="phoneDetailTitle"></h3><p id="phoneDetailCopy"></p><label id="flightDestinationWrap" for="flightDestination" hidden>Destination<select id="flightDestination"><option value="abuja">Port Harcourt → Abuja</option><option value="port-harcourt">Port Harcourt · return trip</option><option value="enugu">Port Harcourt → Enugu</option></select></label><label id="rideDestinationWrap" for="rideDestination" hidden>Where to?<select id="rideDestination"><option value="home">Home · Tenu Close No. 4</option><option value="market">Mile 1 Market</option><option value="school">Trans-Amadi School</option><option value="neighbor">Neighbour · Tenu Close No. 5</option></select></label><p id="phoneStatus" class="status" aria-live="polite"></p><div class="row"><button id="orderRide" hidden>Confirm ride</button><button id="bookFlight" hidden>Book flight</button></div></section><button id="phoneBack" class="phone-back" hidden>‹ All apps</button><button id="closePhone" class="secondary">Close</button></section></div>
 <div id="browserOverlay" class="overlay" hidden><section class="dialog"><h1>Browser not supported</h1><p id="browserMessage"></p></section></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -210,9 +234,15 @@ function building(x,z,w,d,color,label){
  box(w,.15,d,'#c9a16c',x,.08,z);
  box(w,.15,.2,color,x,2.1,z-d/2);box(w,.15,.2,color,x,2.1,z+d/2);
  box(.2,2.1,d,color,x-w/2,1.05,z);box(.2,2.1,d,color,x+w/2,1.05,z);
- box(w+.5,.35,d+.5,'#9c4937',x,2.35,z);
- box(1,1.8,.25,'#6b4a34',x, .9,z+d/2+.02);
+ const doorway=1.8,side=(w-doorway)/2;
+ box(side,2.1,.2,color,x-(doorway+side)/2,1.05,z+d/2);
+ box(side,2.1,.2,color,x+(doorway+side)/2,1.05,z+d/2);
+ box(doorway,.15,.2,color,x,2.1,z+d/2);
+ box(.35,1.8,.12,'#6b4a34',x-doorway/2+.18,.9,z+d/2+.07);
+ const roof=box(w+.5,.35,d+.5,'#9c4937',x,2.35,z);
  sign(label,x,3.35,z+d/2+.22,'#2a1f2d')
+ roof.material.transparent=true;roof.material.depthWrite=false;
+ return{roof,x,z,width:w,depth:d,opacity:1}
 }
 
 // ground, compound, road
@@ -223,10 +253,11 @@ box(1.2,.1,120,'#9c927f',6.4,.01,0);box(1.2,.1,120,'#9c927f',15.6,.01,0);
 for(let z=-58;z<60;z+=6)box(.25,.16,2.6,'#f2c230',11,.02,z);
 for(let z=-14;z<=10;z+=2.5){box(.25,.9,.25,'#c9a15a',-18,.45,z);box(.25,.9,.25,'#c9a15a',9.5,.45,z)}
 box(.15,.4,26,'#c9a15a',-18,.6,-2);
-// Nearby homes, a supermarket, a school and visible street advertising.
+// Neighbouring homes, local venues and visible street advertising.
 building(-25,-4,8,9,'#e8c18c','TENU CLOSE · NO. 5');
-building(21,-5,9,10,'#59a777','TENU MARKET');
-building(22,-23,13,11,'#e6bd65','COMMUNITY SCHOOL');
+const marketVenue=building(21,-5,9,10,'#59a777','MILE 1 MARKET');
+const schoolVenue=building(22,-23,13,11,'#e6bd65','TRANS-AMADI SCHOOL');
+const venueBuildings=[marketVenue,schoolVenue];
 building(-27,17,8,8,'#d79b75','NEIGHBOUR');
 building(25,16,9,9,'#7eaaa0','NEIGHBOUR');
 for(let z=-30;z<=30;z+=3){
@@ -237,11 +268,11 @@ for(const [x,z] of [[-29,11],[-29,23],[-24,27],[28,8],[29,24],[18,26],[-20,20]])
  const shrub=new THREE.Mesh(new THREE.IcosahedronGeometry(1.1,1),M('#477d45'));
  shrub.position.set(x,.7,z);shrub.scale.set(1.4,.8,1);shrub.castShadow=true;S.add(shrub)
 }
-sign('NDDC CLOSE · TENU CLOSE',-7,4,6,'#246b87');
+sign('NDDC CLOSE · PORT HARCOURT',-7,4,6,'#246b87');
 sign('OUR HOME · NO. 4',-6,4.2,-1.3,'#246b87');
 box(.25,4,.25,'#4b4139',6,2,13);box(5,.12,.2,'#2b3d4f',6,4,13);
-sign('TENU MARKET · OPEN DAILY',6,4.8,13,'#167a60');
-[-3,9].forEach(z=>{box(.3,3,.3,'#4b4139',16,1.5,z);box(4,.1,.2,'#2b3d4f',16,3.1,z);sign(z<0?'MARKET':'SCHOOL',16,3.8,z,'#d94d3f')});
+sign('MILE 1 MARKET · OPEN DAILY',6,4.8,13,'#167a60');
+[-3,9].forEach(z=>{box(.3,3,.3,'#4b4139',16,1.5,z);box(4,.1,.2,'#2b3d4f',16,3.1,z);sign(z<0?'MILE 1':'TRANS-AMADI',16,3.8,z,'#d94d3f')});
 
 // Open-top, single-storey family home: four bedrooms open onto a shared living area.
 box(20,.2,16,'#b9835a',-6,.1,-9);
@@ -292,10 +323,11 @@ box(2.2,.5,2.4,'#6c63d6',-6.5,.35,-6.2);box(2.2,.15,.8,'#fff',-6.5,.7,-7.5);
 box(1.1,2.2,1.1,'#eef2f8',1.1,1.1,-6.1);box(.1,.8,.1,'#999',.5,1.4,-5.5);
 box(2.6,.9,.8,'#8d623f',-1.5,.45,-3.2);
 
-// generator, suya stand, trees
+// generator, bole and fish stand, trees
 box(1.6,1.1,1,'#d2382f',2.5,.55,-8);box(1.6,.2,1,'#222',2.5,1.2,-8);cyl(.12,.12,1,'#333',3.1,1.5,-8.2);
 box(2.4,.9,1,'#7a4a2a',3,.45,6);cyl(.05,.05,2.4,'#444',3,1.5,6);
 const um=new THREE.Mesh(new THREE.ConeGeometry(1.9,.9,8),M('#e8453c'));um.position.set(3,2.8,6);um.castShadow=true;S.add(um);
+sign('BOLE & FISH',3,2.3,6,'#8b452b');
 box(.5,.15,.15,'#3b2a1a',2.6,1,6);box(.5,.15,.15,'#3b2a1a',3.3,1,6);
 [[-14,8],[6,-4],[-14,-9],[5,9]].forEach(([x,z])=>{cyl(.25,.35,4,'#8a5a32',x,2,z,S,6);
  const l=new THREE.Mesh(new THREE.IcosahedronGeometry(1.7,0),M('#2f8f4e'));l.scale.y=.55;l.position.set(x,4.3,z);l.castShadow=true;S.add(l)});
@@ -363,7 +395,11 @@ const gridX=i=>GRID_X+(i%GRID_W)*GRID_STEP,gridZ=i=>GRID_Z+Math.floor(i/GRID_W)*
 [
  [-6,-17,20,.3],[-16,-9,.3,16],[4,-9,.3,16],
  [-11.5,-1,9,.3],[-.5,-1,9,.3],
- [-25,-4,8,9],[21,-5,9,10],[22,-23,13,11],
+ [-25,-4,8,9],
+ [16.5,-5,.3,10],[25.5,-5,.3,10],[21,-10,9,.3],
+ [18.3,0,3.6,.3],[23.7,0,3.6,.3],
+ [15.5,-23,.3,11],[28.5,-23,.3,11],[22,-28.5,13,.3],
+ [18.3,-17.5,5.6,.3],[25.7,-17.5,5.6,.3],
  ...[-11,-6,-1].flatMap(x=>[[x,-14.75,.2,4.5],[x,-9.65,.2,2.3]]),
  ...[-13.5,-8.5,-3.5,1.5].flatMap(x=>[[x-2.5,-8.5,3.6,.2],[x+2.2,-8.5,.8,.2]]),
  ...bedrooms.map(x=>[x,-14.2,2.8,2.8]),
@@ -1275,7 +1311,139 @@ async function sendCoins(){
  }catch(err){$('bankStatus').textContent='Could not send those coins. Check your balance and try again.';console.error('Wallet transfer failed:',err)}
  finally{button.disabled=false}
 }
-const activityDestinations={work:[2,-3],school:[15,-18],market:[17,-5],groceries:[17,-5],outfit:[17,-5],phone:[17,-5],bill:[-2,1],cook:[1.1,-6.1],sleep:[-8.5,-12]};
+const activityDestinations={work:[2,-3],school:[22,-24],market:[21,-6],market_shop:[21,-6],groceries:[17,-5],outfit:[17,-5],phone:[17,-5],bill:[-2,1],cook:[1.1,-6.1],sleep:[-8.5,-12]};
+const MINI_GAME_DURATION=7000;
+const MINI_GAME_COOLDOWN=30000,miniGameCooldownsKey='tenuMinigameCooldownsV1';
+let miniGameCooldowns={};
+try{
+ const saved=JSON.parse(localStorage.getItem(miniGameCooldownsKey)||'{}');
+ miniGameCooldowns=saved&&typeof saved==='object'&&!Array.isArray(saved)?saved:{}
+}catch(err){console.warn('Mini-game cooldowns could not be loaded:',err)}
+let miniGame=null,miniGameFrame=0,miniGameSubmitting=false;
+function miniGameCooldownKey(type){return activeCharId+':'+type}
+function isMiniGameCoolingDown(type){return Number(miniGameCooldowns[miniGameCooldownKey(type)]||0)>Date.now()}
+function setMiniGameQuestion(){
+ const questions=[
+  {q:'Which river gives Port Harcourt its name?',answers:['Bonny River','Niger River','Osun River'],correct:0},
+  {q:'What do bole sellers roast?',answers:['Plantain','Yam','Corn'],correct:0},
+  {q:'How many days are in a week?',answers:['Five','Seven','Ten'],correct:1}
+ ];
+ const arena=$('miniGameArena');arena.replaceChildren();
+ if(miniGame.questionIndex>=questions.length){
+  const done=document.createElement('strong');done.textContent='Class complete!';arena.append(done);return
+ }
+ const question=questions[miniGame.questionIndex],prompt=document.createElement('strong');
+ prompt.textContent=question.q;arena.append(prompt);
+ const choices=document.createElement('div');choices.className='choice-grid';
+ question.answers.forEach((answer,index)=>{
+  const button=document.createElement('button');button.type='button';button.textContent=answer;
+  button.onclick=()=>{
+   if(!miniGame)return;
+   miniGame.score+=index===question.correct?1:0;miniGame.questionIndex++;
+   $('miniGameScore').textContent='Correct answers: '+miniGame.score+'/3';setMiniGameQuestion()
+  };
+  choices.append(button)
+ });
+ arena.append(choices)
+}
+function finishMiniGame(result){
+ if(!miniGame)return;
+ cancelAnimationFrame(miniGameFrame);
+ const callback=miniGame.onResult;miniGame=null;$('miniGameOverlay').hidden=true;
+ callback(result)
+}
+function startMiniGame(type,onResult){
+ if(miniGame)return;
+ if(!['cook','market','school'].includes(type))throw Error('Unknown mini-game');
+ const names={cook:'Roast bole & fish',market:'Stock the Mile 1 stall',school:'Trans-Amadi class'};
+ const instructions={
+  cook:'Tap Roast when the marker is inside the green zone. Land all three taps for a perfect meal.',
+  market:'Time three taps as the moving basket reaches the green stall zone.',
+  school:'Answer three quick questions before class ends.'
+ };
+ miniGame={type,onResult,startedAt:performance.now(),clicks:0,score:0,questionIndex:0,markerElement:null};
+ $('miniGameKicker').textContent=type==='cook'?'MILE 1 BOLE STALL':'TENU HOUSE · QUICK GAME';
+ $('miniGameTitle').textContent=names[type];$('miniGameCopy').textContent=instructions[type];
+ $('miniGameScore').textContent=type==='school'?'Correct answers: 0/3':'Good timing: 0/3';
+ const arena=$('miniGameArena');arena.replaceChildren();
+ if(type==='school')setMiniGameQuestion();
+ else{
+  const prompt=document.createElement('strong'),track=document.createElement('div');
+  prompt.textContent=type==='cook'?'Watch the heat. Tap at the right moment!':'Catch each basket in the green stall zone.';
+  track.className='heat-track';track.setAttribute('aria-label','Moving timing marker');
+  const zone=document.createElement('span'),marker=document.createElement('span');
+  zone.className='heat-zone';marker.className='heat-marker';track.append(zone,marker);arena.append(prompt,track);
+  miniGame.markerElement=marker
+ }
+ $('miniGameAction').textContent=type==='cook'?'Roast!':'Stock it!';
+ $('miniGameAction').disabled=type==='school';$('autoMiniGame').hidden=type!=='cook';
+ $('miniGameOverlay').hidden=false;
+ const tick=now=>{
+  if(!miniGame)return;
+  const elapsed=now-miniGame.startedAt;
+  if(miniGame.markerElement){
+   const phase=(elapsed%1700)/1700,position=phase<.5?phase*200:200-phase*200;
+   miniGame.markerElement.style.left=position+'%'
+  }
+  if(elapsed>=MINI_GAME_DURATION){
+   const result=miniGame.score===3?'perfect':miniGame.score>0?'good':'fail';
+   finishMiniGame(result);return
+  }
+  miniGameFrame=requestAnimationFrame(tick)
+ };
+ miniGameFrame=requestAnimationFrame(tick)
+}
+function tapMiniGame(){
+ if(!miniGame||miniGame.type==='school'||miniGame.clicks>=3)return;
+ miniGame.clicks++;
+ const position=Number.parseFloat(miniGame.markerElement.style.left)||0;
+ if(position>=40&&position<=60)miniGame.score++;
+ $('miniGameScore').textContent='Good timing: '+miniGame.score+'/3';
+ $('miniGameAction').disabled=miniGame.clicks>=3
+}
+async function completeMiniGame(type,result){
+ if(!result||miniGameSubmitting)return;
+ miniGameSubmitting=true;
+ const c=chars[sel];
+ try{
+  let outcome={coins:0,needs:{...c.needs},balance:Number(localWallet[activeCharId]??10000)};
+  if(db){
+   if(!economyOnline)throw Error('Shared wallet unavailable');
+   const {data,error}=await db.rpc('complete_tenu_minigame',{p_game:type,p_result:result});if(error)throw error;
+   outcome={...outcome,...data}
+  }else{
+   const restores={perfect:60,good:40,fail:15,auto:20};
+   const rewards={cook:{perfect:10,good:0,fail:0,auto:0},market:{perfect:40,good:20,fail:0},school:{perfect:50,good:25,fail:0}};
+   outcome.coins=rewards[type]?.[result]||0;
+   if(type==='cook')outcome.needs.hunger=Math.min(100,outcome.needs.hunger+restores[result]);
+   if(outcome.coins){localWallet[activeCharId]=outcome.balance+outcome.coins;outcome.balance=localWallet[activeCharId];saveWallet()}
+  }
+  miniGameCooldowns[miniGameCooldownKey(type)]=Date.now()+MINI_GAME_COOLDOWN;
+  try{localStorage.setItem(miniGameCooldownsKey,JSON.stringify(miniGameCooldowns))}catch(err){console.warn('Mini-game cooldown could not be saved:',err)}
+  c.needs={...c.needs,...outcome.needs};drawNameTag(c);updateSimbarNeeds();
+  if(db){
+   localWallet[activeCharId]=Number(outcome.balance);
+   $('balance').textContent='TENU '+Number(outcome.balance).toLocaleString()+' coins';
+   $('activityBalance').textContent='Wallet: '+Number(outcome.balance).toLocaleString()+' TENU coins'
+  }else{
+   saveWallet();
+   if(type==='cook')saveLocalNeeds()
+  }
+  if(type==='cook'){
+   const progress=getDailyGoalProgress();if(progress){progress.cooked=true;saveDailyGoalProgress();renderDailyGoals();completeDailyGoal('cook')}
+   toast(result==='perfect'?'Perfect roast! Full meal and +'+Number(outcome.coins||0)+' coins.':result==='good'?'Bole & fish ready. Hunger restored.':result==='auto'?'Auto-cooked meal ready.':'The food got burnt, but you salvaged a small bite.')
+  }else{
+   if(Number(outcome.coins)>0){
+    const progress=getDailyGoalProgress();if(progress){progress.earned+=Number(outcome.coins);saveDailyGoalProgress();renderDailyGoals();if(progress.earned>=500)completeDailyGoal('earn_500')}
+   }
+   toast(result==='perfect'?'Perfect! You earned '+Number(outcome.coins||0)+' coins.':result==='good'?'Good effort! You earned '+Number(outcome.coins||0)+' coins.':'Try again after your cooldown.')
+  }
+ }catch(err){
+  $('activityStatus').textContent='This game result could not be saved. Try again when the connection is back.';
+ toast(err?.message?.includes('cooling down')?'This game is cooling down. Try again in 30 seconds.':'This game result could not be saved. Check your connection and try again.');
+ console.error('Mini-game result failed:',err)
+ }finally{miniGameSubmitting=false}
+}
 async function openActivities(){
  $('activityOverlay').hidden=false;$('activityStatus').textContent='';await loadWallet();
  const isDoms=activeCharId==='Doms';$('giftWrap').hidden=!isDoms;$('domsGift').hidden=!isDoms;
@@ -1284,19 +1452,28 @@ async function openActivities(){
 }
 function startActivity(activity){
  const c=chars[sel],dest=activityDestinations[activity];if(!dest)return;
+ if(miniGameSubmitting){toast('Please wait for the current game result.');return}
+ if(['cook','market','school'].includes(activity)&&isMiniGameCoolingDown(activity)){
+  toast('Please wait before playing this game again.');return
+ }
  $('activityOverlay').hidden=true;c.hold=60;c.activityDone=false;
  if(activity==='sleep')return go(c,bedrooms[c.roomIndex],-14.2,{max:45,at:'sleep',action:'sleep'});
  go(c,dest[0],dest[1],{max:activity==='school'?6:3,at:activity,action:activity})
 }
 async function finishActivity(c,activity){
- const earn={work:400,school:100,market:300}[activity];
+ const earn={work:400}[activity];
  if(activity==='sleep'){toast(c.n+' is sleeping. Energy restored.');return}
  if(activity==='cook'){
-  c.needs.hunger=Math.min(100,c.needs.hunger+40);drawNameTag(c);saveLocalNeeds();
-  if(c.i===sel&&activeCharId===DEF[c.i][0])await persistNeeds();
-  const progress=getDailyGoalProgress(DEF[c.i][0]);if(progress){progress.cooked=true;saveDailyGoalProgress()}
-  if(c.i===sel&&activeCharId===DEF[c.i][0]){renderDailyGoals();completeDailyGoal('cook')}
-  toast(c.n+' cooked a meal.');return
+  if(c.i===sel&&activeCharId===DEF[c.i][0])startMiniGame('cook',result=>completeMiniGame('cook',result));
+  return
+ }
+ if(activity==='market_shop'){
+  if(c.i===sel&&activeCharId===DEF[c.i][0]){$('venueShopStatus').textContent='You made it to Mile 1 Market.';$('venueShopOverlay').hidden=false}
+  return
+ }
+ if(activity==='market'||activity==='school'){
+  if(c.i===sel&&activeCharId===DEF[c.i][0])startMiniGame(activity,result=>completeMiniGame(activity,result));
+  return
  }
  if(!earn)return;
  try{
@@ -1337,6 +1514,7 @@ async function buyItem(item){
    else{currentProfile={...currentProfile,appearance:c.appearance};const saved=JSON.parse(localStorage.getItem(localProfilesKey)||'{}');saved[activeCharId]=currentProfile;localStorage.setItem(localProfilesKey,JSON.stringify(saved))}
   }
   $('activityStatus').textContent=item==='bill'?'NEPA bill paid.':'Purchase complete.';
+  if(!$('venueShopOverlay').hidden)$('venueShopStatus').textContent=item==='groceries'?'Fresh groceries packed.':'Purchase complete.';
   toast(item==='bill'?'Bill paid.':'Shopping done.');await loadWallet()
  }catch(err){$('activityStatus').textContent='Not enough coins, or the shop is temporarily unavailable.';console.error('Purchase failed:',err)}
 }
@@ -1359,8 +1537,8 @@ async function purchaseGeneratorDiesel(){
 }
 const tripDestinations={
  home:{point:[-6,-3],label:'Home · Tenu Close No. 4'},
- market:{point:[16,-5],label:'Tenu Market'},
- school:{point:[16,-18],label:'Community school'},
+ market:{point:[21,-6],label:'Mile 1 Market'},
+ school:{point:[22,-24],label:'Trans-Amadi School'},
  neighbor:{point:[-20,-4],label:'Neighbour · Tenu Close No. 5'}
 };
 async function payTransport(item,fare){
@@ -1487,6 +1665,16 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  tvScreen.material.color.set(mainsPower?'#14141c':'#08080a');
  windowGlows.forEach(({pane,light})=>{const on=lightsPowered&&daylight<.7;pane.visible=on;light.intensity=on ? .65 : 0});
  streetLamps.forEach(({bulb,light})=>{const on=lightsPowered&&daylight<.55;bulb.material.color.set(on?'#ffd27c':'#393943');light.intensity=on?1.2:0});
+ venueBuildings.forEach(venue=>{
+  const inside=chars.some(c=>Math.abs(c.g.position.x-venue.x)<venue.width/2-.5&&Math.abs(c.g.position.z-venue.z)<venue.depth/2-.5);
+  const target=inside ? .18 : 1;
+  venue.opacity+=(target-venue.opacity)*Math.min(1,dt*5);
+  venue.roof.material.opacity=venue.opacity
+ });
+ const cookAnchor=new THREE.Vector3(1.1,2.1,-6.1).project(cam);
+ const cookX=(cookAnchor.x*.5+.5)*innerWidth,cookY=(-cookAnchor.y*.5+.5)*innerHeight;
+ $('quickCook').hidden=!activeCharId||cookAnchor.z<0||cookAnchor.z>1||cookX<0||cookX>innerWidth||cookY<0||cookY>innerHeight;
+ $('quickCook').style.left=cookX+'px';$('quickCook').style.top=cookY+'px';
  veh.forEach(o=>{o.z+=o.v*dt;o.g.position.z=o.z;if(o.z>45)o.z=-45;if(o.z<-45)o.z=45;o.g.position.z=o.z});
  pedestrians.forEach(o=>{
   const p=o.g.position,waiting=veh.some(v=>Math.abs(v.x-p.x)<3&&Math.abs(v.z-p.z)<2.8);
@@ -1531,7 +1719,7 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
      $('home').textContent='NDDC Close · '+trip.label;toast('Arrived at '+trip.label+'.')
     }else if(trip?.kind==='flight'){
      S.remove(trip.vehicle);c.g.visible=true;const flightMinutes=gameMinute+8*60;gameDay+=Math.floor(flightMinutes/1440);gameMinute=flightMinutes%1440;
-     $('home').textContent='Visiting '+trip.label+' · NDDC Close, Lagos';toast('Landed at '+trip.label+' airport.')
+     $('home').textContent='Visiting '+trip.label+' · NDDC Close, Port Harcourt';toast('Landed at '+trip.label+' airport.')
     }
     c.trip=null;
     const completed=c.act.action;c.p.position.y=0;endAct(c);c.wait=5+Math.random()*6;
@@ -1609,6 +1797,12 @@ document.getElementById('generatorBtn').onclick=()=>{
  else toast('No diesel left. Buy generator diesel from Earn coins.')
 };
 document.getElementById('dailyCookBtn').onclick=()=>{setMenuOpen(false);startActivity('cook')};
+document.getElementById('quickCook').onclick=()=>startActivity('cook');
+document.getElementById('closeMiniGame').onclick=()=>finishMiniGame(null);
+document.getElementById('miniGameAction').onclick=tapMiniGame;
+document.getElementById('autoMiniGame').onclick=()=>finishMiniGame('auto');
+document.getElementById('closeVenueShop').onclick=()=> $('venueShopOverlay').hidden=true;
+document.getElementById('venueShopOverlay').addEventListener('click',event=>{if(event.target===$('venueShopOverlay'))$('venueShopOverlay').hidden=true});
 document.getElementById('buyDiesel').onclick=purchaseGeneratorDiesel;
 document.getElementById('buildBtn').onclick=()=>{setMenuOpen(false);openBuildCatalog()};
 document.getElementById('closeBuildCatalog').onclick=()=> $('buildOverlay').hidden=true;

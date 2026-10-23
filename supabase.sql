@@ -7,10 +7,11 @@
 -- 6. Run supabase/migrations/20261020180000_google_doms_owner.sql.
 -- 7. Run supabase/migrations/20261023170000_daily_goals_and_generator_diesel.sql.
 -- 8. Run supabase/migrations/20261023180000_profile_claims_and_shared_build.sql.
--- 9. Set the private doms_owner_email value in public.tenu_house_settings
+-- 9. Run supabase/migrations/20261023190000_tenu_minigame_rewards.sql.
+-- 10. Set the private doms_owner_email value in public.tenu_house_settings
 --    using the verified email that should own the Doms profile.
--- 10. Enable Anonymous Sign-Ins in Authentication > Providers > Anonymous.
--- 11. Enable Google in Authentication > Providers and configure its OAuth credentials.
+-- 11. Enable Anonymous Sign-Ins in Authentication > Providers > Anonymous.
+-- 12. Enable Google in Authentication > Providers and configure its OAuth credentials.
 --    Add the deployed site's URL and https://<project-ref>.supabase.co/auth/v1/callback
 --    to the Google OAuth authorized redirect URIs.
 create table if not exists public.tenu_players (
