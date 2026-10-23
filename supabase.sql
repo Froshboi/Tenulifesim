@@ -14,6 +14,13 @@
 -- 12. Enable Anonymous Sign-Ins and Email provider in Authentication > Providers.
 -- 13. Add the deployed site URL to Authentication > URL Configuration > Redirect URLs
 --     so email confirmation and password-reset links can return to the game.
+-- 14. Run supabase/migrations/20261023210000_mma_email_link.sql to reserve MMA
+--     for the sister's verified email, then set mma_owner_email as shown below.
+--     This setting links only a verified account and will not take an active profile.
+--     insert into public.tenu_house_settings (setting_key, setting_value)
+--       values ('mma_owner_email', lower(btrim('jahzalem55@gmail.com')))
+--       on conflict (setting_key) do update
+--       set setting_value = excluded.setting_value, updated_at = now();
 create table if not exists public.tenu_players (
   character_id text primary key check (character_id in ('MMA','Ukechi','Chibaby','Doms','Jahsfavour','Mummy','Dee')),
   user_id uuid not null unique references auth.users(id) on delete cascade,
