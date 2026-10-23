@@ -21,6 +21,8 @@
 --       values ('mma_owner_email', lower(btrim('jahzalem55@gmail.com')))
 --       on conflict (setting_key) do update
 --       set setting_value = excluded.setting_value, updated_at = now();
+-- 15. Run supabase/migrations/20261023220000_engagement_rewards.sql for
+--     server-backed daily streak gifts, event counts, and shared weekly rewards.
 create table if not exists public.tenu_players (
   character_id text primary key check (character_id in ('MMA','Ukechi','Chibaby','Doms','Jahsfavour','Mummy','Dee')),
   user_id uuid not null unique references auth.users(id) on delete cascade,

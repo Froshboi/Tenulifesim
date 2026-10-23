@@ -35,7 +35,12 @@ canvas{display:block}
 .daily-goals button{width:100%;min-height:44px;margin-top:8px;padding:9px;border:0;border-radius:9px;background:#477d45;color:#fff;font: bold 12px "Trebuchet MS",sans-serif}
 .daily-goals button:disabled{opacity:.55}
 .streak-card{display:flex;align-items:center;gap:10px;margin:0 0 12px;padding:10px;border:1px solid #e2b45a;border-radius:12px;background:#fff5d9}
-.streak-flame{font-size:26px}.streak-copy strong,.streak-copy span{display:block}.streak-copy span{margin-top:2px;color:#756253;font-size:11px}
+.streak-flame{font-size:26px}.streak-copy{flex:1}.streak-copy strong,.streak-copy span{display:block}.streak-copy span{margin-top:2px;color:#756253;font-size:11px}
+.engagement-counts{margin:8px 0 0;color:#6d5c50;font-size:11px}
+.engagement-card{margin:0 0 12px;padding:11px;border:1px solid #d5bfa2;border-radius:12px;background:#fffaf0}
+.engagement-card h2{margin:0 0 6px;font-size:14px}.engagement-card p{margin:5px 0;color:#6d5c50;font-size:11px}
+.engagement-card button,.streak-card button{min-height:36px;padding:7px 10px;border:0;border-radius:9px;background:#477d45;color:#fff;font:bold 11px "Trebuchet MS",sans-serif}
+.engagement-card button:disabled,.streak-card button:disabled{opacity:.55}
 .market-catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 .market-card{display:flex;min-width:0;flex-direction:column;gap:7px;padding:9px;border:1px solid #e0d0b8;border-radius:12px;background:#fffaf0}
 .market-art{display:grid;place-items:center;min-height:88px;border-radius:9px;background:linear-gradient(145deg,#fae9c7,#f4dcb0)}
@@ -201,7 +206,7 @@ canvas{display:block}
 <div id="toast" aria-live="polite"></div>
 <div id="hint" hidden>Tap the ground to move</div>
 <button id="menuToggle" aria-label="Open game menu" aria-controls="menuOverlay" aria-expanded="false">☰</button>
-<div id="menuOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Game menu"><div class="menu-header"><strong>House &amp; player</strong><button id="menuClose" aria-label="Close game menu">×</button></div><section class="daily-goals" aria-label="Daily goals"><h2>Today's goals · 150 coins each</h2><div class="daily-goal"><span>Cook a meal</span><span id="goalCookStatus" class="daily-goal-status">Not done</span></div><div class="daily-goal"><span>Pay the NEPA bill</span><span id="goalBillStatus" class="daily-goal-status">Not done</span></div><div class="daily-goal"><span>Earn 500 coins</span><span id="goalEarnStatus" class="daily-goal-status">0 / 500</span></div><button id="dailyCookBtn">Cook a meal</button></section><section class="streak-card" aria-label="Login streak"><span class="streak-flame" aria-hidden="true">🔥</span><span class="streak-copy"><strong id="loginStreakCount">0 day login streak</strong><span id="loginStreakMessage">Play today to start your streak.</span></span></section><div class="tools menu-actions"><button id="profileBtn">My profile</button><button id="howToPlayBtn">How to play</button><button id="buildBtn" hidden>Build mode</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Earn coins</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn">Install app</button></div></section></div>
+<div id="menuOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Game menu"><div class="menu-header"><strong>House &amp; player</strong><button id="menuClose" aria-label="Close game menu">×</button></div><section class="daily-goals" aria-label="Daily goals"><h2>Today's goals · 150 coins each</h2><div class="daily-goal"><span>Cook a meal</span><span id="goalCookStatus" class="daily-goal-status">Not done</span></div><div class="daily-goal"><span>Pay the NEPA bill</span><span id="goalBillStatus" class="daily-goal-status">Not done</span></div><div class="daily-goal"><span>Earn 500 coins</span><span id="goalEarnStatus" class="daily-goal-status">0 / 500</span></div><button id="dailyCookBtn">Cook a meal</button></section><section class="streak-card" aria-label="Login streak and daily gift"><span class="streak-flame" aria-hidden="true">🔥</span><span class="streak-copy"><strong id="loginStreakCount">Sign in for streak</strong><span id="loginStreakMessage">Daily gift rewards are server validated.</span><span id="engagementCounts" class="engagement-counts">Today's events: —</span></span><button id="claimDailyReward">🎁 Claim</button></section><section class="engagement-card" aria-label="Shared weekly family goal"><h2>Family goal · this week</h2><p id="weeklyGoalProgress">Earn 5,000 coins together · loading…</p><button id="claimWeeklyGoal">Claim 500 coins</button><p id="engagementStatus" class="status" aria-live="polite"></p></section><div class="tools menu-actions"><button id="profileBtn">My profile</button><button id="howToPlayBtn">How to play</button><button id="buildBtn" hidden>Build mode</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Earn coins</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn">Install app</button></div></section></div>
 <div id="buildOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Build catalogue"><div class="menu-header"><strong>Build mode · TENU coins</strong><button id="closeBuildCatalog" aria-label="Close catalogue">×</button></div><div id="buildCatalog" class="build-catalog"></div><p id="buildStatus" class="status">Choose an item, then tap a green grid cell inside the house.</p></section></div>
 <div id="buildHud" hidden><strong id="buildModeLabel">Place item</strong><button id="openBuildCatalog">Catalogue</button><button id="rotateBuild">Rotate</button><button id="cancelBuild">Done</button></div>
 <div id="placedItemOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Furniture actions"><div class="menu-header"><strong id="placedItemName">Furniture</strong><button id="closePlacedItem" aria-label="Close furniture actions">×</button></div><div class="row"><button id="movePlacedItem">Move</button><button id="sellPlacedItem">Sell · 50% refund</button></div></section></div>
@@ -221,7 +226,7 @@ canvas{display:block}
 <div id="miniGameOverlay" class="overlay mini-game-overlay" hidden><section class="dialog mini-game-dialog" role="dialog" aria-modal="true" aria-labelledby="miniGameTitle"><header class="mini-game-head"><div><p id="miniGameKicker" class="mini-game-kicker">TENU HOUSE · QUICK GAME</p><h2 id="miniGameTitle">Cook bole &amp; fish</h2></div><button id="closeMiniGame" aria-label="Close mini-game">×</button></header><p id="miniGameCopy" class="mini-game-copy"></p><div id="miniGameArena" class="mini-game-arena"></div><p id="miniGameScore" class="mini-game-score" aria-live="polite"></p><div class="mini-game-actions"><button id="autoMiniGame" class="secondary">Auto · small meal</button><button id="miniGameAction" class="mini-game-tap">Tap!</button></div></section></div>
 <div id="bankOverlay" class="overlay" hidden><section class="dialog"><h2>Household wallet</h2><p id="bankBalance">Loading balance…</p><p>Send fictional TENU coins to another household player.</p><label for="bankRecipient">Send to</label><select id="bankRecipient"></select><label for="bankAmount">Amount (1–10,000)</label><input id="bankAmount" type="number" min="1" max="10000" step="1"><p id="bankStatus" class="status"></p><div class="row"><button id="sendCoins">Send coins</button><button id="closeBank" class="secondary">Close</button></div></section></div>
 <div id="chatOverlay" class="overlay" hidden><section class="dialog"><h2>House chat</h2><div id="chatLog" aria-live="polite"></div><label for="chatMessage">Message</label><textarea id="chatMessage" maxlength="500" placeholder="Say something to the household"></textarea><p id="chatStatus" class="status"></p><div class="row"><button id="sendChat">Send</button><button id="closeChat" class="secondary">Close</button></div></section></div>
-<div id="phoneOverlay" class="overlay" hidden><section class="dialog phone-dialog" aria-label="Phone apps"><div class="phone-topline"><span>9:41</span><span>●●●  ▰</span></div><header class="phone-heading"><span class="phone-heading-mark">T</span><div><h2 id="phoneTitle">Your phone</h2><p id="phoneSubtitle">Apps for life around the city</p></div></header><div id="phoneApps" class="phone-app-grid"><button class="phone-app" data-phone="bolt"><span class="phone-app-icon" style="background:#32b67a">B</span><span class="phone-app-label">Bolt</span></button><button class="phone-app" data-phone="uber"><span class="phone-app-icon" style="background:#343942">U</span><span class="phone-app-label">Uber</span></button><button class="phone-app" data-phone="keke"><span class="phone-app-icon" style="background:#e7aa32">K</span><span class="phone-app-label">Keke</span></button><button class="phone-app" data-phone="flight"><span class="phone-app-icon" style="background:#4d83cc">✈</span><span class="phone-app-label">Flights</span></button><button class="phone-app" data-phone="maps"><span class="phone-app-icon" style="background:#4b9c75">⌖</span><span class="phone-app-label">Maps</span></button></div><section id="phoneDetail" class="phone-detail" hidden><h3 id="phoneDetailTitle"></h3><p id="phoneDetailCopy"></p><label id="flightDestinationWrap" for="flightDestination" hidden>Destination<select id="flightDestination"><option value="abuja">Port Harcourt → Abuja</option><option value="port-harcourt">Port Harcourt · return trip</option><option value="enugu">Port Harcourt → Enugu</option></select></label><label id="rideDestinationWrap" for="rideDestination" hidden>Where to?<select id="rideDestination"><option value="home">Home · Tenu Close No. 4</option><option value="market">Mile 1 Market</option><option value="school">Trans-Amadi School</option><option value="neighbor">Neighbour · Tenu Close No. 5</option></select></label><p id="phoneStatus" class="status" aria-live="polite"></p><div class="row"><button id="orderRide" hidden>Confirm ride</button><button id="bookFlight" hidden>Book flight</button></div></section><button id="phoneBack" class="phone-back" hidden>‹ All apps</button><button id="closePhone" class="secondary">Close</button></section></div>
+<div id="phoneOverlay" class="overlay" hidden><section class="dialog phone-dialog" aria-label="Phone apps"><div class="phone-topline"><span>9:41</span><span>●●●  ▰</span></div><header class="phone-heading"><span class="phone-heading-mark">T</span><div><h2 id="phoneTitle">Your phone</h2><p id="phoneSubtitle">Apps for life around the city</p></div></header><div id="phoneApps" class="phone-app-grid"><button class="phone-app" data-phone="bolt"><span class="phone-app-icon" style="background:#32b67a">B</span><span class="phone-app-label">Bolt</span></button><button class="phone-app" data-phone="uber"><span class="phone-app-icon" style="background:#343942">U</span><span class="phone-app-label">Uber</span></button><button class="phone-app" data-phone="keke"><span class="phone-app-icon" style="background:#e7aa32">K</span><span class="phone-app-label">Keke</span></button><button class="phone-app" data-phone="flight"><span class="phone-app-icon" style="background:#4d83cc">✈</span><span class="phone-app-label">Flights</span></button><button class="phone-app" data-phone="maps"><span class="phone-app-icon" style="background:#4b9c75">⌖</span><span class="phone-app-label">Maps</span></button><button class="phone-app" data-phone="chat"><span class="phone-app-icon" style="background:#86639b">💬</span><span class="phone-app-label">House chat</span></button></div><section id="phoneDetail" class="phone-detail" hidden><h3 id="phoneDetailTitle"></h3><p id="phoneDetailCopy"></p><label id="flightDestinationWrap" for="flightDestination" hidden>Destination<select id="flightDestination"><option value="abuja">Port Harcourt → Abuja</option><option value="port-harcourt">Port Harcourt · return trip</option><option value="enugu">Port Harcourt → Enugu</option></select></label><label id="rideDestinationWrap" for="rideDestination" hidden>Where to?<select id="rideDestination"><option value="home">Home · Tenu Close No. 4</option><option value="market">Mile 1 Market</option><option value="school">Trans-Amadi School</option><option value="neighbor">Neighbour · Tenu Close No. 5</option></select></label><p id="phoneStatus" class="status" aria-live="polite"></p><div class="row"><button id="orderRide" hidden>Confirm ride</button><button id="bookFlight" hidden>Book flight</button></div></section><button id="phoneBack" class="phone-back" hidden>‹ All apps</button><button id="closePhone" class="secondary">Close</button></section></div>
 <div id="browserOverlay" class="overlay" hidden><section class="dialog"><h1>Browser not supported</h1><p id="browserMessage"></p></section></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -730,7 +735,7 @@ document.getElementById('rot').onclick=()=>{ang+=Math.PI/2;size()};
 // loop
 const clk=new THREE.Clock();
 const $=id=>document.getElementById(id),profileOverlay=$('profileOverlay');
-let currentUserId=null,currentUser=null,currentProfile=null,roomRows={};
+let currentUserId=null,currentUser=null,currentProfile=null,roomRows={},engagementState=null,chatOpenedFromPhone=false;
 let controlTimeout=null,presenceTimer=null,phoneMode='',lastPresenceWrite=0;
 function resetControlsTimeout(){
  document.body.classList.remove('controls-hidden');$('restoreControls').hidden=true;
@@ -865,7 +870,7 @@ function applyProfile(row){
  $('hint').textContent='Tap the ground to move';
  $('hint').classList.remove('dismissed');
  $('hint').hidden=hasTappedWorld;
- renderDailyGoals();recordLoginStreak();
+ renderDailyGoals();recordLoginStreak();refreshEngagementState().catch(err=>console.error('Daily rewards could not load:',err));
  c.online=true;updateSimbar();
  profileOverlay.hidden=true
  loadWallet().catch(err=>console.error('Wallet balance could not be loaded:',err));
@@ -1082,7 +1087,8 @@ async function startChat(){
   .on('postgres_changes',{event:'*',schema:'public',table:'tenu_players'},()=>refreshProfiles().catch(err=>console.error('Live profile update failed:',err)))
   .on('postgres_changes',{event:'*',schema:'public',table:'tenu_rooms'},()=>refreshProfiles().catch(err=>console.error('Live room update failed:',err)))
   .subscribe(status=>{
-  if(status==='CHANNEL_ERROR')$('chatStatus').textContent='Live house chat is unavailable right now.'
+  if(status==='SUBSCRIBED')$('chatStatus').textContent='Household chat is live.';
+  else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')$('chatStatus').textContent='Live house chat is unavailable right now.'
  })
 }
 async function connectHouse(url,key){
@@ -1379,6 +1385,53 @@ function recordLoginStreak(){
  $('loginStreakCount').textContent=record.count+' day'+(record.count===1?'':'s')+' login streak';
  $('loginStreakMessage').textContent=record.lastDate===today?'Checked in today · come back tomorrow to keep it going.':'Play today to start your streak.'
 }
+function renderEngagementState(state){
+ engagementState=state;
+ const streak=Math.max(0,Number(state.streak)||0),eventCount=Math.max(0,Number(state.events_completed)||0);
+ $('loginStreakCount').textContent=streak+' day'+(streak===1?'':'s')+' login streak';
+ $('loginStreakMessage').textContent=state.daily_claimed?'Daily gift claimed. Keep your streak going tomorrow.':'Claim today’s gift to keep your streak alive.';
+ $('engagementCounts').textContent='Today’s events: '+eventCount+' · daily gift '+(state.daily_claimed?'claimed':'ready');
+ $('claimDailyReward').disabled=Boolean(state.daily_claimed);
+ $('claimDailyReward').textContent=state.daily_claimed?'✓ Claimed':'🎁 Claim '+Number(state.daily_reward||50)+' coins';
+ const weeklyEarned=Math.max(0,Number(state.weekly_earned)||0),weeklyTarget=Math.max(1,Number(state.weekly_target)||5000);
+ $('weeklyGoalProgress').textContent='Family earnings: '+Math.min(weeklyTarget,weeklyEarned).toLocaleString()+' / '+weeklyTarget.toLocaleString()+' coins · reward '+Number(state.weekly_reward||500);
+ $('claimWeeklyGoal').disabled=Boolean(state.weekly_claimed)||weeklyEarned<weeklyTarget;
+ $('claimWeeklyGoal').textContent=state.weekly_claimed?'✓ Claimed this week':weeklyEarned>=weeklyTarget?'Claim '+Number(state.weekly_reward||500)+' coins':'Keep earning together'
+}
+async function refreshEngagementState(){
+ if(!activeCharId)return;
+ if(!db){$('claimDailyReward').disabled=true;$('claimWeeklyGoal').disabled=true;$('engagementStatus').textContent='Daily gifts and family rewards require a server connection.';return}
+ $('claimDailyReward').disabled=true;$('claimWeeklyGoal').disabled=true;
+ const {data,error}=await db.rpc('get_tenu_engagement_state');
+ if(error){$('claimDailyReward').disabled=true;$('claimWeeklyGoal').disabled=true;$('engagementStatus').textContent='Could not load daily rewards. Run the engagement rewards migration, then retry.';console.error('Engagement state load failed:',error);return}
+ renderEngagementState(data);$('engagementStatus').textContent=''
+}
+async function claimDailyReward(){
+ const button=$('claimDailyReward');button.disabled=true;$('engagementStatus').textContent='Claiming today’s gift…';
+ try{
+  if(!db)throw Error('Daily rewards require a server connection.');
+  const {data,error}=await db.rpc('claim_tenu_daily_reward');if(error)throw error;
+  await refreshEngagementState();await loadWallet();
+  if(Number(data.reward)>0)toast('Daily gift claimed · +'+Number(data.reward)+' coins · streak '+Number(data.streak)+'!');
+  else toast('Today’s gift is already claimed.')
+ }catch(err){
+  $('engagementStatus').textContent=err?.message||'Could not claim the daily gift.';
+  console.error('Daily reward claim failed:',err)
+ }finally{button.disabled=!engagementState||Boolean(engagementState.daily_claimed)}
+}
+async function claimWeeklyGoal(){
+ const button=$('claimWeeklyGoal');button.disabled=true;$('engagementStatus').textContent='Claiming the family reward…';
+ try{
+  if(!db)throw Error('The shared family goal requires a server connection.');
+  const {data,error}=await db.rpc('claim_tenu_weekly_goal');if(error)throw error;
+  await refreshEngagementState();await loadWallet();
+  if(Number(data.reward)>0)toast('Family goal complete · +'+Number(data.reward)+' coins!');
+  else toast('Your family already claimed this week’s reward.')
+ }catch(err){
+  $('engagementStatus').textContent=err?.message||'Could not claim the family goal reward.';
+  console.error('Weekly family goal claim failed:',err)
+ }finally{button.disabled=!engagementState||Boolean(engagementState.weekly_claimed)||Number(engagementState.weekly_earned)<Number(engagementState.weekly_target)}
+}
 async function claimDailyGoal(goal){
  const progress=getDailyGoalProgress();if(!progress||progress.claimed[goal])return;
  const complete=goal==='cook'?progress.cooked:goal==='nepa_bill'?progress.paidBill:progress.earned>=500;
@@ -1625,6 +1678,7 @@ async function completeMiniGame(type,result){
    }
    toast(result==='perfect'?'Perfect! You earned '+Number(outcome.coins||0)+' coins.':result==='good'?'Good effort! You earned '+Number(outcome.coins||0)+' coins.':'Try again after your cooldown.')
   }
+  if(db)await refreshEngagementState();
  }catch(err){
   $('activityStatus').textContent='This game result could not be saved. Try again when the connection is back.';
  toast(err?.message?.includes('cooling down')?'This game is cooling down. Try again in 30 seconds.':'This game result could not be saved. Check your connection and try again.');
@@ -1671,23 +1725,23 @@ function startActivity(activity){
  if(['cook','market','school','sleep','fun','generator','water'].includes(activity)&&isMiniGameCoolingDown(activity)){
   toast('Please wait before playing this game again.');return
  }
- function updateContextActions(){
-  const actions=$('contextActions'),c=chars[sel];
-  if(!activeCharId||!c||!profileOverlay.hidden||!$('walkthroughOverlay').hidden||!$('accountOverlay').hidden){
-   actions.hidden=true;return
-  }
-  const anchor=new THREE.Vector3(c.g.position.x,3.5,c.g.position.z).project(cam);
-  const x=(anchor.x*.5+.5)*innerWidth,y=(-anchor.y*.5+.5)*innerHeight;
-  if(anchor.z<0||anchor.z>1||x<0||x>innerWidth||y<0||y>innerHeight){actions.hidden=true;return}
-  const width=actions.offsetWidth||190,height=actions.offsetHeight||88;
-  actions.style.left=Math.max(8,Math.min(innerWidth-width-8,x-width/2))+'px';
-  actions.style.top=Math.max(58,Math.min(innerHeight-height-72,y-height-14))+'px';
-  $('contextStatus').textContent=c.act?(c.act.at==='sleep'?'Sleeping':c.act.at==='tv'?'Watching TV':c.act.at==='cook'?'Cooking':'Walking'):'Ready · '+c.n;
-  actions.hidden=false
- }
  $('activityOverlay').hidden=true;c.hold=60;c.activityDone=false;
  if(activity==='sleep')return go(c,bedrooms[c.roomIndex],-14.2,{max:2,at:'pre_sleep',action:'sleep'});
  go(c,dest[0],dest[1],{max:activity==='school'?6:3,at:activity,action:activity})
+}
+function updateContextActions(){
+ const actions=$('contextActions'),c=chars[sel];
+ if(!activeCharId||!c||!profileOverlay.hidden||!$('walkthroughOverlay').hidden||!$('accountOverlay').hidden){
+  actions.hidden=true;return
+ }
+ const anchor=new THREE.Vector3(c.g.position.x,3.5,c.g.position.z).project(cam);
+ const x=(anchor.x*.5+.5)*innerWidth,y=(-anchor.y*.5+.5)*innerHeight;
+ if(anchor.z<0||anchor.z>1||x<0||x>innerWidth||y<0||y>innerHeight){actions.hidden=true;return}
+ const width=actions.offsetWidth||190,height=actions.offsetHeight||88;
+ actions.style.left=Math.max(8,Math.min(innerWidth-width-8,x-width/2))+'px';
+ actions.style.top=Math.max(58,Math.min(innerHeight-height-72,y-height-14))+'px';
+ $('contextStatus').textContent=c.act?(c.act.at==='sleep'?'Sleeping':c.act.at==='tv'?'Watching TV':c.act.at==='cook'?'Cooking':'Walking'):'Ready · '+c.n;
+ actions.hidden=false
 }
 async function finishActivity(c,activity){
  const earn={work:400}[activity];
@@ -1727,6 +1781,7 @@ async function finishActivity(c,activity){
    const progress=getDailyGoalProgress(DEF[c.i][0]);if(progress){progress.earned+=amount;saveDailyGoalProgress()}
    if(c.i===sel&&activeCharId===DEF[c.i][0]){renderDailyGoals();if(progress.earned>=500)completeDailyGoal('earn_500')}
   }
+  if(db)await refreshEngagementState();
   if(c.i===sel){toast(amount?activity+' finished. You earned '+amount+' coins.':'You already earned coins for '+activity+' today.');await loadWallet()}
  }catch(err){if(c.i===sel){$('activityStatus').textContent='Could not complete this activity yet. Try again later.';toast('This activity could not be completed right now.')}console.error('Activity reward failed:',err)}
 }
@@ -1808,15 +1863,24 @@ function openPhone(){
 }
 function selectPhoneApp(mode){
  phoneMode=mode;$('phoneApps').hidden=true;$('phoneDetail').hidden=false;$('phoneBack').hidden=false;$('phoneStatus').textContent='';
- const flight=mode==='flight',ride=['bolt','uber','keke'].includes(mode),maps=mode==='maps';
- const appNames={bolt:'Bolt',uber:'Uber',keke:'Keke',flight:'Flights',maps:'Maps'};
+ const flight=mode==='flight',ride=['bolt','uber','keke'].includes(mode),maps=mode==='maps',chat=mode==='chat';
+ const appNames={bolt:'Bolt',uber:'Uber',keke:'Keke',flight:'Flights',maps:'Maps',chat:'House chat'};
  const descriptions={
   bolt:'A car is ready to take you around Port Harcourt.',
   uber:'Choose a destination and request a private ride.',
   keke:'A quick local keke ride around the neighbourhood.',
   flight:'Plan a trip and book it with your TENU coins.',
-  maps:'Your home is NDDC Close, Tenu Close No. 4. Your neighbour is No. 5.'
+  maps:'Your home is NDDC Close, Tenu Close No. 4. Your neighbour is No. 5.',
+  chat:'Send a live message to the household and see new replies as they arrive.'
  };
+ if(chat){
+  $('phoneOverlay').hidden=true;chatOpenedFromPhone=true;$('chatOverlay').hidden=false;
+   startChat().then(()=>$('chatStatus').textContent=db?'Connecting to live household chat…':'Saved on this device; shared chat is offline.').catch(err=>{
+   $('chatStatus').textContent='House chat is unavailable. Check your connection and the chat migration.';
+   console.error('Phone house chat could not start:',err)
+  });
+  return
+ }
  $('phoneTitle').textContent=appNames[mode];$('phoneSubtitle').textContent='TENU HOUSE · CITY SERVICES';
  $('phoneDetailTitle').textContent=ride?'Where would you like to go?':flight?'Plan your trip':appNames[mode];
  $('phoneDetailCopy').textContent=descriptions[mode];
@@ -1879,11 +1943,11 @@ async function tryDomsGift(){
  finally{$('domsGift').disabled=false}
 }
 const dayColor=new THREE.Color('#ffd9a0'),nightColor=new THREE.Color('#3b4a60');
-let outageRemaining=0,eventTimer=38,generatorNoise=false,uiTimer=0,fuelSaveTimer=0,fuelSyncTimer=0,generatorFuelSyncing=false;
+let outageRemaining=0,eventTimer=38,generatorNoise=false,uiTimer=0,fuelSaveTimer=0,fuelSyncTimer=0,generatorFuelSyncing=false,engagementSyncTimer=0;
 function setMenuOpen(open){
  const overlay=$('menuOverlay');overlay.hidden=!open;
  $('menuToggle').setAttribute('aria-expanded',String(open));
- if(open){resetControlsTimeout();renderDailyGoals()}
+ if(open){resetControlsTimeout();renderDailyGoals();refreshEngagementState().catch(err=>console.error('Daily rewards could not refresh:',err))}
 }
 function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  gameMinute+=dt*6;if(gameMinute>=1440){gameMinute-=1440;gameDay++}
@@ -1986,6 +2050,10 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
   else{c.st='';if(c.i===sel&&activeCharId===DEF[c.i][0])c.wait=2;
    else if(c.hold<=0&&(c.wait-=dt)<=0){decide(c);c.wait=4+Math.random()*4}}});
  updateSimbarNeeds();
+ if(activeCharId&&db){
+  engagementSyncTimer+=dt;
+  if(engagementSyncTimer>=30){engagementSyncTimer=0;refreshEngagementState().catch(err=>console.error('Engagement progress refresh failed:',err))}
+ }
  uiTimer+=dt;
  if(uiTimer>=1){
   uiTimer=0;const hour=Math.floor(gameMinute/60)%24,minute=Math.floor(gameMinute%60),clockText=String(hour).padStart(2,'0')+':'+String(minute).padStart(2,'0');
@@ -1998,6 +2066,8 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  updateContextActions();
  R.render(S,cam);requestAnimationFrame(frame)}
 document.getElementById('menuToggle').onclick=()=>setMenuOpen($('menuOverlay').hidden);
+document.getElementById('claimDailyReward').onclick=claimDailyReward;
+document.getElementById('claimWeeklyGoal').onclick=claimWeeklyGoal;
 document.querySelectorAll('#bottomNav [data-tab]').forEach(button=>button.addEventListener('click',()=>{
  const tab=button.dataset.tab;
  document.querySelectorAll('#bottomNav [data-tab]').forEach(item=>item.setAttribute('aria-current',String(item===button?'page':'false')));
@@ -2126,10 +2196,13 @@ window.addEventListener('pagehide',()=>{if(activeCharId)sendPresence(false).catc
 document.getElementById('closeBank').onclick=()=> $('bankOverlay').hidden=true;
 document.getElementById('sendCoins').onclick=sendCoins;
 document.getElementById('chatBtn').onclick=async()=>{
- $('chatOverlay').hidden=false;
+ chatOpenedFromPhone=false;$('chatOverlay').hidden=false;
  try{await startChat()}catch(err){$('chatStatus').textContent='House chat is unavailable right now.';console.error('Chat load failed:',err)}
 };
-document.getElementById('closeChat').onclick=()=> $('chatOverlay').hidden=true;
+document.getElementById('closeChat').onclick=()=>{
+ $('chatOverlay').hidden=true;
+ if(chatOpenedFromPhone){chatOpenedFromPhone=false;openPhone()}
+};
 document.getElementById('sendChat').onclick=async()=>{
  const message=$('chatMessage').value.trim();if(!message||!activeCharId)return;
  const button=$('sendChat');button.disabled=true;
