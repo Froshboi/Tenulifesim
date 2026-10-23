@@ -24,6 +24,13 @@ canvas{display:block}
 .menu-actions.tools{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .menu-actions button{min-height:44px;padding:9px 10px;border:0;border-radius:10px;background:#2a1f2d;color:#fff4df;text-align:left;font:13px "Trebuchet MS",sans-serif}
 .menu-actions button[hidden]{display:none}
+.daily-goals{margin-bottom:12px;padding:11px;border:1px solid #d5bfa2;border-radius:12px;background:#fffaf0}
+.daily-goals h2{margin:0 0 8px;font-size:14px}
+.daily-goal{display:flex;justify-content:space-between;gap:8px;padding:4px 0;font-size:12px}
+.daily-goal-status{color:#786c61;white-space:nowrap}
+.daily-goal-status.done{color:#267449;font-weight:bold}
+.daily-goals button{width:100%;min-height:44px;margin-top:8px;padding:9px;border:0;border-radius:9px;background:#477d45;color:#fff;font: bold 12px "Trebuchet MS",sans-serif}
+.daily-goals button:disabled{opacity:.55}
 #needs{position:fixed;right:8px;top:calc(42px + env(safe-area-inset-top));padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:11px;line-height:1.55}
 #needs progress{width:68px;height:7px;vertical-align:middle;accent-color:#64c987}
 #toast{position:fixed;left:50%;top:calc(94px + env(safe-area-inset-top));transform:translateX(-50%);padding:9px 14px;border-radius:10px;background:#2a1f2dee;color:white;font-size:13px;pointer-events:none;opacity:0;transition:opacity .2s}
@@ -100,7 +107,7 @@ canvas{display:block}
 <div id="toast" aria-live="polite"></div>
 <div id="hint" hidden>Tap the ground to move</div>
 <button id="menuToggle" aria-label="Open game menu" aria-controls="menuOverlay" aria-expanded="false">☰</button>
-<div id="menuOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Game menu"><div class="menu-header"><strong>House &amp; player</strong><button id="menuClose" aria-label="Close game menu">×</button></div><div class="tools menu-actions"><button id="profileBtn">My profile</button><button id="howToPlayBtn">How to play</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Earn coins</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div></section></div>
+<div id="menuOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Game menu"><div class="menu-header"><strong>House &amp; player</strong><button id="menuClose" aria-label="Close game menu">×</button></div><section class="daily-goals" aria-label="Daily goals"><h2>Today's goals · 150 coins each</h2><div class="daily-goal"><span>Cook a meal</span><span id="goalCookStatus" class="daily-goal-status">Not done</span></div><div class="daily-goal"><span>Pay the NEPA bill</span><span id="goalBillStatus" class="daily-goal-status">Not done</span></div><div class="daily-goal"><span>Earn 500 coins</span><span id="goalEarnStatus" class="daily-goal-status">0 / 500</span></div><button id="dailyCookBtn">Cook a meal</button></section><div class="tools menu-actions"><button id="profileBtn">My profile</button><button id="howToPlayBtn">How to play</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Earn coins</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div></section></div>
 <div id="btns"><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">－</button><button id="rot" aria-label="Rotate view">⟲</button></div>
 <button id="restoreControls" hidden>Show controls</button>
 <nav id="simbar" aria-label="Your character" hidden></nav>
@@ -108,7 +115,7 @@ canvas{display:block}
 <div id="walkthroughOverlay" class="overlay" hidden><section class="dialog walkthrough-dialog"><div class="walkthrough-step" id="walkthroughIcon">⌖</div><p class="walkthrough-kicker">QUICK START · <span id="walkthroughCount">1 OF 4</span></p><h2 id="walkthroughTitle">Make yourself at home</h2><p id="walkthroughCopy" class="walkthrough-copy"></p><div id="walkthroughDots" class="walkthrough-dots"></div><div class="row"><button id="walkthroughNext">Next</button><button id="walkthroughSkip" class="secondary">Skip</button></div></section></div>
 <div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2>Welcome to TENU HOUSE</h2><p class="auth-copy">Sign in to keep your character across devices, or play as a guest and get started right away.</p><button id="googleSignIn" class="auth-google">Continue with Google</button><button id="linkGoogle" class="auth-link-google" hidden>Link Google to this player</button><div class="auth-divider">or use email</div><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"><div class="row"><button id="signInAccount">Sign in</button><button id="secureAccount">Create account</button></div><p id="accountStatus" class="status" aria-live="polite"></p><button id="continueAnonymous" class="auth-guest">Continue anonymously</button><button id="closeAccount" class="auth-guest">Back to character selection</button></section></div>
 <div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
-<div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Go to school<br>Earn 100 coins</button><button data-activity="market">Work at the market<br>Earn 300 coins</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay a household bill<br>Spend 250 coins</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep / rest</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
+<div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Go to school<br>Earn 100 coins</button><button data-activity="market">Work at the market<br>Earn 300 coins</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay NEPA bill<br>Spend 250 coins</button><button id="buyDiesel">Buy generator diesel<br>Spend 300 coins · 5 min</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep / rest</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
 <div id="bankOverlay" class="overlay" hidden><section class="dialog"><h2>Household wallet</h2><p id="bankBalance">Loading balance…</p><p>Send fictional TENU coins to another household player.</p><label for="bankRecipient">Send to</label><select id="bankRecipient"></select><label for="bankAmount">Amount (1–10,000)</label><input id="bankAmount" type="number" min="1" max="10000" step="1"><p id="bankStatus" class="status"></p><div class="row"><button id="sendCoins">Send coins</button><button id="closeBank" class="secondary">Close</button></div></section></div>
 <div id="chatOverlay" class="overlay" hidden><section class="dialog"><h2>House chat</h2><div id="chatLog" aria-live="polite"></div><label for="chatMessage">Message</label><textarea id="chatMessage" maxlength="500" placeholder="Say something to the household"></textarea><p id="chatStatus" class="status"></p><div class="row"><button id="sendChat">Send</button><button id="closeChat" class="secondary">Close</button></div></section></div>
 <div id="phoneOverlay" class="overlay" hidden><section class="dialog"><h2 id="phoneTitle">Phone</h2><p>Choose a ride, flight or map app. Game fares use TENU coins.</p><div id="phoneApps" class="choice-grid"><button data-phone="bolt">Bolt<br>Order a car</button><button data-phone="uber">Uber / taxi<br>Order a car</button><button data-phone="keke">Keke<br>Local ride</button><button data-phone="flight">Flights<br>Book a trip</button><button data-phone="maps">Maps<br>NDDC Close · Tenu Close 4</button></div><label id="flightDestinationWrap" for="flightDestination" hidden>Flight destination<select id="flightDestination"><option value="abuja">Lagos → Abuja</option><option value="port-harcourt">Lagos → Port Harcourt</option><option value="enugu">Lagos → Enugu</option></select></label><label id="rideDestinationWrap" for="rideDestination" hidden>Ride destination<select id="rideDestination"><option value="home">Home · Tenu Close No. 4</option><option value="market">Tenu Market</option><option value="school">Community school</option><option value="neighbor">Neighbour · Tenu Close No. 5</option></select></label><p id="phoneStatus" class="status"></p><div class="row"><button id="orderRide" hidden>Order ride</button><button id="bookFlight" hidden>Book flight</button><button id="closePhone" class="secondary">Close</button></div></section></div>
@@ -284,12 +291,13 @@ const chars=DEF.map((d,i)=>{const o=person(d[4],d[5],d[6],d[7]);Object.assign(o,
  o.nameTexture=new THREE.CanvasTexture(o.nameCanvas);o.nameTag.material.map=o.nameTexture;drawNameTag(o);
  o.g.position.set(-14+i*2.5,0,-2.4);o.g.userData.c=o;S.add(o.g);return o});
 let sel=0,activeCharId=null,db=null,chatChannel=null,profilesByChar={},hoveredChar=-1,touchedChar=-1,touchedUntil=0,economyOnline=true;
-const localWalletKey='tenuLocalCoins',savedNeedsKey='tenuNeeds',savedClockKey='tenuClock',localDailyKey='tenuLocalDaily';
-let localWallet={},localNeeds={},localDaily={},gameMinute=480,gameDay=1,clockSaveTimer=0,needsSaveTimer=0;
+const localWalletKey='tenuLocalCoins',savedNeedsKey='tenuNeeds',savedClockKey='tenuClock',localDailyKey='tenuLocalDaily',generatorDieselKey='tenuGeneratorDiesel';
+let localWallet={},localNeeds={},localDaily={},generatorDiesel=0,gameMinute=480,gameDay=1,clockSaveTimer=0,needsSaveTimer=0;
 try{
  localWallet=JSON.parse(localStorage.getItem(localWalletKey)||'{}')||{};
  localNeeds=JSON.parse(localStorage.getItem(savedNeedsKey)||'{}')||{};
  localDaily=JSON.parse(localStorage.getItem(localDailyKey)||'{}')||{};
+ generatorDiesel=Math.max(0,Number(localStorage.getItem(generatorDieselKey))||0);
  const clock=JSON.parse(localStorage.getItem(savedClockKey)||'{}');gameMinute=Number(clock.minute)||480;gameDay=Number(clock.day)||1
 }catch(err){console.warn('Local game progress could not be loaded:',err)}
 chars.forEach(c=>{const saved=localNeeds[DEF[c.i][0]];if(saved)c.needs={energy:100,hunger:100,fun:100,...saved}});
@@ -393,7 +401,8 @@ function arrive(c){
  else if(t.at)c.g.rotation.y=Math.PI;
  if(t.at==='raid')toast(c.n+' grabbed a snack from the fridge.');
  if(t.at==='eat')toast(c.n+' is having a snack.');
- if(t.action==='work'||t.action==='school'||t.action==='market')toast(c.n+' started '+t.action+'.')
+ if(t.action==='work'||t.action==='school'||t.action==='market')toast(c.n+' started '+t.action+'.');
+ if(t.action==='cook')toast(c.n+' is cooking a meal.')
 }
 
 // input
@@ -523,9 +532,9 @@ function updateSimbarNeeds(){
 }
 const walkthroughSteps=[
  {icon:'⌖',title:'Make yourself at home',copy:'Tap a household member to choose who you play. Tap the ground to walk around the compound. Your portrait and needs stay in the bar at the bottom.'},
- {icon:'♡',title:'Keep your needs up',copy:'Energy, hunger and fun drain as time passes. Rest on the bed or sofa, grab food from the fridge, and relax by the TV. Your live meters are in the bottom bar.'},
- {icon:'₦',title:'Earn TENU coins',copy:'Open Earn coins, then take a work shift for 400 coins, go to school for 100, or work at the market for 300. Each activity can pay once per game day.'},
- {icon:'✦',title:'Spend and explore',copy:'Use your coins for groceries, clothes, a phone, bills, rides and flights. Customize your character, and tap How to play any time to see these tips again.'}
+ {icon:'♡',title:'Keep your needs up',copy:'Energy, hunger and fun drain over time. Rest in bed or on the sofa, eat from the fridge, or relax by the TV. Cook a meal and check today’s goals in the ☰ menu.'},
+ {icon:'₦',title:'Earn TENU coins',copy:'Open Earn coins for work, school and market shifts. Earn 500 coins to complete today’s goal; each job pays once per in-game day.'},
+ {icon:'✦',title:'Spend and prepare',copy:'Use coins for groceries, clothes, bills and generator diesel. NEPA outages last two minutes; a running generator can keep the house lights on. Customize your character from the menu.'}
 ];
 function showWalkthrough(){
  walkthroughIndex=0;renderWalkthrough();$('walkthroughOverlay').hidden=false
@@ -568,6 +577,7 @@ function applyProfile(row){
  $('hint').textContent='Tap the ground to move';
  $('hint').classList.remove('dismissed');
  $('hint').hidden=hasTappedWorld;
+ renderDailyGoals();
  c.online=true;updateSimbar();
  profileOverlay.hidden=true
  loadWallet().catch(err=>console.error('Wallet balance could not be loaded:',err));
@@ -820,6 +830,48 @@ function earnLocal(activity,characterId,amount){
  localDaily[characterId][activity]=gameDay;localStorage.setItem(localDailyKey,JSON.stringify(localDaily));
  localWallet[characterId]=Number(localWallet[characterId]??10000)+amount;saveWallet();return amount
 }
+const DAILY_GOAL_REWARD=150;
+function getDailyGoalProgress(characterId=activeCharId){
+ if(!characterId)return null;
+ const record=localDaily[characterId]||(localDaily[characterId]={});
+ const today=new Date().toISOString().slice(0,10);
+ if(record.goalDate!==today){record.goalDate=today;record.goals={cooked:false,paidBill:false,earned:0,claimed:{}}}
+ record.goals={cooked:false,paidBill:false,earned:0,claimed:{},...record.goals};
+ return record.goals
+}
+function saveDailyGoalProgress(){try{localStorage.setItem(localDailyKey,JSON.stringify(localDaily))}catch(err){console.warn('Daily goals could not be saved:',err)}}
+function renderDailyGoals(){
+ const progress=getDailyGoalProgress();
+ if(!progress)return;
+ const states=[
+  ['goalCookStatus',progress.cooked,'Cooked','Not done'],
+  ['goalBillStatus',progress.paidBill,'Paid','Not done']
+ ];
+ states.forEach(([id,done,yes,no])=>{const el=$(id);el.textContent=done?yes:no;el.classList.toggle('done',done)});
+ const earned=$('goalEarnStatus');earned.textContent=Math.min(500,Math.floor(progress.earned))+' / 500';earned.classList.toggle('done',progress.earned>=500);
+ $('dailyCookBtn').disabled=progress.cooked
+}
+async function claimDailyGoal(goal){
+ const progress=getDailyGoalProgress();if(!progress||progress.claimed[goal])return;
+ const complete=goal==='cook'?progress.cooked:goal==='nepa_bill'?progress.paidBill:progress.earned>=500;
+ if(!complete)return;
+ if(db&&economyOnline){
+  const {data,error}=await db.rpc('claim_tenu_daily_goal',{p_goal:goal});if(error)throw error;
+  progress.claimed[goal]=true;saveDailyGoalProgress();await loadWallet();
+  if(Number(data)>0)toast('Daily goal complete! +'+Number(data)+' coins.')
+ }else{
+  localWallet[activeCharId]=Number(localWallet[activeCharId]??10000)+DAILY_GOAL_REWARD;
+  saveWallet();progress.claimed[goal]=true;saveDailyGoalProgress();await loadWallet();
+  toast('Daily goal complete! +'+DAILY_GOAL_REWARD+' coins.')
+ }
+ renderDailyGoals()
+}
+function completeDailyGoal(goal){
+ claimDailyGoal(goal).catch(err=>{
+  $('activityStatus').textContent='Goal complete, but its reward is unavailable. Check that the latest house update is installed.';
+  console.error('Daily goal reward failed:',err)
+ })
+}
 async function openBank(){
  $('bankOverlay').hidden=false;$('bankStatus').textContent='';
  await loadWallet()
@@ -841,7 +893,7 @@ async function sendCoins(){
  }catch(err){$('bankStatus').textContent='Could not send those coins. Check your balance and try again.';console.error('Wallet transfer failed:',err)}
  finally{button.disabled=false}
 }
-const activityDestinations={work:[2,-3],school:[15,-18],market:[17,-5],groceries:[17,-5],outfit:[17,-5],phone:[17,-5],bill:[-2,1],sleep:[-8.5,-12]};
+const activityDestinations={work:[2,-3],school:[15,-18],market:[17,-5],groceries:[17,-5],outfit:[17,-5],phone:[17,-5],bill:[-2,1],cook:[1.1,-6.1],sleep:[-8.5,-12]};
 async function openActivities(){
  $('activityOverlay').hidden=false;$('activityStatus').textContent='';await loadWallet();
  const isDoms=activeCharId==='Doms';$('giftWrap').hidden=!isDoms;$('domsGift').hidden=!isDoms;
@@ -857,11 +909,22 @@ function startActivity(activity){
 async function finishActivity(c,activity){
  const earn={work:400,school:100,market:300}[activity];
  if(activity==='sleep'){toast(c.n+' is sleeping. Energy restored.');return}
+ if(activity==='cook'){
+  c.needs.hunger=Math.min(100,c.needs.hunger+40);drawNameTag(c);saveLocalNeeds();
+  if(c.i===sel&&activeCharId===DEF[c.i][0])await persistNeeds();
+  const progress=getDailyGoalProgress(DEF[c.i][0]);if(progress){progress.cooked=true;saveDailyGoalProgress()}
+  if(c.i===sel&&activeCharId===DEF[c.i][0]){renderDailyGoals();completeDailyGoal('cook')}
+  toast(c.n+' cooked a meal.');return
+ }
  if(!earn)return;
  try{
   let amount=earn;
   if(db&&economyOnline){const {data,error}=await db.rpc('earn_tenu_activity',{p_activity:activity});if(error)throw error;amount=Number(data)||0}
   else amount=earnLocal(activity,DEF[c.i][0],earn);
+  if(amount>0){
+   const progress=getDailyGoalProgress(DEF[c.i][0]);if(progress){progress.earned+=amount;saveDailyGoalProgress()}
+   if(c.i===sel&&activeCharId===DEF[c.i][0]){renderDailyGoals();if(progress.earned>=500)completeDailyGoal('earn_500')}
+  }
   if(c.i===sel){toast(amount?activity+' finished. You earned '+amount+' coins.':'You already earned coins for '+activity+' today.');await loadWallet()}
  }catch(err){if(c.i===sel){$('activityStatus').textContent='Could not complete this activity yet. Try again later.';toast('This activity could not be completed right now.')}console.error('Activity reward failed:',err)}
 }
@@ -876,15 +939,35 @@ async function buyItem(item){
    localWallet[activeCharId]-=price;saveWallet()
   }
   if(item==='groceries'){chars[sel].needs.hunger=100;await persistNeeds();drawNameTag(chars[sel])}
+  if(item==='bill'){
+   const progress=getDailyGoalProgress();if(progress){progress.paidBill=true;saveDailyGoalProgress();renderDailyGoals();completeDailyGoal('nepa_bill')}
+  }
   if(item==='outfit'){
    const colors=['#c45b72','#4e9d78','#d89a35','#8164bd','#3a6ea5'],c=chars[sel];
    c.appearance={...c.appearance,shirt:colors[Math.random()*colors.length|0]};applyAppearance(c,c.appearance);drawNameTag(c);
    if(db){const {error}=await db.from('tenu_players').update({appearance:c.appearance}).eq('character_id',activeCharId).eq('user_id',currentUserId);if(error)console.warn('Purchased outfit appearance could not be saved:',error)}
    else{currentProfile={...currentProfile,appearance:c.appearance};const saved=JSON.parse(localStorage.getItem(localProfilesKey)||'{}');saved[activeCharId]=currentProfile;localStorage.setItem(localProfilesKey,JSON.stringify(saved))}
   }
-  $('activityStatus').textContent=item==='bill'?'Household bill paid.':'Purchase complete.';
+  $('activityStatus').textContent=item==='bill'?'NEPA bill paid.':'Purchase complete.';
   toast(item==='bill'?'Bill paid.':'Shopping done.');await loadWallet()
  }catch(err){$('activityStatus').textContent='Not enough coins, or the shop is temporarily unavailable.';console.error('Purchase failed:',err)}
+}
+function saveGeneratorDiesel(){try{localStorage.setItem(generatorDieselKey,String(generatorDiesel))}catch(err){console.warn('Generator diesel could not be saved:',err)}}
+async function purchaseGeneratorDiesel(){
+ const button=$('buyDiesel');button.disabled=true;$('activityStatus').textContent='Buying diesel…';
+ try{
+  if(db&&economyOnline){
+   const {data,error}=await db.rpc('purchase_tenu_diesel');if(error)throw error;
+   localWallet[activeCharId]=Number(data);saveWallet()
+  }else{
+   localWallet[activeCharId]=Number(localWallet[activeCharId]??10000);
+   if(localWallet[activeCharId]<300)throw Error('Insufficient game coins');
+   localWallet[activeCharId]-=300;saveWallet()
+  }
+  generatorDiesel+=300;saveGeneratorDiesel();$('activityStatus').textContent='Diesel added · '+Math.ceil(generatorDiesel/60)+' minutes available.';
+  toast('Generator diesel topped up.');await loadWallet()
+ }catch(err){$('activityStatus').textContent='Could not buy diesel. Check your balance and latest house update.';console.error('Generator diesel purchase failed:',err)}
+ finally{button.disabled=false}
 }
 const tripDestinations={
  home:{point:[-6,-3],label:'Home · Tenu Close No. 4'},
@@ -967,11 +1050,11 @@ async function tryDomsGift(){
  finally{$('domsGift').disabled=false}
 }
 const dayColor=new THREE.Color('#ffd9a0'),nightColor=new THREE.Color('#3b4a60');
-let outageRemaining=0,eventTimer=38,generatorNoise=false,uiTimer=0;
+let outageRemaining=0,eventTimer=38,generatorNoise=false,uiTimer=0,fuelSaveTimer=0;
 function setMenuOpen(open){
  const overlay=$('menuOverlay');overlay.hidden=!open;
  $('menuToggle').setAttribute('aria-expanded',String(open));
- if(open)resetControlsTimeout()
+ if(open){resetControlsTimeout();renderDailyGoals()}
 }
 function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  gameMinute+=dt*6;if(gameMinute>=1440){gameMinute-=1440;gameDay++}
@@ -981,11 +1064,19 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  sun.color.set(daylight>.2?'#fff3d1':'#99a9d5');
  eventTimer-=dt;
  if(eventTimer<=0){
-  if(outageRemaining<=0&&Math.random()<.28){outageRemaining=20;toast('NEPA outage! The TV and house lights are off.')}
-  else{generatorNoise=!generatorNoise;$('generatorBtn').textContent='Generator: '+(generatorNoise?'noisy':'quiet');toast(generatorNoise?'The generator is rumbling outside.':'The generator has gone quiet.')}
+  if(outageRemaining<=0&&Math.random()<.28){outageRemaining=120;toast('NEPA outage! The TV and house lights are off for two minutes.')}
+  else if(generatorNoise){generatorNoise=false;toast('The generator has gone quiet.')}
+  else if(generatorDiesel>0){generatorNoise=true;toast('The generator is running on diesel.')}
+  else toast('NEPA is on. The generator needs diesel.');
   eventTimer=45+Math.random()*55
  }
  if(outageRemaining>0)outageRemaining=Math.max(0,outageRemaining-dt);
+ if(generatorNoise){
+  generatorDiesel=Math.max(0,generatorDiesel-dt);fuelSaveTimer+=dt;
+  if(generatorDiesel===0){generatorNoise=false;toast('Generator diesel is empty. Buy more to run it again.');saveGeneratorDiesel()}
+  else if(fuelSaveTimer>=10){fuelSaveTimer=0;saveGeneratorDiesel()}
+  $('generatorBtn').textContent=generatorNoise?'Generator: running · '+Math.ceil(generatorDiesel/60)+'m':'Generator: quiet'
+ }
  const mainsPower=outageRemaining<=0,lightsPowered=mainsPower||generatorNoise;
  roomLight.intensity=lightsPowered ? .25+1.25*(1-daylight) : 0;
  tvLight.intensity=mainsPower ? .1+.7*(1-daylight) : 0;
@@ -1002,9 +1093,9 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  });
  chars.forEach(c=>{
   const p=c.g.position;c.hold-=dt;
-  const hungerRate=c.q==='raider' ? .13 : .065,funRate=c.q==='gamer' ? .096 : .06;
+  const hungerRate=c.q==='raider' ? .22 : .11,funRate=c.q==='gamer' ? .176 : .11;
   c.needs.hunger=Math.max(0,c.needs.hunger-hungerRate*dt);
-  c.needs.energy=Math.max(0,c.needs.energy-.055*dt);
+  c.needs.energy=Math.max(0,c.needs.energy-.11*dt);
   c.needs.fun=Math.max(0,c.needs.fun-funRate*dt);
   if(c.path.length){const [tx,tz]=c.path[0],dx=tx-p.x,dz=tz-p.z,d=Math.hypot(dx,dz),s=4.2*dt;
    c.g.rotation.y=Math.atan2(dx,dz);c.ph+=dt*10;
@@ -1023,6 +1114,7 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
     c.trip.vehicle.position.z=c.trip.from[1]-p*24;c.trip.vehicle.position.y=8+Math.sin(p*Math.PI)*3
    }
    if(c.act.at==='eat'||c.act.at==='raid')c.needs.hunger=Math.min(100,c.needs.hunger+(c.act.at==='raid'?14:18)*dt);
+   if(c.act.at==='cook')c.needs.hunger=Math.min(100,c.needs.hunger+2.5*dt);
    if(c.act.at==='sleep')c.needs.energy=Math.min(100,c.needs.energy+2.5*dt);
    if(c.act.at==='sofa')c.needs.energy=Math.min(100,c.needs.energy+.9*dt);
    if(c.act.at==='tv')c.needs.fun=Math.min(100,c.needs.fun+9*dt);
@@ -1047,7 +1139,7 @@ function frame(){const dt=Math.min(.05,clk.getDelta()),t=clk.elapsedTime;
  uiTimer+=dt;
  if(uiTimer>=1){
   uiTimer=0;const hour=Math.floor(gameMinute/60)%24,minute=Math.floor(gameMinute%60),clockText=String(hour).padStart(2,'0')+':'+String(minute).padStart(2,'0');
-  $('clock').textContent='Day '+gameDay+' · '+clockText+(daylight>.25?' ☀️':' 🌙');updateNeedsHud();updateSimbar();chars.forEach(drawNameTag);
+  $('clock').textContent='Day '+gameDay+' · '+clockText+(daylight>.25?' ☀️':' 🌙');updateNeedsHud();updateSimbar();renderDailyGoals();chars.forEach(drawNameTag);
   clockSaveTimer+=1;needsSaveTimer+=1;
   if(clockSaveTimer>=15){clockSaveTimer=0;try{localStorage.setItem(savedClockKey,JSON.stringify({minute:gameMinute,day:gameDay}))}catch(err){console.warn('Clock could not be saved:',err)}}
   if(needsSaveTimer>=20){needsSaveTimer=0;persistNeeds().catch(err=>console.error('Needs could not be saved:',err))}
@@ -1099,10 +1191,12 @@ document.querySelectorAll('[data-activity]').forEach(button=>button.addEventList
 document.querySelectorAll('[data-buy]').forEach(button=>button.addEventListener('click',()=>buyItem(button.dataset.buy)));
 document.getElementById('domsGift').onclick=tryDomsGift;
 document.getElementById('generatorBtn').onclick=()=>{
- generatorNoise=!generatorNoise;
- $('generatorBtn').textContent='Generator: '+(generatorNoise?'noisy':'quiet');
- toast(generatorNoise?'Generator noise is on.':'Generator noise is off.')
+ if(generatorNoise){generatorNoise=false;saveGeneratorDiesel();$('generatorBtn').textContent='Generator: quiet';toast('Generator switched off.')}
+ else if(generatorDiesel>0){generatorNoise=true;$('generatorBtn').textContent='Generator: running · '+Math.ceil(generatorDiesel/60)+'m';toast('Generator noise is on.')}
+ else toast('No diesel left. Buy generator diesel from Earn coins.')
 };
+document.getElementById('dailyCookBtn').onclick=()=>{setMenuOpen(false);startActivity('cook')};
+document.getElementById('buyDiesel').onclick=purchaseGeneratorDiesel;
 document.addEventListener('pointerdown',resetControlsTimeout,{passive:true});
 document.addEventListener('keydown',resetControlsTimeout);
 document.addEventListener('visibilitychange',()=>{
