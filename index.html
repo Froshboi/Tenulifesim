@@ -79,6 +79,45 @@ canvas{display:block}
 .walkthrough-dialog .row button:first-child{background:#574149}
 .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .choice-grid button{min-height:52px;text-align:left}
+.profile-dialog{width:min(480px,100%);max-height:min(88dvh,760px);padding:clamp(18px,5vw,28px);background:radial-gradient(circle at 100% 0,#f2d8a5 0,transparent 38%),linear-gradient(155deg,#fff9ea,#f1dfc5)}
+.profile-brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.profile-brand-mark{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#2a1f2d;color:#ffc857;font-weight:bold}
+.profile-brand-copy{color:#8d6853;font-size:10px;font-weight:bold;letter-spacing:.14em}
+.profile-dialog h1{margin:0;font-size:28px}
+.profile-intro{margin:4px 0 16px;color:#74645d;font-size:13px}
+.profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.profile-card{display:flex;align-items:center;gap:9px;min-width:0;min-height:72px;padding:9px;border:1px solid #e0cdb0!important;border-radius:13px!important;background:#fffaf0!important;color:#2a1f2d!important;box-shadow:0 2px 0 #d5c09f;text-align:left!important}
+.profile-card:hover:not(:disabled),.profile-card:focus-visible{border-color:#c75b72!important;outline:2px solid #c75b72;outline-offset:1px}
+.profile-card:disabled{opacity:.62;box-shadow:none}
+.profile-avatar{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:2px solid #fff;border-radius:50%;color:#fff;font-size:15px;font-weight:bold;box-shadow:0 1px 4px #0003}
+.profile-card-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+.profile-card-name{overflow:hidden;font-size:12px;text-overflow:ellipsis;white-space:nowrap}
+.profile-card-state{color:#76645b;font-size:10px;line-height:1.25}
+.profile-card-state.available{color:#267449;font-weight:bold}
+#profileOverlay #accountBtn{display:block;width:100%;min-height:48px;margin-top:16px;border:0;border-radius:11px;background:#2a1f2d;color:#fff4df;font-weight:bold;box-shadow:0 3px 0 #17121a}
+#profileOverlay #accountBtn:hover{background:#433248}
+#profileOverlay #accountBtn:focus-visible{outline:3px solid #ffc857;outline-offset:2px}
+#profileOverlay #profileStatus{margin:10px 0 0;text-align:center}
+@media(max-width:380px){.profile-grid{gap:7px}.profile-card{gap:7px;min-height:66px;padding:7px}.profile-avatar{flex-basis:32px;width:32px;height:32px}}
+#phoneOverlay .phone-dialog{width:min(390px,100%);padding:18px;background:linear-gradient(160deg,#1d2330,#11151e);color:#f8f4ec}
+.phone-topline{display:flex;justify-content:space-between;margin-bottom:14px;color:#c6ccd8;font-size:11px}
+.phone-heading{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.phone-heading-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:#f4c65e;color:#24202a;font-size:19px}
+.phone-heading h2{margin:0;font-size:21px}
+.phone-heading p{margin:3px 0 0;color:#c6ccd8;font-size:12px}
+.phone-app-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.phone-app{display:grid;justify-items:center;gap:7px;min-height:94px;padding:10px 4px!important;border:1px solid #ffffff18!important;border-radius:16px!important;background:#ffffff0d!important;color:#f8f4ec!important;font-size:11px}
+.phone-app:focus-visible,.phone-app:hover{outline:2px solid #f4c65e;outline-offset:2px}
+.phone-app-icon{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;color:#fff;font-size:20px;font-weight:bold}
+.phone-app-label{font-weight:bold}
+.phone-detail{padding:14px;border:1px solid #ffffff20;border-radius:16px;background:#ffffff0c}
+.phone-detail h3{margin:0 0 5px;font-size:17px}
+.phone-detail p{color:#c6ccd8;font-size:12px}
+#phoneOverlay label{margin-top:12px;color:#f8f4ec}
+#phoneOverlay select{background:#252c39;color:#fff}
+#phoneOverlay .row{margin-top:14px}
+#phoneOverlay .phone-back{width:100%;margin:4px 0 0;background:transparent;color:#f4c65e}
+#phoneOverlay .status{color:#f4c65e}
 #chatLog{max-height:40vh;overflow:auto;background:#fff;border-radius:9px;padding:10px;font-size:13px}
 #chatLog p{margin:4px 0;overflow-wrap:anywhere}
 .slider-row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
@@ -122,14 +161,14 @@ canvas{display:block}
 <div id="btns"><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">－</button><button id="rot" aria-label="Rotate view">⟲</button></div>
 <button id="restoreControls" hidden>Show controls</button>
 <nav id="simbar" aria-label="Your character" hidden></nav>
-<div id="profileOverlay" class="overlay"><section class="dialog"><h1>TENU HOUSE</h1><h2>Who are you playing?</h2><p>Choose a household member to start playing.</p><div id="profileChoices" class="choice-grid"></div><button id="accountBtn" class="secondary">Sign in or create an account</button><p id="profileStatus" class="status">Getting the house ready…</p></section></div>
+<div id="profileOverlay" class="overlay"><section class="dialog profile-dialog" aria-labelledby="profileTitle"><div class="profile-brand"><span class="profile-brand-mark" aria-hidden="true">T</span><span class="profile-brand-copy">TENU HOUSE · PORT HARCOURT</span></div><h1 id="profileTitle">Who’s joining the house?</h1><p class="profile-intro">Choose an available household member, or sign in to continue your saved character.</p><div id="profileChoices" class="profile-grid" aria-label="Household members"></div><button id="accountBtn" type="button">Save progress · sign in or create an account</button><p id="profileStatus" class="status" aria-live="polite">Getting the house ready…</p></section></div>
 <div id="walkthroughOverlay" class="overlay" hidden><section class="dialog walkthrough-dialog"><div class="walkthrough-step" id="walkthroughIcon">⌖</div><p class="walkthrough-kicker">QUICK START · <span id="walkthroughCount">1 OF 4</span></p><h2 id="walkthroughTitle">Make yourself at home</h2><p id="walkthroughCopy" class="walkthrough-copy"></p><div id="walkthroughDots" class="walkthrough-dots"></div><div class="row"><button id="walkthroughNext">Next</button><button id="walkthroughSkip" class="secondary">Skip</button></div></section></div>
 <div id="accountOverlay" class="overlay" hidden><section class="dialog auth-dialog"><div class="auth-mark">T</div><p class="auth-eyebrow">YOUR HOUSE, YOUR STORY</p><h2>Welcome to TENU HOUSE</h2><p class="auth-copy">Sign in to keep your character across devices, or play as a guest and get started right away.</p><button id="googleSignIn" class="auth-google">Continue with Google</button><button id="linkGoogle" class="auth-link-google" hidden>Link Google to this player</button><div class="auth-divider">or use email</div><label for="accountEmail">Email address</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"><label for="accountPassword">Password</label><input id="accountPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"><div class="row"><button id="signInAccount">Sign in</button><button id="secureAccount">Create account</button></div><p id="accountStatus" class="status" aria-live="polite"></p><button id="continueAnonymous" class="auth-guest">Continue anonymously</button><button id="closeAccount" class="auth-guest">Back to character selection</button></section></div>
 <div id="customOverlay" class="overlay" hidden><section class="dialog"><h2>Create-a-Sim</h2><p>Preview your look, then save it to your character profile.</p><label for="customName">Display name</label><input id="customName" maxlength="24"><label for="shirtColor">Clothes colour</label><input id="shirtColor" type="color"><label for="skinColor">Skin tone</label><input id="skinColor" type="color"><label for="hairColor">Hair colour</label><input id="hairColor" type="color"><label for="hairStyle">Hairstyle</label><select id="hairStyle"><option value="short">Short</option><option value="afro">Afro</option><option value="bald">Bald</option></select><label class="slider-row" for="bodyBuild">Body build <span id="bodyBuildValue" class="number"></span><input id="bodyBuild" type="range" min="0.75" max="1.3" step="0.05"></label><label class="slider-row" for="bodyHeight">Height <span id="bodyHeightValue" class="number"></span><input id="bodyHeight" type="range" min="0.85" max="1.15" step="0.05"></label><label for="roomColor">Bedroom colour</label><input id="roomColor" type="color"><label for="wallColor">Bedroom wall colour</label><input id="wallColor" type="color"><label for="floorColor">Bedroom floor colour</label><input id="floorColor" type="color"><p id="customStatus" class="status"></p><div class="row"><button id="saveCustom">Save customization</button><button id="closeCustom" class="secondary">Close</button></div></section></div>
 <div id="activityOverlay" class="overlay" hidden><section class="dialog"><h2>Work, school &amp; shopping</h2><p id="activityBalance"></p><div class="choice-grid"><button data-activity="work">Work a shift<br>Earn 400 coins</button><button data-activity="school">Go to school<br>Earn 100 coins</button><button data-activity="market">Work at the market<br>Earn 300 coins</button><button data-buy="groceries">Groceries<br>Spend 120 coins</button><button data-buy="outfit">New outfit<br>Spend 350 coins</button><button data-buy="phone">New phone<br>Spend 900 coins</button><button data-buy="bill">Pay NEPA bill<br>Spend 250 coins</button><button id="buyDiesel">Buy generator diesel<br>Spend 300 coins · 5 min</button></div><label id="giftWrap" for="giftRecipient" hidden>Send an allowance to a household member<select id="giftRecipient"></select></label><button id="domsGift" hidden>Try a random Doms gift</button><p id="activityStatus" class="status"></p><div class="row"><button id="sleepBtn">Sleep / rest</button><button id="closeActivities" class="secondary">Close</button></div></section></div>
 <div id="bankOverlay" class="overlay" hidden><section class="dialog"><h2>Household wallet</h2><p id="bankBalance">Loading balance…</p><p>Send fictional TENU coins to another household player.</p><label for="bankRecipient">Send to</label><select id="bankRecipient"></select><label for="bankAmount">Amount (1–10,000)</label><input id="bankAmount" type="number" min="1" max="10000" step="1"><p id="bankStatus" class="status"></p><div class="row"><button id="sendCoins">Send coins</button><button id="closeBank" class="secondary">Close</button></div></section></div>
 <div id="chatOverlay" class="overlay" hidden><section class="dialog"><h2>House chat</h2><div id="chatLog" aria-live="polite"></div><label for="chatMessage">Message</label><textarea id="chatMessage" maxlength="500" placeholder="Say something to the household"></textarea><p id="chatStatus" class="status"></p><div class="row"><button id="sendChat">Send</button><button id="closeChat" class="secondary">Close</button></div></section></div>
-<div id="phoneOverlay" class="overlay" hidden><section class="dialog"><h2 id="phoneTitle">Phone</h2><p>Choose a ride, flight or map app. Game fares use TENU coins.</p><div id="phoneApps" class="choice-grid"><button data-phone="bolt">Bolt<br>Order a car</button><button data-phone="uber">Uber / taxi<br>Order a car</button><button data-phone="keke">Keke<br>Local ride</button><button data-phone="flight">Flights<br>Book a trip</button><button data-phone="maps">Maps<br>NDDC Close · Tenu Close 4</button></div><label id="flightDestinationWrap" for="flightDestination" hidden>Flight destination<select id="flightDestination"><option value="abuja">Lagos → Abuja</option><option value="port-harcourt">Lagos → Port Harcourt</option><option value="enugu">Lagos → Enugu</option></select></label><label id="rideDestinationWrap" for="rideDestination" hidden>Ride destination<select id="rideDestination"><option value="home">Home · Tenu Close No. 4</option><option value="market">Tenu Market</option><option value="school">Community school</option><option value="neighbor">Neighbour · Tenu Close No. 5</option></select></label><p id="phoneStatus" class="status"></p><div class="row"><button id="orderRide" hidden>Order ride</button><button id="bookFlight" hidden>Book flight</button><button id="closePhone" class="secondary">Close</button></div></section></div>
+<div id="phoneOverlay" class="overlay" hidden><section class="dialog phone-dialog" aria-label="Phone apps"><div class="phone-topline"><span>9:41</span><span>●●●  ▰</span></div><header class="phone-heading"><span class="phone-heading-mark">T</span><div><h2 id="phoneTitle">Your phone</h2><p id="phoneSubtitle">Apps for life around the city</p></div></header><div id="phoneApps" class="phone-app-grid"><button class="phone-app" data-phone="bolt"><span class="phone-app-icon" style="background:#32b67a">B</span><span class="phone-app-label">Bolt</span></button><button class="phone-app" data-phone="uber"><span class="phone-app-icon" style="background:#343942">U</span><span class="phone-app-label">Uber</span></button><button class="phone-app" data-phone="keke"><span class="phone-app-icon" style="background:#e7aa32">K</span><span class="phone-app-label">Keke</span></button><button class="phone-app" data-phone="flight"><span class="phone-app-icon" style="background:#4d83cc">✈</span><span class="phone-app-label">Flights</span></button><button class="phone-app" data-phone="maps"><span class="phone-app-icon" style="background:#4b9c75">⌖</span><span class="phone-app-label">Maps</span></button></div><section id="phoneDetail" class="phone-detail" hidden><h3 id="phoneDetailTitle"></h3><p id="phoneDetailCopy"></p><label id="flightDestinationWrap" for="flightDestination" hidden>Destination<select id="flightDestination"><option value="abuja">Port Harcourt → Abuja</option><option value="port-harcourt">Port Harcourt · return trip</option><option value="enugu">Port Harcourt → Enugu</option></select></label><label id="rideDestinationWrap" for="rideDestination" hidden>Where to?<select id="rideDestination"><option value="home">Home · Tenu Close No. 4</option><option value="market">TENU Market</option><option value="school">Trans-Amadi Community School</option><option value="neighbor">Neighbour · Tenu Close No. 5</option></select></label><p id="phoneStatus" class="status" aria-live="polite"></p><div class="row"><button id="orderRide" hidden>Confirm ride</button><button id="bookFlight" hidden>Book flight</button></div></section><button id="phoneBack" class="phone-back" hidden>‹ All apps</button><button id="closePhone" class="secondary">Close</button></section></div>
 <div id="browserOverlay" class="overlay" hidden><section class="dialog"><h1>Browser not supported</h1><p id="browserMessage"></p></section></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -347,7 +386,7 @@ const BUILD_CATALOG=[
  {id:'solar_panel',name:'Solar panel',price:2000,size:[2.5,1.5],cells:[5,3],effect:'Solar backup upgrade',color:'#34506d'},
  {id:'water_tank',name:'Water tank',price:1000,size:[2.5,2.5],cells:[5,5],effect:'Household water storage',color:'#4784a8'}
 ];
-let placedItems=[],buildMode=false,buildSelection=null,buildGhost=null,movingBuildItem=null,selectedPlacedItem=null,currentBuildPlacement=null,buildRotation=0;
+let placedItems=[],buildMode=false,buildSelection=null,buildGhost=null,movingBuildItem=null,selectedPlacedItem=null,currentBuildPlacement=null,buildRotation=0,sharedLayoutReady=true,houseItemsChannel=null,layoutLoadVersion=0;
 const buildGrid=new THREE.GridHelper(20,40,'#4dff91','#b6e3b5');
 buildGrid.position.set(-6,.245,-9);buildGrid.scale.z=.8;buildGrid.visible=false;buildGrid.material.transparent=true;buildGrid.material.opacity=.65;S.add(buildGrid);
 const buildFootprint=new THREE.Mesh(new THREE.PlaneGeometry(.5,.5),new THREE.MeshBasicMaterial({color:'#31d36a',transparent:true,opacity:.32,depthWrite:false,side:THREE.DoubleSide}));
@@ -454,6 +493,50 @@ function loadBuildLayout(){
    S.add(candidate.mesh);placedItems.push(candidate);rebuildBlocked()
   })
  }catch(err){console.error('Saved build layout could not be loaded:',err)}
+}
+function clearPlacedItems(){
+ placedItems.forEach(item=>{S.remove(item.mesh);disposeBuildMesh(item.mesh)});
+ placedItems=[];rebuildBlocked()
+}
+async function loadSharedBuildLayout(){
+ if(!db)return;
+ sharedLayoutReady=false;const version=++layoutLoadVersion;
+ try{
+  const {data,error}=await db.from('tenu_house_items').select('id,item_id,x,z,rotation,price_paid').order('created_at',{ascending:true});
+  if(error)throw error;
+  if(version!==layoutLoadVersion)return;
+  clearPlacedItems();
+  data.forEach(saved=>{
+   const itemId=saved.item_id,rotation=Number(saved.rotation),pricePaid=Number(saved.price_paid);
+   if(!BUILD_CATALOG.some(item=>item.id===itemId)||!Number.isFinite(Number(saved.x))||!Number.isFinite(Number(saved.z))||![0,90,180,270].includes(rotation)||!Number.isFinite(pricePaid)){
+    console.warn('Skipped invalid shared furniture data:',saved.id);return
+   }
+   const candidate={id:saved.id,itemId,x:Number(saved.x),z:Number(saved.z),rotation,pricePaid};
+   const footprint=placementFor(candidate.itemId,candidate.x,candidate.z,candidate.rotation);
+   if(!footprint?.valid){console.warn('Skipped blocked shared furniture:',candidate.id);return}
+   candidate.x=footprint.x;candidate.z=footprint.z;candidate.mesh=makeBuildMesh(candidate.itemId);
+   candidate.mesh.position.set(candidate.x,.24,candidate.z);candidate.mesh.rotation.y=candidate.rotation*Math.PI/180;candidate.mesh.userData.placedItem=candidate;
+   S.add(candidate.mesh);placedItems.push(candidate);rebuildBlocked()
+  });
+  saveBuildLayout();sharedLayoutReady=true
+ }catch(err){
+  if(version!==layoutLoadVersion)throw err;
+  console.error('Shared furniture could not be loaded:',err);
+  $('buildStatus').textContent='Shared furniture is unavailable. Try again before building.';
+  throw err
+ }
+}
+function startHouseItemSync(){
+ if(!db)return;
+ if(houseItemsChannel)db.removeChannel(houseItemsChannel).catch(err=>console.warn('Previous furniture sync could not close:',err));
+ houseItemsChannel=db.channel('tenu-house-items')
+  .on('postgres_changes',{event:'*',schema:'public',table:'tenu_house_items'},()=>loadSharedBuildLayout().catch(err=>console.error('Live furniture refresh failed:',err)))
+  .subscribe(status=>{
+   if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'){
+    $('buildStatus').textContent='Shared furniture is loaded, but live updates are unavailable.';
+    console.error('Live furniture sync status:',status)
+   }
+  })
 }
 loadBuildLayout();
 function nearestOpen(x,z){
@@ -721,23 +804,46 @@ function applyProfile(row){
  c.online=true;updateSimbar();
  profileOverlay.hidden=true
  loadWallet().catch(err=>console.error('Wallet balance could not be loaded:',err));
+ if(db){startHouseItemSync();loadSharedBuildLayout().catch(err=>console.error('Initial shared furniture load failed:',err))}
  try{if(localStorage.getItem('tenuWalkthroughSeen:'+activeCharId)!=='1')showWalkthrough()}catch(err){console.warn('Walkthrough preference could not be read:',err);showWalkthrough()}
+}
+function startSignedInProfile(row){
+ applyProfile(row);startPresence();
+ startChat().catch(err=>{$('chatStatus').textContent='House chat is unavailable right now.';console.warn('House chat could not start:',err)})
 }
 function updateChoices(){
  const list=$('profileChoices');list.replaceChildren();
- chars.forEach(c=>{
-  const original=DEF[c.i][0],owner=profilesByChar[original],b=document.createElement('button');
-  const isDoms=original==='Doms',isMine=Boolean(owner&&owner.user_id===currentUserId);
-  b.textContent=isDoms&&!isMine?c.n+' · sign in to play':(isMine?c.n+' · your profile':c.n+(db&&owner?(c.online?' · online':' · NPC when offline'):''))+' — '+c.relation;
-  b.disabled=isDoms?!isMine:Boolean(db&&owner&&owner.user_id!==currentUserId);
-  b.onclick=()=>chooseProfile(original);
-  list.appendChild(b)
+ chars.filter(c=>DEF[c.i][0]!=='Doms').forEach(c=>{
+  const original=DEF[c.i][0],owner=profilesByChar[original],isMine=Boolean(owner&&owner.user_id===currentUserId);
+  const online=Boolean(owner&&!isMine&&owner.last_seen_at&&Date.now()-Date.parse(owner.last_seen_at)<30000);
+  const button=document.createElement('button'),avatar=document.createElement('span'),copy=document.createElement('span');
+  const name=document.createElement('strong'),state=document.createElement('span');
+  button.type='button';button.className='profile-card';button.disabled=Boolean(db&&owner&&!isMine&&online);
+  avatar.className='profile-avatar';avatar.setAttribute('aria-hidden','true');
+  avatar.textContent=(c.n.trim()[0]||original[0]).toUpperCase();avatar.style.backgroundColor=DEF[c.i][5];
+  copy.className='profile-card-copy';name.className='profile-card-name';state.className='profile-card-state';
+  name.textContent=c.n;
+  const stateText=isMine?'Your saved player · tap to continue':online?'Playing now':owner?'Available · tap to play':'Ready to play';
+  state.textContent=stateText;
+  if(!owner||isMine||!online)state.classList.add('available');
+  button.setAttribute('aria-label',c.n+', '+c.relation+'. '+(button.disabled?'Currently playing':'Select player'));
+  copy.append(name,state);button.append(avatar,copy);button.onclick=()=>chooseProfile(original);
+  list.appendChild(button)
  });updateSimbar()
 }
 function appendChat(row){
  const log=$('chatLog'),p=document.createElement('p');
  p.textContent=(row.player_name||row.character_id)+': '+row.message;log.appendChild(p);
  while(log.children.length>60)log.firstElementChild.remove();log.scrollTop=log.scrollHeight
+}
+function releaseActiveProfile(message){
+ clearInterval(presenceTimer);presenceTimer=null;
+ if(buildMode)stopBuildMode();
+ activeCharId=null;currentProfile=null;
+ ['buildBtn','customizeBtn','bankBtn','activitiesBtn','phoneBtn','chatBtn','generatorBtn'].forEach(id=>$(id).hidden=true);
+ $('balance').hidden=true;$('simbar').hidden=true;
+ ['buildOverlay','placedItemOverlay','phoneOverlay','bankOverlay','activityOverlay','customOverlay','chatOverlay','walkthroughOverlay'].forEach(id=>$(id).hidden=true);
+ profileOverlay.hidden=false;$('profileStatus').textContent=message;
 }
 async function refreshProfiles(){
  let {data,error}=await db.from('tenu_players').select('character_id,user_id,character_name,appearance,needs,last_seen_at');
@@ -760,6 +866,9 @@ async function refreshProfiles(){
  if(roomError?.code==='42703')({data:rooms,error:roomError}=await db.from('tenu_rooms').select('room_id,color'));
  if(roomError)throw roomError;roomRows=Object.fromEntries(rooms.map(row=>[row.room_id,row]));
  rooms.forEach(row=>applyRoom(row.room_id,row));
+ if(activeCharId&&profilesByChar[activeCharId]?.user_id!==currentUserId){
+  releaseActiveProfile('This character is now being played from another account. Choose an available household member.');
+ }
  updateChoices();updateSimbar()
 }
 function saveLocalNeeds(){
@@ -799,6 +908,7 @@ function restoreMovingBuildItem(){
  movingBuildItem=null;rebuildBlocked()
 }
 function startBuildSelection(itemId,movingItem=null){
+ if(db&&!sharedLayoutReady){$('buildStatus').textContent='Loading the shared house layout. Try again in a moment.';return}
  const definition=BUILD_CATALOG.find(item=>item.id===itemId);if(!definition)return;
  if(movingBuildItem&&movingBuildItem!==movingItem)restoreMovingBuildItem();
  if(buildGhost){S.remove(buildGhost);disposeBuildMesh(buildGhost)}
@@ -813,10 +923,32 @@ function stopBuildMode(restoreMove=true){
  if(buildGhost){S.remove(buildGhost);disposeBuildMesh(buildGhost);buildGhost=null}
  buildGrid.visible=false;buildFootprint.visible=false;$('buildHud').hidden=true;$('buildOverlay').hidden=true
 }
-function placeBuildItem(){
+async function placeBuildItem(){
  if(!buildMode||!buildSelection)return;
  if(!currentBuildPlacement?.valid){$('buildStatus').textContent='That spot is blocked. Choose a green cell inside the house.';return}
  const moving=Boolean(movingBuildItem),price=buildSelection.price;
+ if(db){
+  if(!sharedLayoutReady){$('buildStatus').textContent='The shared house layout is still loading.';return}
+  if(!economyOnline&&!moving){$('buildStatus').textContent='The shared wallet is unavailable. Furniture purchases are paused.';return}
+ let serverSaved=false;
+ try{
+  if(moving){
+   const {error}=await db.rpc('move_tenu_house_item',{p_item_id:movingBuildItem.id,p_x:currentBuildPlacement.x,p_z:currentBuildPlacement.z,p_rotation:buildRotation});
+    if(error)throw error
+   }else{
+    const {error}=await db.rpc('place_tenu_house_item',{p_item_id:buildSelection.id,p_x:currentBuildPlacement.x,p_z:currentBuildPlacement.z,p_rotation:buildRotation});
+    if(error)throw error
+   }
+   serverSaved=true;movingBuildItem=null;await loadWallet();await loadSharedBuildLayout();
+   $('buildStatus').textContent=buildSelection.name+(moving?' moved.':' placed.')+' Shared with the household.';
+   toast(buildSelection.name+(moving?' moved.':' placed.'));
+   return
+  }catch(err){
+   if(moving&&!serverSaved)restoreMovingBuildItem();
+   $('buildStatus').textContent=serverSaved?'Furniture was saved, but the shared layout could not refresh. Reload the game to sync.':'Could not save this furniture change. Check the shared wallet and house update.';
+   console.error('Shared furniture update failed:',err);return
+  }
+ }
  if(!moving){
   localWallet[activeCharId]=Number(localWallet[activeCharId]??10000);
   if(localWallet[activeCharId]<price){$('buildStatus').textContent='Not enough TENU coins for '+buildSelection.name+'.';toast('Not enough coins to build that item.');return}
@@ -850,9 +982,23 @@ function moveSelectedBuildItem(){
  placedItems=placedItems.filter(existing=>existing!==item);S.remove(item.mesh);disposeBuildMesh(item.mesh);movingBuildItem=item;rebuildBlocked();
  startBuildSelection(item.itemId,item)
 }
-function sellSelectedBuildItem(){
+async function sellSelectedBuildItem(){
  const item=selectedPlacedItem;if(!item)return;
  const refund=Math.floor(item.pricePaid/2);
+ if(db){
+  if(!sharedLayoutReady||!economyOnline){$('buildStatus').textContent='Shared wallet or house layout is unavailable. Try again later.';return}
+  let serverSold=false;
+  try{
+   const {error}=await db.rpc('sell_tenu_house_item',{p_item_id:item.id});if(error)throw error;
+   serverSold=true;
+   $('placedItemOverlay').hidden=true;selectedPlacedItem=null;
+   await loadWallet();await loadSharedBuildLayout();
+   toast('Furniture sold for '+refund+' coins.');return
+  }catch(err){
+   $('buildStatus').textContent=serverSold?'Furniture was sold, but the shared layout could not refresh. Reload the game to sync.':'Could not sell this furniture. Try again later.';
+   console.error('Shared furniture sale failed:',err);return
+  }
+ }
  placedItems=placedItems.filter(existing=>existing!==item);S.remove(item.mesh);disposeBuildMesh(item.mesh);rebuildBlocked();
  localWallet[activeCharId]=Number(localWallet[activeCharId]??10000)+refund;saveWallet();
  $('balance').textContent='TENU '+localWallet[activeCharId].toLocaleString()+' coins';
@@ -891,7 +1037,8 @@ async function connectHouse(url,key){
  db=client;
  await refreshProfiles();
  const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
- $('profileStatus').textContent=mine?'Welcome back, '+(mine.character_name||mine.character_id)+'. Select your profile to continue.':'Choose your household character.';
+ if(mine){startSignedInProfile(mine);return}
+ $('profileStatus').textContent='Choose your household character to get started.';
  profileOverlay.hidden=false;
 }
 function connectionMessage(err){
@@ -899,7 +1046,8 @@ function connectionMessage(err){
  return 'Playing on this device for now. Character progress and game currency will save here; shared features may be unavailable.'
 }
 async function chooseProfile(characterId){
- const status=$('profileStatus');status.textContent='Starting your character…';
+ const status=$('profileStatus');status.textContent='Opening '+characterId+'’s home…';
+ $('profileChoices').querySelectorAll('button').forEach(button=>button.disabled=true);
  try{
   if(!db){
    if(characterId==='Doms'){status.textContent='Sign in with the household Google account to continue as Doms.';return}
@@ -907,21 +1055,24 @@ async function chooseProfile(characterId){
    const saved=JSON.parse(localStorage.getItem(localProfilesKey)||'{}'),rooms=JSON.parse(localStorage.getItem(localRoomsKey)||'{}');
    profilesByChar={};roomRows=rooms;
    const row=saved[characterId]||{character_id:characterId,character_name:c.n,appearance:c.appearance,needs:c.needs};
+   saved[characterId]=row;
+   try{localStorage.setItem(localProfilesKey,JSON.stringify(saved))}catch(err){console.warn('Local player profile could not be saved:',err)}
    Object.assign(c,{n:row.character_name||characterId,needs:{...c.needs,...(row.needs||{}),...(localNeeds[characterId]||{})}});applyAppearance(c,row.appearance);drawNameTag(c);
    activeCharId=characterId;sel=c.i;currentUserId='local';currentProfile=row;applyProfile(row);
    return
   }
-  const existing=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
-  let result;
-  if(existing&&existing.character_id===characterId)result={data:existing,error:null};
-  else if(existing)result=await db.from('tenu_players').update({character_id:characterId}).eq('user_id',currentUserId).select('character_id,user_id,character_name,appearance').single();
-  else result=await db.from('tenu_players').insert({character_id:characterId,user_id:currentUserId,character_name:characterId,appearance:{}}).select('character_id,user_id,character_name,appearance').single();
-  if(result.error)throw result.error;
-  await refreshProfiles();applyProfile(result.data);
+  if(characterId==='Doms')throw Error('This player is available only through the household owner account.');
+  const {error}=await db.rpc('claim_tenu_profile',{p_character_id:characterId});if(error)throw error;
+  await refreshProfiles();
+  const claimed=profilesByChar[characterId];
+  if(!claimed||claimed.user_id!==currentUserId)throw Error('The player claim did not finish.');
+  applyProfile(claimed);
   startPresence();
   try{await startChat()}catch(chatError){$('chatStatus').textContent='House chat is unavailable right now.';console.warn('House chat could not start:',chatError)}
  }catch(err){
-  status.textContent='Could not select that character. Please sign in or try again.';console.error('Profile selection failed:',err)
+  const unavailable=err?.code==='P0001'&&/online|currently/i.test(err.message||'');
+  status.textContent=unavailable?'This player is in the house right now. Choose another household member.':'Could not open this player. Check your connection and try again.';
+  updateChoices();console.error('Profile selection failed:',err)
  }
 }
 function openAccount(){
@@ -958,8 +1109,8 @@ async function linkGoogle(){
    currentUser=data.user;currentUserId=data.user.id;await refreshProfiles();
    const mine=Object.values(profilesByChar).find(row=>row.user_id===currentUserId);
    $('accountOverlay').hidden=true;
-   if(mine){applyProfile(mine);startPresence()}
-   else{profileOverlay.hidden=false;$('profileStatus').textContent='Signed in. Choose a household character.'}
+   if(mine)startSignedInProfile(mine);
+   else{profileOverlay.hidden=false;$('profileStatus').textContent='Choose an available household member to start playing.'}
    updateChoices()
   }catch(err){$('accountStatus').textContent='Could not sign in with those details.';console.error('Household sign-in failed:',err)}
   finally{$('signInAccount').disabled=false}
@@ -1032,18 +1183,25 @@ async function loadWallet(){
  if(db){
   const {data,error}=await db.from('tenu_bank_accounts').select('balance').eq('character_id',activeCharId).single();
   if(!error){balance=Number(data.balance);economyOnline=true}
-  else if(['42P01','PGRST205','PGRST116'].includes(error.code)){
-   economyOnline=false;$('activityStatus').textContent='Using this device’s game wallet until shared banking is ready.';$('bankStatus').textContent='Using this device’s game wallet until shared banking is ready.';console.warn('Shared wallet tables are not ready:',error.message)
-  }else{console.error('Wallet balance could not be loaded:',error);$('bankStatus').textContent='Could not load the shared wallet right now.'}
+  else{
+   economyOnline=false;
+   $('balance').textContent='Wallet unavailable';$('bankBalance').textContent='Shared wallet unavailable. Try again later.';
+   $('activityBalance').textContent='Shared wallet unavailable.';$('bankStatus').textContent='Could not load the shared wallet right now.';
+   $('activityStatus').textContent='Shared wallet unavailable. Purchases and rewards are paused.';
+   console.error('Wallet balance could not be loaded:',error);return
+  }
+ }else{
+  economyOnline=false
  }
- localWallet[activeCharId]=balance;saveWallet();$('balance').textContent='TENU '+balance.toLocaleString()+' coins';$('bankBalance').textContent='Balance: '+balance.toLocaleString()+' TENU coins · game currency';
+ if(!db){localWallet[activeCharId]=balance;saveWallet()}
+ $('balance').textContent='TENU '+balance.toLocaleString()+' coins';$('bankBalance').textContent='Balance: '+balance.toLocaleString()+' TENU coins · game currency';
  $('activityBalance').textContent='Wallet: '+balance.toLocaleString()+' TENU coins';
  const list=$('bankRecipient');list.replaceChildren();
  chars.filter(c=>DEF[c.i][0]!==activeCharId&&(!db||profilesByChar[DEF[c.i][0]])).forEach(c=>{
   const option=document.createElement('option');option.value=DEF[c.i][0];option.textContent=c.n;list.appendChild(option)
  })
 }
-function saveWallet(){try{localStorage.setItem(localWalletKey,JSON.stringify(localWallet))}catch(err){console.warn('Wallet could not be saved locally:',err)}}
+function saveWallet(){if(db)return;try{localStorage.setItem(localWalletKey,JSON.stringify(localWallet))}catch(err){console.warn('Wallet could not be saved locally:',err)}}
 function earnLocal(activity,characterId,amount){
  localDaily[characterId]=localDaily[characterId]||{};
  if(localDaily[characterId][activity]===gameDay)return 0;
@@ -1075,7 +1233,8 @@ async function claimDailyGoal(goal){
  const progress=getDailyGoalProgress();if(!progress||progress.claimed[goal])return;
  const complete=goal==='cook'?progress.cooked:goal==='nepa_bill'?progress.paidBill:progress.earned>=500;
  if(!complete)return;
- if(db&&economyOnline){
+ if(db){
+  if(!economyOnline)throw Error('Shared wallet unavailable');
   const {data,error}=await db.rpc('claim_tenu_daily_goal',{p_goal:goal});if(error)throw error;
   progress.claimed[goal]=true;saveDailyGoalProgress();await loadWallet();
   if(Number(data)>0)toast('Daily goal complete! +'+Number(data)+' coins.')
@@ -1102,7 +1261,10 @@ async function sendCoins(){
  if(!recipient){$('bankStatus').textContent='No other household player has joined yet.';return}
  const button=$('sendCoins');button.disabled=true;$('bankStatus').textContent='Sending…';
  try{
-  if(db&&economyOnline){const {error}=await db.rpc('transfer_tenu_coins',{p_transfer_id:crypto.randomUUID(),p_from_character_id:activeCharId,p_to_character_id:recipient,p_amount:amount});if(error)throw error}
+  if(db){
+   if(!economyOnline)throw Error('Shared wallet unavailable');
+   const {error}=await db.rpc('transfer_tenu_coins',{p_transfer_id:crypto.randomUUID(),p_from_character_id:activeCharId,p_to_character_id:recipient,p_amount:amount});if(error)throw error
+  }
   else{
    localWallet[activeCharId]=Number(localWallet[activeCharId]??10000);
    if(localWallet[activeCharId]<amount)throw Error('Not enough coins');
@@ -1139,7 +1301,10 @@ async function finishActivity(c,activity){
  if(!earn)return;
  try{
   let amount=earn;
-  if(db&&economyOnline){const {data,error}=await db.rpc('earn_tenu_activity',{p_activity:activity});if(error)throw error;amount=Number(data)||0}
+  if(db){
+   if(!economyOnline)throw Error('Shared wallet unavailable');
+   const {data,error}=await db.rpc('earn_tenu_activity',{p_activity:activity});if(error)throw error;amount=Number(data)||0
+  }
   else amount=earnLocal(activity,DEF[c.i][0],earn);
   if(amount>0){
    const progress=getDailyGoalProgress(DEF[c.i][0]);if(progress){progress.earned+=amount;saveDailyGoalProgress()}
@@ -1152,7 +1317,10 @@ async function buyItem(item){
  const prices={groceries:120,outfit:350,phone:900,bill:250},price=prices[item];if(!price)return;
  $('activityStatus').textContent='Processing…';
  try{
-  if(db&&economyOnline){const {error}=await db.rpc('purchase_tenu_item',{p_item:item});if(error)throw error}
+  if(db){
+   if(!economyOnline)throw Error('Shared wallet unavailable');
+   const {error}=await db.rpc('purchase_tenu_item',{p_item:item});if(error)throw error
+  }
   else{
    localWallet[activeCharId]=Number(localWallet[activeCharId]??10000);
    if(localWallet[activeCharId]<price)throw Error('Insufficient game coins');
@@ -1176,9 +1344,9 @@ function saveGeneratorDiesel(){try{localStorage.setItem(generatorDieselKey,Strin
 async function purchaseGeneratorDiesel(){
  const button=$('buyDiesel');button.disabled=true;$('activityStatus').textContent='Buying diesel…';
  try{
-  if(db&&economyOnline){
+  if(db){
+   if(!economyOnline)throw Error('Shared wallet unavailable');
    const {data,error}=await db.rpc('purchase_tenu_diesel');if(error)throw error;
-   localWallet[activeCharId]=Number(data);saveWallet()
   }else{
    localWallet[activeCharId]=Number(localWallet[activeCharId]??10000);
    if(localWallet[activeCharId]<300)throw Error('Insufficient game coins');
@@ -1196,9 +1364,9 @@ const tripDestinations={
  neighbor:{point:[-20,-4],label:'Neighbour · Tenu Close No. 5'}
 };
 async function payTransport(item,fare){
- if(db&&economyOnline){
+ if(db){
+  if(!economyOnline)throw Error('Shared wallet unavailable');
   const {data,error}=await db.rpc('purchase_tenu_item',{p_item:item});if(error)throw error;
-  localWallet[activeCharId]=Number(data);saveWallet()
  }else{
   localWallet[activeCharId]=Number(localWallet[activeCharId]??10000);
   if(localWallet[activeCharId]<fare)throw Error('Insufficient game coins');
@@ -1208,17 +1376,30 @@ async function payTransport(item,fare){
 }
 function openPhone(){
  phoneMode='';$('phoneStatus').textContent='';$('phoneApps').hidden=false;
+ $('phoneDetail').hidden=true;$('phoneBack').hidden=true;
  $('flightDestinationWrap').hidden=true;$('rideDestinationWrap').hidden=true;
- $('orderRide').hidden=true;$('bookFlight').hidden=true;$('phoneOverlay').hidden=false
+ $('orderRide').hidden=true;$('bookFlight').hidden=true;$('phoneTitle').textContent='Your phone';
+ $('phoneSubtitle').textContent='Apps for life around the city';$('phoneOverlay').hidden=false
 }
 function selectPhoneApp(mode){
- phoneMode=mode;$('phoneApps').hidden=true;$('phoneStatus').textContent='';
+ phoneMode=mode;$('phoneApps').hidden=true;$('phoneDetail').hidden=false;$('phoneBack').hidden=false;$('phoneStatus').textContent='';
  const flight=mode==='flight',ride=['bolt','uber','keke'].includes(mode),maps=mode==='maps';
+ const appNames={bolt:'Bolt',uber:'Uber',keke:'Keke',flight:'Flights',maps:'Maps'};
+ const descriptions={
+  bolt:'A car is ready to take you around Port Harcourt.',
+  uber:'Choose a destination and request a private ride.',
+  keke:'A quick local keke ride around the neighbourhood.',
+  flight:'Plan a trip and book it with your TENU coins.',
+  maps:'Your home is NDDC Close, Tenu Close No. 4. Your neighbour is No. 5.'
+ };
+ $('phoneTitle').textContent=appNames[mode];$('phoneSubtitle').textContent='TENU HOUSE · CITY SERVICES';
+ $('phoneDetailTitle').textContent=ride?'Where would you like to go?':flight?'Plan your trip':appNames[mode];
+ $('phoneDetailCopy').textContent=descriptions[mode];
  $('flightDestinationWrap').hidden=!flight;$('rideDestinationWrap').hidden=!ride;
  $('orderRide').hidden=!ride;$('bookFlight').hidden=!flight;
  if(flight)updateFlightFare();
- if(ride){$('orderRide').textContent=mode==='keke'?'Order keke':'Order '+(mode==='bolt'?'Bolt':'Uber / taxi');$('phoneStatus').textContent='Pickup: Tenu Close No. 4. Choose a stop.'}
- if(maps){$('phoneStatus').textContent='You are at NDDC Close, Tenu Close No. 4. Your neighbour is No. 5.';$('phoneApps').hidden=false}
+ if(ride){$('orderRide').textContent=mode==='keke'?'Request keke':'Request '+appNames[mode];$('phoneStatus').textContent='Pickup · Tenu Close No. 4'}
+ if(maps)$('phoneStatus').textContent='NDDC Close · Port Harcourt'
 }
 function updateFlightFare(){
  const fares={abuja:2500,'port-harcourt':2200,enugu:2300},destination=$('flightDestination').value;
@@ -1258,7 +1439,10 @@ async function tryDomsGift(){
  const target=$('giftRecipient').value;if(!target){$('activityStatus').textContent='Invite another household member first.';return}
  $('domsGift').disabled=true;
  try{
-  if(db&&economyOnline){const {data,error}=await db.rpc('doms_random_gift',{p_to_character_id:target});if(error)throw error;$('activityStatus').textContent=data>0?'Doms picked you for a '+data+'-coin gift!':'No gift this time. Try again tomorrow.'}
+  if(db){
+   if(!economyOnline)throw Error('Shared wallet unavailable');
+   const {data,error}=await db.rpc('doms_random_gift',{p_to_character_id:target});if(error)throw error;$('activityStatus').textContent=data>0?'Doms picked you for a '+data+'-coin gift!':'No gift this time. Try again tomorrow.'
+  }
   else if(localDaily.Doms?.gift===gameDay)$('activityStatus').textContent='Doms has already tried a gift today.';
   else if((()=>{localDaily.Doms={...localDaily.Doms,gift:gameDay};localStorage.setItem(localDailyKey,JSON.stringify(localDaily));return Math.random()<.35})()){
    const amount=100+Math.floor(Math.random()*401);localWallet.Doms=Number(localWallet.Doms??10000);
@@ -1406,6 +1590,10 @@ document.getElementById('bankBtn').onclick=()=>openBank().catch(err=>{console.er
 document.getElementById('activitiesBtn').onclick=()=>openActivities().catch(err=>{console.error('Activities could not open:',err);$('activityStatus').textContent='Activities are unavailable right now.'});
 document.getElementById('phoneBtn').onclick=openPhone;
 document.getElementById('closePhone').onclick=()=> $('phoneOverlay').hidden=true;
+document.getElementById('phoneBack').onclick=()=>{
+ phoneMode='';$('phoneApps').hidden=false;$('phoneDetail').hidden=true;$('phoneBack').hidden=true;
+ $('phoneTitle').textContent='Your phone';$('phoneSubtitle').textContent='Apps for life around the city'
+};
 document.querySelectorAll('[data-phone]').forEach(button=>button.addEventListener('click',()=>selectPhoneApp(button.dataset.phone)));
 document.getElementById('orderRide').onclick=orderRide;
 document.getElementById('bookFlight').onclick=bookFlight;
