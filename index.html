@@ -31,6 +31,14 @@ canvas{display:block}
 .daily-goal-status.done{color:#267449;font-weight:bold}
 .daily-goals button{width:100%;min-height:44px;margin-top:8px;padding:9px;border:0;border-radius:9px;background:#477d45;color:#fff;font: bold 12px "Trebuchet MS",sans-serif}
 .daily-goals button:disabled{opacity:.55}
+.build-catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.build-catalog button{min-height:60px;padding:8px;border:0;border-radius:10px;background:#2a1f2d;color:#fff4df;text-align:left;font:12px "Trebuchet MS",sans-serif}
+.build-catalog button strong,.build-catalog button span{display:block}
+.build-catalog button span{margin-top:4px;color:#e6d6bd;font-size:10px}
+#buildHud{position:fixed;left:50%;bottom:calc(70px + env(safe-area-inset-bottom));z-index:4;display:flex;align-items:center;gap:5px;max-width:calc(100vw - 16px);padding:6px;transform:translateX(-50%);border-radius:13px;background:#2a1f2df0;color:#fff4df}
+#buildHud strong{max-width:90px;overflow:hidden;padding:0 4px;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+#buildHud button{min-height:38px;padding:7px 9px;border:0;border-radius:8px;background:#fff4df;color:#2a1f2d;font:11px "Trebuchet MS",sans-serif}
+#buildHud button[hidden]{display:none}
 #needs{position:fixed;right:8px;top:calc(42px + env(safe-area-inset-top));padding:8px 10px;border-radius:10px;background:#2a1f2dd9;color:#fff4df;font-size:11px;line-height:1.55}
 #needs progress{width:68px;height:7px;vertical-align:middle;accent-color:#64c987}
 #toast{position:fixed;left:50%;top:calc(94px + env(safe-area-inset-top));transform:translateX(-50%);padding:9px 14px;border-radius:10px;background:#2a1f2dee;color:white;font-size:13px;pointer-events:none;opacity:0;transition:opacity .2s}
@@ -107,7 +115,10 @@ canvas{display:block}
 <div id="toast" aria-live="polite"></div>
 <div id="hint" hidden>Tap the ground to move</div>
 <button id="menuToggle" aria-label="Open game menu" aria-controls="menuOverlay" aria-expanded="false">☰</button>
-<div id="menuOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Game menu"><div class="menu-header"><strong>House &amp; player</strong><button id="menuClose" aria-label="Close game menu">×</button></div><section class="daily-goals" aria-label="Daily goals"><h2>Today's goals · 150 coins each</h2><div class="daily-goal"><span>Cook a meal</span><span id="goalCookStatus" class="daily-goal-status">Not done</span></div><div class="daily-goal"><span>Pay the NEPA bill</span><span id="goalBillStatus" class="daily-goal-status">Not done</span></div><div class="daily-goal"><span>Earn 500 coins</span><span id="goalEarnStatus" class="daily-goal-status">0 / 500</span></div><button id="dailyCookBtn">Cook a meal</button></section><div class="tools menu-actions"><button id="profileBtn">My profile</button><button id="howToPlayBtn">How to play</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Earn coins</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div></section></div>
+<div id="menuOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Game menu"><div class="menu-header"><strong>House &amp; player</strong><button id="menuClose" aria-label="Close game menu">×</button></div><section class="daily-goals" aria-label="Daily goals"><h2>Today's goals · 150 coins each</h2><div class="daily-goal"><span>Cook a meal</span><span id="goalCookStatus" class="daily-goal-status">Not done</span></div><div class="daily-goal"><span>Pay the NEPA bill</span><span id="goalBillStatus" class="daily-goal-status">Not done</span></div><div class="daily-goal"><span>Earn 500 coins</span><span id="goalEarnStatus" class="daily-goal-status">0 / 500</span></div><button id="dailyCookBtn">Cook a meal</button></section><div class="tools menu-actions"><button id="profileBtn">My profile</button><button id="howToPlayBtn">How to play</button><button id="buildBtn" hidden>Build mode</button><button id="customizeBtn" hidden>Customize</button><button id="bankBtn" hidden>Wallet</button><button id="activitiesBtn" hidden>Earn coins</button><button id="phoneBtn" hidden>Phone apps</button><button id="chatBtn" hidden>House chat</button><button id="generatorBtn" hidden>Generator: quiet</button><button id="installBtn" hidden>Install app</button></div></section></div>
+<div id="buildOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Build catalogue"><div class="menu-header"><strong>Build mode · TENU coins</strong><button id="closeBuildCatalog" aria-label="Close catalogue">×</button></div><div id="buildCatalog" class="build-catalog"></div><p id="buildStatus" class="status">Choose an item, then tap a green grid cell inside the house.</p></section></div>
+<div id="buildHud" hidden><strong id="buildModeLabel">Place item</strong><button id="openBuildCatalog">Catalogue</button><button id="rotateBuild">Rotate</button><button id="cancelBuild">Done</button></div>
+<div id="placedItemOverlay" class="menu-overlay" hidden><section class="menu-sheet" role="dialog" aria-modal="true" aria-label="Furniture actions"><div class="menu-header"><strong id="placedItemName">Furniture</strong><button id="closePlacedItem" aria-label="Close furniture actions">×</button></div><div class="row"><button id="movePlacedItem">Move</button><button id="sellPlacedItem">Sell · 50% refund</button></div></section></div>
 <div id="btns"><button id="zi" aria-label="Zoom in">＋</button><button id="zo" aria-label="Zoom out">－</button><button id="rot" aria-label="Rotate view">⟲</button></div>
 <button id="restoreControls" hidden>Show controls</button>
 <nav id="simbar" aria-label="Your character" hidden></nav>
@@ -324,6 +335,127 @@ const gridX=i=>GRID_X+(i%GRID_W)*GRID_STEP,gridZ=i=>GRID_Z+Math.floor(i/GRID_W)*
   if(Math.abs(gridX(gridId(gx,gz))-x)<=w/2+.36&&Math.abs(gridZ(gridId(gx,gz))-z)<=d/2+.36)blocked[gridId(gx,gz)]=1
  }
 });
+const staticBlocked=blocked.slice(),buildLayoutKey='tenuBuildLayout';
+const BUILD_CATALOG=[
+ {id:'bed',name:'Bed',price:600,size:[2.5,2.5],cells:[5,5],effect:'Restores energy',color:'#c75b7a'},
+ {id:'fridge',name:'Fridge',price:800,size:[1.5,1.5],cells:[3,3],effect:'Restores hunger',color:'#e8edf0'},
+ {id:'tv',name:'Television',price:700,size:[2.5,1.5],cells:[5,3],effect:'Restores fun',color:'#25232c'},
+ {id:'ceiling_fan',name:'Ceiling fan',price:350,size:[1.5,1.5],cells:[3,3],effect:'Keeps the room cool',color:'#a7b0b6'},
+ {id:'mosquito_net',name:'Mosquito net',price:400,size:[3.5,3.5],cells:[7,7],effect:'Adds a net over the bed',color:'#e8dfc7'},
+ {id:'generator',name:'Generator',price:1200,size:[1.5,1.5],cells:[3,3],effect:'Runs on generator diesel',color:'#4d5258'},
+ {id:'inverter',name:'Inverter',price:1500,size:[1.5,1.5],cells:[3,3],effect:'Backup household power',color:'#e8edf0'},
+ {id:'solar_panel',name:'Solar panel',price:2000,size:[2.5,1.5],cells:[5,3],effect:'Solar backup upgrade',color:'#34506d'},
+ {id:'water_tank',name:'Water tank',price:1000,size:[2.5,2.5],cells:[5,5],effect:'Household water storage',color:'#4784a8'}
+];
+let placedItems=[],buildMode=false,buildSelection=null,buildGhost=null,movingBuildItem=null,selectedPlacedItem=null,currentBuildPlacement=null,buildRotation=0;
+const buildGrid=new THREE.GridHelper(20,40,'#4dff91','#b6e3b5');
+buildGrid.position.set(-6,.245,-9);buildGrid.scale.z=.8;buildGrid.visible=false;buildGrid.material.transparent=true;buildGrid.material.opacity=.65;S.add(buildGrid);
+const buildFootprint=new THREE.Mesh(new THREE.PlaneGeometry(.5,.5),new THREE.MeshBasicMaterial({color:'#31d36a',transparent:true,opacity:.32,depthWrite:false,side:THREE.DoubleSide}));
+buildFootprint.rotation.x=-Math.PI/2;buildFootprint.position.y=.25;buildFootprint.visible=false;S.add(buildFootprint);
+function footprintCells(itemId,centerX,centerZ,rotation){
+ const item=BUILD_CATALOG.find(entry=>entry.id===itemId);if(!item)return null;
+ const swap=Math.abs(rotation%180)===90,w=swap?item.cells[1]:item.cells[0],d=swap?item.cells[0]:item.cells[1];
+ const cx=Math.round((centerX-GRID_X)/GRID_STEP),cz=Math.round((centerZ-GRID_Z)/GRID_STEP),cells=[];
+ for(let dz=-(d-1)/2;dz<=(d-1)/2;dz++)for(let dx=-(w-1)/2;dx<=(w-1)/2;dx++){
+  const gx=cx+dx,gz=cz+dz;
+  if(gx<0||gx>=GRID_W||gz<0||gz>=GRID_H)return null;
+  cells.push({id:gridId(gx,gz),x:gridX(gridId(gx,gz)),z:gridZ(gridId(gx,gz))})
+ }
+ return{cells,cx,cz,w,d,x:gridX(gridId(cx,cz)),z:gridZ(gridId(cx,cz))}
+}
+function placementFor(itemId,x,z,rotation){
+ const footprint=footprintCells(itemId,x,z,rotation);if(!footprint)return null;
+ const valid=footprint.cells.every(cell=>cell.x>=-15.5&&cell.x<=3.5&&cell.z>=-16.5&&cell.z<=-1.5&&!blocked[cell.id]);
+ return{...footprint,valid}
+}
+function disposeBuildMesh(mesh){
+ mesh.traverse(object=>{
+  if(object.geometry)object.geometry.dispose();
+  if(object.material){const materials=Array.isArray(object.material)?object.material:[object.material];materials.forEach(material=>material.dispose())}
+ })
+}
+function rebuildBlocked(){
+ blocked.set(staticBlocked);
+ placedItems.forEach(item=>{
+  const footprint=footprintCells(item.itemId,item.x,item.z,item.rotation);
+  if(footprint)footprint.cells.forEach(cell=>{blocked[cell.id]=1})
+ })
+}
+function makeBuildMesh(itemId,isGhost=false){
+ const item=BUILD_CATALOG.find(entry=>entry.id===itemId),g=new THREE.Group(),w=item.size[0],d=item.size[1],color=item.color;
+ if(itemId==='bed'){
+  box(w,.3,d,'#79583f',0,.18,0,g);box(w-.2,.2,d-.2,color,0,.42,0,g);box(w*.85,.12,.6,'#fff0d8',0,.58,-d*.32,g)
+ }else if(itemId==='fridge'){
+  box(w,1.8,d,color,0,.9,0,g);box(.07,1.1,.05,'#8f989d',w*.34,1,-d*.4,g);box(w+.08,.12,d+.08,'#d3dce0',0,.12,0,g)
+ }else if(itemId==='tv'){
+  box(w,.18,.22,'#4d4139',0,.09,0,g);box(.18,.8,.18,'#4d4139',0,.52,0,g);box(w,.95,.16,color,0,1.15,-.05,g);box(w-.18,.76,.03,'#7389a5',0,1.17,-.14,g)
+ }else if(itemId==='ceiling_fan'){
+  box(.16,1.7,.16,'#737b7e',0,1.45,0,g);box(.3,.2,.3,color,0,.55,0,g);
+  for(let i=0;i<4;i++){const a=i*Math.PI/2;const blade=box(.95,.08,.24,color,Math.cos(a)*.48,.52,Math.sin(a)*.48,g);blade.rotation.y=-a}
+ }else if(itemId==='mosquito_net'){
+  const h=2.2,mat=new THREE.MeshLambertMaterial({color,transparent:true,opacity:.28,side:THREE.DoubleSide});
+  for(const x of [-w/2,w/2])for(const z of [-d/2,d/2])box(.08,h,.08,'#ded4bd',x,h/2,z,g);
+  box(w,.08,.08,'#ded4bd',0,h,0,g);box(.08,.08,d,'#ded4bd',0,h,0,g);
+  for(const [x,z,ww,dd] of [[0,-d/2,w,h],[0,d/2,w,h],[-w/2,0,.04,h],[w/2,0,.04,h]]){
+   const panel=new THREE.Mesh(new THREE.BoxGeometry(ww,dd,.025),mat);panel.position.set(x,h/2,z);g.add(panel)
+  }
+ }else if(itemId==='generator'){
+  box(w,.9,d,color,0,.45,0,g);box(w*.7,.38,.08,'#25282a',0,.55,-d/2-.04,g);box(.32,.14,.08,'#e7b841',-.35,1,-d/2-.05,g)
+ }else if(itemId==='inverter'){
+  box(w,1.3,d,color,0,.65,0,g);box(w*.52,.22,.05,'#5bc18c',0,.87,-d/2-.04,g);box(.1,.34,.06,'#4c555e',w*.28,.46,-d/2-.05,g)
+ }else if(itemId==='solar_panel'){
+  box(w,.14,d,color,0,1.05,0,g);box(.12,.8,.12,'#777d80',-w*.36,.45,0,g);box(.12,.8,.12,'#777d80',w*.36,.45,0,g);
+  for(let x=-w*.3;x<=w*.31;x+=.5)box(.035,.15,d*.9,'#8db1cf',x,1.13,0,g)
+ }else if(itemId==='water_tank'){
+  box(w,1.6,d,color,0,.8,0,g);box(w+.08,.12,d+.08,'#33708d',0,1.62,0,g);box(.3,.18,.3,'#285d78',0,1.77,0,g)
+ }
+ if(isGhost)g.traverse(object=>{if(object.isMesh){object.material=object.material.clone();object.material.transparent=true;object.material.opacity=.55}});
+ g.userData.itemId=itemId;return g
+}
+function tintBuildGhost(valid){
+ if(!buildGhost)return;
+ const tint=valid?'#33d879':'#ff4b4b';
+ buildGhost.traverse(object=>{if(object.isMesh)object.material.color.set(tint)});
+ buildFootprint.material.color.set(valid?'#31d36a':'#ff4141')
+}
+function updateBuildPreviewAt(x,z){
+ if(!buildMode||!buildSelection)return;
+ const placement=placementFor(buildSelection.id,x,z,buildRotation);
+ currentBuildPlacement=placement;
+ if(!placement){tintBuildGhost(false);return}
+ buildGhost.position.set(placement.x,.24,placement.z);buildGhost.rotation.y=buildRotation*Math.PI/180;
+ if(buildFootprint.userData.w!==placement.w||buildFootprint.userData.d!==placement.d){
+  buildFootprint.geometry.dispose();buildFootprint.geometry=new THREE.PlaneGeometry(placement.w*GRID_STEP,placement.d*GRID_STEP);
+  buildFootprint.userData.w=placement.w;buildFootprint.userData.d=placement.d
+ }
+ buildFootprint.position.set(placement.x,.245,placement.z);buildFootprint.visible=true;
+ tintBuildGhost(placement.valid)
+}
+function updateBuildPreview(event){
+ if(!buildMode)return;
+ pt.set(event.clientX/innerWidth*2-1,-(event.clientY/innerHeight)*2+1);rc.setFromCamera(pt,cam);
+ const plane=new THREE.Plane(new THREE.Vector3(0,1,0),-.24),point=rc.ray.intersectPlane(plane,v3);
+ if(point)updateBuildPreviewAt(point.x,point.z)
+}
+function saveBuildLayout(){
+ try{localStorage.setItem(buildLayoutKey,JSON.stringify(placedItems.map(({mesh,...item})=>item)));return true}
+ catch(err){console.error('Build layout could not be saved:',err);return false}
+}
+function loadBuildLayout(){
+ try{
+  const stored=JSON.parse(localStorage.getItem(buildLayoutKey)||'[]');
+  if(!Array.isArray(stored))throw Error('Saved layout must be a list');
+  stored.forEach(saved=>{
+   if(!BUILD_CATALOG.some(item=>item.id===saved.itemId)||!Number.isFinite(saved.x)||!Number.isFinite(saved.z)||!Number.isFinite(saved.rotation))throw Error('Saved furniture data is invalid');
+   const candidate={...saved,mesh:null},footprint=placementFor(candidate.itemId,candidate.x,candidate.z,candidate.rotation);
+   if(!footprint?.valid){console.warn('Skipped overlapping or out-of-room saved furniture:',candidate.itemId);return}
+   candidate.x=footprint.x;candidate.z=footprint.z;candidate.mesh=makeBuildMesh(candidate.itemId);
+   candidate.mesh.position.set(candidate.x,.24,candidate.z);candidate.mesh.rotation.y=candidate.rotation*Math.PI/180;candidate.mesh.userData.placedItem=candidate;
+   S.add(candidate.mesh);placedItems.push(candidate);rebuildBlocked()
+  })
+ }catch(err){console.error('Saved build layout could not be loaded:',err)}
+}
+loadBuildLayout();
 function nearestOpen(x,z){
  let best=-1,bestD=Infinity;
  for(let i=0;i<blocked.length;i++)if(!blocked[i]){
@@ -372,24 +504,30 @@ function findPath(sx,sz,tx,tz){
 }
 function go(c,x,z,then){endAct(c);c.then=then||null;c.path=findPath(c.g.position.x,c.g.position.z,x,z)}
 function endAct(c){c.act=null;c.p.rotation.x=0;c.g.position.y=0}
+function nearestNeedTarget(c,itemId,fallback){
+ const targets=placedItems.filter(item=>item.itemId===itemId).map(item=>[item.x,item.z]);
+ targets.push(fallback);
+ targets.sort((a,b)=>Math.hypot(a[0]-c.g.position.x,a[1]-c.g.position.z)-Math.hypot(b[0]-c.g.position.x,b[1]-c.g.position.z));
+ return targets[0]
+}
 function decide(c){
  const r=Math.random(),hour=Math.floor(gameMinute/60),needs=c.needs;
- if((hour>=22||hour<6)&&needs.energy<96||needs.energy<18)return go(c,bedrooms[c.roomIndex],-14.2,{max:45,at:'sleep',action:'sleep'});
+ if((hour>=22||hour<6)&&needs.energy<96||needs.energy<18){const [x,z]=nearestNeedTarget(c,'bed',[bedrooms[c.roomIndex],-14.2]);return go(c,x,z,{max:45,at:'sleep',action:'sleep'})}
  const lowest=Object.entries(needs).sort((a,b)=>a[1]-b[1])[0];
  if(lowest[1]<35){
-  if(lowest[0]==='hunger')return go(c,1.1,-6.1,{max:4,at:'eat'});
-  if(lowest[0]==='energy')return go(c,-12,-4.2,{max:14,at:'sofa'});
-  return go(c,-13.5,-6.5,{max:8,at:'tv'});
+  if(lowest[0]==='hunger'){const [x,z]=nearestNeedTarget(c,'fridge',[1.1,-6.1]);return go(c,x,z,{max:4,at:'eat'})}
+  if(lowest[0]==='energy'){const [x,z]=nearestNeedTarget(c,'bed',[bedrooms[c.roomIndex],-14.2]);return go(c,x,z,{max:14,at:'sleep'})}
+  const [x,z]=nearestNeedTarget(c,'tv',[-12,-7.8]);return go(c,x,z,{max:8,at:'tv'})
  }
  if(c.q==='raider'&&r<.28){
   if(performance.now()-c.lastQuirkToast>12000){toast(c.n+' is raiding the fridge!');c.lastQuirkToast=performance.now()}
-  return go(c,1.1,-6.1,{max:4,at:'raid'})
+  const [x,z]=nearestNeedTarget(c,'fridge',[1.1,-6.1]);return go(c,x,z,{max:4,at:'raid'})
  }
  if(c.q==='sleeper'&&r<.3){
   if(performance.now()-c.lastQuirkToast>12000){toast(c.n+' nodded off on the sofa.');c.lastQuirkToast=performance.now()}
   return go(c,-12,-4.2,{max:12,at:'sofa'})
  }
- if(c.q==='gamer'&&r<.35)return go(c,-13.5,-6.5,{max:5,at:'tv'});
+ if(c.q==='gamer'&&r<.35){const [x,z]=nearestNeedTarget(c,'tv',[-12,-7.8]);return go(c,x,z,{max:5,at:'tv'})}
  if(c.q==='chatter'&&r<.6){const o=chars.filter(z=>z!==c)[Math.random()*3|0];return go(c,o.g.position.x+1,o.g.position.z+1,{max:4,face:o})}
  go(c,-30+Math.random()*56,-27+Math.random()*52)
 }
@@ -411,12 +549,12 @@ let down=null,dragged=false;
 const cvs=R.domElement;
 cvs.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};dragged=false});
 cvs.addEventListener('pointermove',e=>{
- if(!down){hoveredChar=characterAt(e);return}
+ if(!down){if(buildMode)updateBuildPreview(e);else hoveredChar=characterAt(e);return}
  const dx=e.clientX-down.x,dy=e.clientY-down.y;
  if(!dragged&&Math.hypot(dx,dy)<8)return;dragged=true;down={x:e.clientX,y:e.clientY};
  const k=(cam.right-cam.left)/innerWidth;
  view.x+=-Math.cos(ang)*dx*k+(-Math.sin(ang))*dy*k*1.4;view.z+=Math.sin(ang)*dx*k+(-Math.cos(ang))*dy*k*1.4;
- view.x=Math.max(-20,Math.min(20,view.x));view.z=Math.max(-26,Math.min(26,view.z));size()});
+ view.x=Math.max(-20,Math.min(20,view.x));view.z=Math.max(-26,Math.min(26,view.z));size();updateBuildPreview(e)});
 cvs.addEventListener('pointerup',e=>{if(down&&!dragged)tap(e);down=null});
 function characterAt(e){
  pt.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);rc.setFromCamera(pt,cam);
@@ -430,7 +568,9 @@ function dismissMovementHint(){
  const hint=$('hint');hint.classList.add('dismissed');
  setTimeout(()=>{hint.hidden=true},300)
 }
-function tap(e){dismissMovementHint();pt.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);rc.setFromCamera(pt,cam);
+function tap(e){dismissMovementHint();if(buildMode){updateBuildPreview(e);placeBuildItem();return}
+ const placed=findPlacedItemAtPointer(e);if(placed){showPlacedItem(placed);return}
+ pt.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);rc.setFromCamera(pt,cam);
  const h=rc.intersectObjects(chars.map(c=>c.g),true);
  if(h.length){let obj=h[0].object;while(obj&&!obj.userData.c)obj=obj.parent;if(obj){touchedChar=obj.userData.c.i;touchedUntil=performance.now()+3500;$('hint').textContent=obj.userData.c.i===sel?'Tap the ground to move':'Choose your character from the profile menu.'}return}
  if(activeCharId&&rc.ray.intersectPlane(gp,v3)){const c=chars[sel];c.hold=12;
@@ -573,7 +713,7 @@ function applyProfile(row){
  c.n=row.character_name||DEF[c.i][0];applyAppearance(c,row.appearance);drawNameTag(c);
  activeCharId=row.character_id;sel=c.i;currentProfile=row;
  applyRoom(c.roomIndex,roomRows[c.roomIndex]);
- $('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=true;$('balance').hidden=false;updateNeedsHud();updateSimbar();resetControlsTimeout();
+ $('buildBtn').hidden=false;$('customizeBtn').hidden=false;$('bankBtn').hidden=false;$('activitiesBtn').hidden=false;$('phoneBtn').hidden=false;$('chatBtn').hidden=false;$('generatorBtn').hidden=false;$('needs').hidden=true;$('balance').hidden=false;updateNeedsHud();updateSimbar();resetControlsTimeout();
  $('hint').textContent='Tap the ground to move';
  $('hint').classList.remove('dismissed');
  $('hint').hidden=hasTappedWorld;
@@ -638,6 +778,86 @@ async function persistNeeds(){
 }
 function toast(text){
  const el=$('toast');el.textContent=text;el.classList.add('show');clearTimeout(el.timer);el.timer=setTimeout(()=>el.classList.remove('show'),2600)
+}
+function renderBuildCatalog(){
+ const catalog=$('buildCatalog');catalog.replaceChildren();
+ BUILD_CATALOG.forEach(item=>{
+  const button=document.createElement('button'),name=document.createElement('strong'),details=document.createElement('span');
+  button.type='button';button.dataset.buildId=item.id;name.textContent=item.name+' · '+item.price.toLocaleString()+' coins';
+  details.textContent=item.size[0]+'×'+item.size[1]+' units · '+item.effect;
+  button.append(name,details);catalog.append(button)
+ })
+}
+function openBuildCatalog(){
+ if(!activeCharId){toast('Choose a household character before building.');return}
+ renderBuildCatalog();$('buildOverlay').hidden=false
+}
+function restoreMovingBuildItem(){
+ if(!movingBuildItem)return;
+ const item=movingBuildItem;item.mesh=makeBuildMesh(item.itemId);item.mesh.position.set(item.x,.24,item.z);
+ item.mesh.rotation.y=item.rotation*Math.PI/180;item.mesh.userData.placedItem=item;placedItems.push(item);
+ movingBuildItem=null;rebuildBlocked()
+}
+function startBuildSelection(itemId,movingItem=null){
+ const definition=BUILD_CATALOG.find(item=>item.id===itemId);if(!definition)return;
+ if(movingBuildItem&&movingBuildItem!==movingItem)restoreMovingBuildItem();
+ if(buildGhost){S.remove(buildGhost);disposeBuildMesh(buildGhost)}
+ buildSelection=definition;buildRotation=movingItem?.rotation||0;movingBuildItem=movingItem;
+ buildGhost=makeBuildMesh(itemId,true);S.add(buildGhost);buildMode=true;buildGrid.visible=true;buildFootprint.visible=true;
+ $('buildOverlay').hidden=true;$('buildHud').hidden=false;$('buildModeLabel').textContent=(movingItem?'Move ':'Place ')+definition.name;
+ updateBuildPreviewAt(-6,-9);resetControlsTimeout()
+}
+function stopBuildMode(restoreMove=true){
+ if(restoreMove)restoreMovingBuildItem();
+ buildMode=false;buildSelection=null;currentBuildPlacement=null;
+ if(buildGhost){S.remove(buildGhost);disposeBuildMesh(buildGhost);buildGhost=null}
+ buildGrid.visible=false;buildFootprint.visible=false;$('buildHud').hidden=true;$('buildOverlay').hidden=true
+}
+function placeBuildItem(){
+ if(!buildMode||!buildSelection)return;
+ if(!currentBuildPlacement?.valid){$('buildStatus').textContent='That spot is blocked. Choose a green cell inside the house.';return}
+ const moving=Boolean(movingBuildItem),price=buildSelection.price;
+ if(!moving){
+  localWallet[activeCharId]=Number(localWallet[activeCharId]??10000);
+  if(localWallet[activeCharId]<price){$('buildStatus').textContent='Not enough TENU coins for '+buildSelection.name+'.';toast('Not enough coins to build that item.');return}
+  localWallet[activeCharId]-=price;saveWallet()
+ }
+ const record=movingBuildItem||{id:crypto.randomUUID(),itemId:buildSelection.id,pricePaid:price};
+ record.x=currentBuildPlacement.x;record.z=currentBuildPlacement.z;record.rotation=buildRotation;record.mesh=makeBuildMesh(record.itemId);
+ record.mesh.position.set(record.x,.24,record.z);record.mesh.rotation.y=record.rotation*Math.PI/180;record.mesh.userData.placedItem=record;
+ S.add(record.mesh);placedItems.push(record);movingBuildItem=null;rebuildBlocked();
+ $('balance').textContent='TENU '+Number(localWallet[activeCharId]).toLocaleString()+' coins';
+ const saved=saveBuildLayout();$('buildStatus').textContent=saved?record.itemId.replaceAll('_',' ')+' placed. Tap a green cell to place another.':'Item placed, but this device could not save the layout.';
+ toast(BUILD_CATALOG.find(item=>item.id===record.itemId).name+' placed.');
+ updateBuildPreviewAt(record.x,record.z)
+}
+function showPlacedItem(item){
+ selectedPlacedItem=item;
+ const definition=BUILD_CATALOG.find(entry=>entry.id===item.itemId);
+ $('placedItemName').textContent=definition.name+' · '+item.pricePaid.toLocaleString()+' coins';
+ $('sellPlacedItem').textContent='Sell · '+Math.floor(item.pricePaid/2).toLocaleString()+' coins';
+ $('placedItemOverlay').hidden=false
+}
+function findPlacedItemAtPointer(event){
+ pt.set(event.clientX/innerWidth*2-1,-(event.clientY/innerHeight)*2+1);rc.setFromCamera(pt,cam);
+ const hit=rc.intersectObjects(placedItems.map(item=>item.mesh),true)[0];if(!hit)return null;
+ let object=hit.object;while(object&&!object.userData.placedItem)object=object.parent;
+ return object?.userData.placedItem||null
+}
+function moveSelectedBuildItem(){
+ const item=selectedPlacedItem;if(!item)return;
+ $('placedItemOverlay').hidden=true;selectedPlacedItem=null;
+ placedItems=placedItems.filter(existing=>existing!==item);S.remove(item.mesh);disposeBuildMesh(item.mesh);movingBuildItem=item;rebuildBlocked();
+ startBuildSelection(item.itemId,item)
+}
+function sellSelectedBuildItem(){
+ const item=selectedPlacedItem;if(!item)return;
+ const refund=Math.floor(item.pricePaid/2);
+ placedItems=placedItems.filter(existing=>existing!==item);S.remove(item.mesh);disposeBuildMesh(item.mesh);rebuildBlocked();
+ localWallet[activeCharId]=Number(localWallet[activeCharId]??10000)+refund;saveWallet();
+ $('balance').textContent='TENU '+localWallet[activeCharId].toLocaleString()+' coins';
+ $('placedItemOverlay').hidden=true;selectedPlacedItem=null;saveBuildLayout();
+ toast('Furniture sold for '+refund+' coins.')
 }
 async function startChat(){
  if(!db){
@@ -1150,7 +1370,12 @@ document.getElementById('menuToggle').onclick=()=>setMenuOpen($('menuOverlay').h
 document.getElementById('menuClose').onclick=()=>setMenuOpen(false);
 document.getElementById('menuOverlay').addEventListener('click',event=>{if(event.target===$('menuOverlay'))setMenuOpen(false)});
 document.querySelector('.menu-actions').addEventListener('click',event=>{if(event.target.closest('button'))setMenuOpen(false)});
-document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('menuOverlay').hidden)setMenuOpen(false)});
+document.addEventListener('keydown',event=>{
+ if(event.key!=='Escape')return;
+ if(!$('menuOverlay').hidden)setMenuOpen(false);
+ if(!$('buildOverlay').hidden)$('buildOverlay').hidden=true;
+ if(!$('placedItemOverlay').hidden){$('placedItemOverlay').hidden=true;selectedPlacedItem=null}
+});
 document.getElementById('profileBtn').onclick=async()=>{
  resetControlsTimeout();
  if(!db){updateChoices();profileOverlay.hidden=false;$('profileStatus').textContent='Choose who you want to play as.';return}
@@ -1197,6 +1422,21 @@ document.getElementById('generatorBtn').onclick=()=>{
 };
 document.getElementById('dailyCookBtn').onclick=()=>{setMenuOpen(false);startActivity('cook')};
 document.getElementById('buyDiesel').onclick=purchaseGeneratorDiesel;
+document.getElementById('buildBtn').onclick=()=>{setMenuOpen(false);openBuildCatalog()};
+document.getElementById('closeBuildCatalog').onclick=()=> $('buildOverlay').hidden=true;
+document.getElementById('buildCatalog').addEventListener('click',event=>{
+ const item=event.target.closest('[data-build-id]');if(item)startBuildSelection(item.dataset.buildId)
+});
+document.getElementById('openBuildCatalog').onclick=openBuildCatalog;
+document.getElementById('rotateBuild').onclick=()=>{
+ if(!buildSelection)return;
+ const point=currentBuildPlacement||{x:-6,z:-9};buildRotation=(buildRotation+90)%360;updateBuildPreviewAt(point.x,point.z)
+};
+document.getElementById('cancelBuild').onclick=()=>stopBuildMode();
+document.getElementById('closePlacedItem').onclick=()=>{selectedPlacedItem=null;$('placedItemOverlay').hidden=true};
+document.getElementById('placedItemOverlay').addEventListener('click',event=>{if(event.target===$('placedItemOverlay')){$('placedItemOverlay').hidden=true;selectedPlacedItem=null}});
+document.getElementById('movePlacedItem').onclick=moveSelectedBuildItem;
+document.getElementById('sellPlacedItem').onclick=sellSelectedBuildItem;
 document.addEventListener('pointerdown',resetControlsTimeout,{passive:true});
 document.addEventListener('keydown',resetControlsTimeout);
 document.addEventListener('visibilitychange',()=>{
